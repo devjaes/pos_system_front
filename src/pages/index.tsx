@@ -11,13 +11,14 @@ const HomePage: NextPage = () => (
       <link rel="icon" href="/favicon.ico" />
       <h1 className="text-4xl font-bold">My pos system</h1>
     </Head>
-    <header className="flex justify-center items-center p-4">
-      <div className="flex items-center space-x-2">
-        <IconWrappedComponent icon="CHEVRON_DOWN" />
-        <h2 className="ml-4 whitespace-nowrap">My pos system</h2>
-      </div>
-      <div className="flex items-center">
-        <IconWrappedComponent icon="MAIL" />
+    <header className="mainHeader">
+      <div>
+        <div className="mainHeader__icon">
+          <IconWrappedComponent icon="CHEVRON_DOWN" />
+        </div>
+        <div className="mainHeader__text">
+          <h2>My pos system</h2>
+        </div>
       </div>
     </header>
     <main className="p-12">
@@ -42,6 +43,22 @@ const HomePage: NextPage = () => (
         </div>
       </div>
     </main>
+    <style>
+      {`
+        .mainHeader {
+          display: flex;
+          justify-content: center;
+          flex-direction: row;
+          background-image: url('https://img.freepik.com/vector-gratis/fondo-dia-internacional-gato-acuarela_23-2149506124.jpg?w=2000');
+          background-size: cover;
+          
+        }
+        .mainHeader__icon, .mainHeader__text {
+          flex: 1;
+          
+        }
+      `}
+    </style>
   </>
 )
 
