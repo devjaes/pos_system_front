@@ -1,11 +1,12 @@
 # Establecer la imagen base para desarrollo
-FROM node:16
+FROM node:18
 
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
 # Copiar el código fuente
-COPY . ./app
+COPY package.json ./
+COPY . ./
 
 # Instalar las dependencias del proyecto
 RUN yarn

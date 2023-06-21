@@ -4,7 +4,6 @@ import Head from 'next/head'
 
 import Link from 'next/link'
 
-import styles from '../../styles/StyleLogin.module.css'
 
 const Login = () => {
   const router = useRouter()

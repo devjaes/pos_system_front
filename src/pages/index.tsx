@@ -1,148 +1,47 @@
 import type { NextPage } from 'next'
+import Head from 'next/head'
 
 import { InputTextComponent } from '@/components/InputTextComponent'
 import { IconWrappedComponent } from '@/wrappers/IconWrappedComponent'
-import {
-  DropdownComponent,
-  IDropdownOption,
-} from '@/components/DropdownComponent'
-
-const options: IDropdownOption[] = [
-  {
-    label: 'Tennis',
-    value: 1,
-  },
-  {
-    label: 'Basket',
-    value: 2,
-  },
-  {
-    label: 'Soccer',
-    value: 3,
-  },
-]
 
 const HomePage: NextPage = () => (
   <>
-    <div className="p-12 flex flex-col gap-4">
-      <InputTextComponent
-        id="input"
-        name="inputFoo"
-        placeholder="foo"
-        onChange={() => null}
-      />
-
-      <InputTextComponent
-        id="input"
-        name="inputFoo"
-        placeholder="foo"
-        value="bar"
-        leading={
-          <IconWrappedComponent
-            icon="MAIL"
-            role="leading-icon"
-            className="h-5 w-5 text-indigo-300"
+    <Head>
+      <title>My pos system</title>
+      <link rel="icon" href="/favicon.ico" />
+      <h1 className="text-4xl font-bold">My pos system</h1>
+    </Head>
+    <header className="flex justify-center items-center p-4">
+      <div className="flex items-center space-x-2">
+        <IconWrappedComponent icon="CHEVRON_DOWN" />
+        <h2 className="ml-4 whitespace-nowrap">My pos system</h2>
+      </div>
+      <div className="flex items-center">
+        <IconWrappedComponent icon="MAIL" />
+      </div>
+    </header>
+    <main className="p-12">
+      <div className="grid grid-cols-1 gap-4">
+        <div className="col-span-1">
+          <InputTextComponent
+            id="username"
+            name="username"
+            labelText="Username"
+            placeholder="Username"
+            onChange={() => {}}
           />
-        }
-        labelText="Some label"
-        onChange={() => null}
-      />
-
-      <InputTextComponent
-        id="input"
-        name="inputFoo"
-        placeholder="foo"
-        value="bar"
-        variant="danger"
-        leading={
-          <IconWrappedComponent
-            icon="MAIL"
-            role="leading-icon"
-            className="h-5 w-5 text-indigo-300"
+        </div>
+        <div className="col-span-1">
+          <InputTextComponent
+            id="password"
+            name="password"
+            labelText="Password"
+            placeholder="Password"
+            onChange={() => {}}
           />
-        }
-        trailing={
-          <IconWrappedComponent
-            icon="MAIL"
-            role="leading-icon"
-            className="h-5 w-5 text-indigo-300"
-          />
-        }
-        labelText="Some label"
-        onChange={() => null}
-      />
-
-      <InputTextComponent
-        id="input"
-        name="inputFoo"
-        placeholder="foo"
-        value="bar"
-        variant="secondary"
-        leading="$"
-        trailing={
-          <IconWrappedComponent
-            icon="MAIL"
-            role="leading-icon"
-            className="h-5 w-5 text-indigo-300 mr-2"
-          />
-        }
-        labelText="Some label"
-        onChange={() => null}
-      />
-    </div>
-    <div className="flex flex-row gap-28 justify-center p-14">
-      <DropdownComponent
-        value={1}
-        onChange={() => null}
-        options={options}
-        placeholder="pick an option"
-        iconHeader="MAIL"
-        variant="secondary"
-        includeDividers={true}
-      >
-        {(option) => (
-          <>
-            <IconWrappedComponent
-              icon="MAIL"
-              role="leading-icon"
-              className="h-5 w-5 text-indigo-300 mr-2"
-            />
-
-            {option.label}
-          </>
-        )}
-      </DropdownComponent>
-
-      <DropdownComponent
-        value={2}
-        onChange={() => null}
-        options={options}
-        placeholder="pick an option"
-      >
-        {(option) => (
-          <>
-            <IconWrappedComponent
-              icon="MAIL"
-              role="leading-icon"
-              className="h-5 w-5 text-indigo-300 mr-2"
-            />
-
-            {option.label}
-          </>
-        )}
-      </DropdownComponent>
-
-      <DropdownComponent
-        value={3}
-        onChange={() => null}
-        options={options}
-        variant="danger"
-        placeholder="pick an option"
-        includeDividers={true}
-      >
-        {(option) => <>{option.label}</>}
-      </DropdownComponent>
-    </div>
+        </div>
+      </div>
+    </main>
   </>
 )
 
