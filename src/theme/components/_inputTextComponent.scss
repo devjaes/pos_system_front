@@ -1,0 +1,75 @@
+@mixin focus-primary {
+    @apply focus:ring-indigo-500 focus:border-indigo-500;
+}
+
+@mixin focus-secondary {
+    @apply focus:ring-gray-500 focus:border-gray-500;
+}
+
+@mixin focus-danger {
+    @apply focus:ring-red-500 focus:border-red-500;
+}
+
+@mixin border-primary {
+    @apply border-indigo-300;
+}
+
+@mixin border-secondary {
+    @apply border-gray-300;
+}
+
+@mixin border-danger {
+    @apply border-red-300;
+}
+
+
+@mixin text-primary {
+    @apply text-indigo-300
+}
+
+@mixin text-secondary {
+    @apply text-gray-300
+}
+
+@mixin text-danger {
+    @apply text-red-300
+}
+
+.input-text-component {
+    input {
+        @apply block w-full sm:text-sm rounded-md;
+
+        &.input-primary {
+            @include text-primary;
+            @include border-primary;
+            @include focus-primary;
+        }
+
+        &.input-secondary {
+            @include text-secondary;
+            @include border-secondary;
+            @include focus-secondary;
+        }
+
+        &.input-danger {
+            @include text-danger;
+            @include border-danger;
+            @include focus-danger;
+        }
+    }
+    label {
+        @apply block text-sm font-medium;
+
+        &.label-primary {
+            @include text-primary;
+        }
+
+        &.label-secondary {
+            @include text-secondary;
+        }
+
+        &.label-danger {
+            @include text-danger;
+        }
+    }
+}

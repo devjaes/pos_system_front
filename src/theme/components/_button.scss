@@ -1,0 +1,254 @@
+@mixin btn-border-common {
+  @apply border border-transparent;
+}
+
+@mixin btn-border-common-white {
+  @apply border border-gray-300;
+}
+
+@mixin btn-extra-small-common {
+  @apply inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded;
+}
+
+@mixin btn-small-common {
+  @apply inline-flex items-center px-3 py-2 text-sm leading-4 font-medium rounded-md;
+}
+
+@mixin btn-medium-common {
+  @apply inline-flex items-center px-4 py-2 text-sm font-medium rounded-md;
+}
+
+@mixin btn-large-common {
+  @apply inline-flex items-center px-4 py-2 text-base font-medium rounded-md;
+}
+
+@mixin btn-extra-large-common {
+  @apply inline-flex items-center px-6 py-3 text-base font-medium rounded-md;
+}
+
+@mixin btn-primary-colors {
+  @apply shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+@mixin btn-secondary-colors {
+  @apply text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+@mixin btn-white-colors {
+  @apply shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
+}
+
+@mixin btn-circular-extra-small {
+  &.btn-circular {
+    @apply p-1 rounded-full;
+  }
+}
+
+@mixin btn-danger-colors {
+  @apply shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500;
+}
+
+
+@mixin btn-circular-small {
+  &.btn-circular {
+    @apply p-1.5 rounded-full;
+  }
+}
+
+@mixin btn-circular-medium {
+  &.btn-circular {
+    @apply p-2 rounded-full;
+  }
+}
+
+@mixin btn-circular-large {
+  &.btn-circular {
+    @apply p-2.5 rounded-full;
+  }
+}
+
+@mixin btn-circular-extra-large {
+  &.btn-circular {
+    @apply p-3 rounded-full;
+  }
+}
+
+@mixin icon-small-common {
+  @apply h-4 w-4;
+}
+
+@mixin icon-medium-large-common {
+  @apply h-5 w-5;
+}
+
+.button-component {
+  &.btn-primary-extra-small {
+    @include btn-extra-small-common;
+    @include btn-border-common;
+    @include btn-primary-colors;
+    @include btn-circular-extra-small;
+  }
+  &.btn-primary-small {
+    @include btn-small-common;
+    @include btn-border-common;
+    @include btn-primary-colors;
+    @include btn-circular-small;
+  }
+  &.btn-primary-medium {
+    @include btn-medium-common;
+    @include btn-border-common;
+    @include btn-primary-colors;
+    @include btn-circular-medium;
+  }
+  &.btn-primary-large {
+    @include btn-large-common;
+    @include btn-border-common;
+    @include btn-primary-colors;
+    @include btn-circular-large;
+  }
+  &.btn-primary-extra-large {
+    @include btn-extra-large-common;
+    @include btn-border-common;
+    @include btn-primary-colors;
+    @include btn-circular-extra-large;
+  }
+
+  &.btn-secondary-extra-small {
+    @include btn-extra-small-common;
+    @include btn-border-common;
+    @include btn-secondary-colors;
+    @include btn-circular-extra-small;
+  }
+  &.btn-secondary-small {
+    @include btn-small-common;
+    @include btn-border-common;
+    @include btn-secondary-colors;
+    @include btn-circular-small;
+  }
+  &.btn-secondary-medium {
+    @include btn-medium-common;
+    @include btn-border-common;
+    @include btn-secondary-colors;
+    @include btn-circular-medium;
+  }
+  &.btn-secondary-large {
+    @include btn-large-common;
+    @include btn-border-common;
+    @include btn-secondary-colors;
+    @include btn-circular-large;
+  }
+  &.btn-secondary-extra-large {
+    @include btn-extra-large-common;
+    @include btn-border-common;
+    @include btn-secondary-colors;
+    @include btn-circular-extra-large;
+  }
+
+  &.btn-white-extra-small {
+    @include btn-extra-small-common;
+    @include btn-border-common-white;
+    @include btn-white-colors;
+    @include btn-circular-extra-small;
+  }
+  &.btn-white-small {
+    @include btn-small-common;
+    @include btn-border-common-white;
+    @include btn-white-colors;
+    @include btn-circular-small;
+  }
+  &.btn-white-medium {
+    @include btn-medium-common;
+    @include btn-border-common-white;
+    @include btn-white-colors;
+    @include btn-circular-medium;
+  }
+  &.btn-white-large {
+    @include btn-large-common;
+    @include btn-border-common-white;
+    @include btn-white-colors;
+    @include btn-circular-large;
+  }
+  &.btn-white-extra-large {
+    @include btn-extra-large-common;
+    @include btn-border-common-white;
+    @include btn-white-colors;
+    @include btn-circular-extra-large;
+  }
+
+  &.btn-danger-extra-small {
+    @include btn-extra-small-common;
+    @include btn-border-common;
+    @include btn-danger-colors;
+    @include btn-circular-extra-small;
+  }
+  &.btn-danger-small {
+    @include btn-small-common;
+    @include btn-border-common;
+    @include btn-danger-colors;
+    @include btn-circular-small;
+  }
+  &.btn-danger-medium {
+    @include btn-medium-common;
+    @include btn-border-common;
+    @include btn-danger-colors;
+    @include btn-circular-medium;
+  }
+  &.btn-danger-large {
+    @include btn-large-common;
+    @include btn-border-common;
+    @include btn-danger-colors;
+    @include btn-circular-large;
+  }
+  &.btn-danger-extra-large {
+    @include btn-extra-large-common;
+    @include btn-border-common;
+    @include btn-danger-colors;
+    @include btn-circular-extra-large;
+  }
+
+  &.btn-round {
+    @apply rounded-full;
+  }
+
+  .start-icon-extra-small {
+    @apply -ml-0.5 mr-2;
+    @include icon-small-common;
+  }
+  .start-icon-small {
+    @apply -ml-0.5 mr-2;
+    @include icon-small-common;
+  }
+  .start-icon-medium {
+    @apply -ml-1 mr-2;
+    @include icon-medium-large-common;
+  }
+  .start-icon-large {
+    @apply -ml-1 mr-3;
+    @include icon-medium-large-common;
+  }
+  .start-icon-extra-large {
+    @apply -ml-1 mr-3;
+    @include icon-medium-large-common;
+  }
+
+  .end-icon-extra-small {
+    @apply ml-2 -mr-0.5;
+    @include icon-small-common;
+  }
+  .end-icon-small {
+    @apply ml-2 -mr-0.5;
+    @include icon-small-common;
+  }
+  .end-icon-medium {
+    @apply ml-2 -mr-1;
+    @include icon-medium-large-common;
+  }
+  .end-icon-large {
+    @apply ml-3 -mr-1;
+    @include icon-medium-large-common;
+  }
+  .end-icon-extra-large {
+    @apply ml-3 -mr-1;
+    @include icon-medium-large-common;
+  }
+}

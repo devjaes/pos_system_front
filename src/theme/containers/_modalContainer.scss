@@ -1,0 +1,47 @@
+.modal-container {
+    @apply relative z-10;
+
+    .modal-overlay {
+        &.overlay-bg {
+            @apply fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity;
+        }
+    }
+
+    .dialog-panel-container {
+        @apply fixed z-10 inset-0 overflow-y-auto;
+
+        .center,
+        .end,
+        .start,
+        .around {
+            @apply flex items-end sm:items-center p-4 text-center sm:p-0;
+        }
+
+        .center {
+            @apply justify-center;
+        }
+
+        .start {
+            @apply justify-start;
+        }
+        .end {
+            @apply justify-end;
+        }
+
+        .around {
+            @apply justify-around;
+        }
+
+        .modal-content {
+            @apply relative bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:max-w-sm sm:w-full sm:p-6;
+
+            &.full-height {
+                @apply h-screen;
+            }
+
+            .close-button {
+                @apply bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+            }
+        }
+    }
+}
