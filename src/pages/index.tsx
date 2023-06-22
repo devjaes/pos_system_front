@@ -4,7 +4,7 @@ import Navegador from '@/components/Navegador'
 import Hiro from '@/components/Hiro'
 import Footer from '@/components/Footer'
 import SideNav from '@/components/SideNav'
-
+import Table from '@/components/Table'
 
 const HomePage: NextPage = () => (
   <>
@@ -12,7 +12,7 @@ const HomePage: NextPage = () => (
     <Hiro />
     <Footer />
     <SideNav />
-
+    <Table />
 
     <style jsx>
       {`

@@ -9,7 +9,7 @@ function Hiro() {
                         <div className="max-w-xl">
                             <h2 className="text-3xl font-semibold text-gray-800 dark:text-white lg:text-4xl">Build Your New <span className="text-blue-600 dark:text-blue-400">Idea</span></h2>
 
-                            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 lg:text-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis commodi cum cupiditate ducimus, fugit harum id necessitatibus odio quam quasi, quibusdam rem tempora voluptates.</p>
+                            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400 lg:text-base">Gestione las ventas, el inventario y a los empleados con total facilidad. Interactúe con los clientes y aumente así sus ingresos. Aunque tenga una o múltiples tiendas, nuestras herramientas cubrirán toda necesidad que tenga en su negocio.</p>
 
                             <div className="flex flex-col mt-6 space-y-3 lg:space-y-0 lg:flex-row">
                                 <a href="#" className="block px-5 py-2 text-sm font-medium tracking-wider text-center text-white transition-colors duration-300 transform bg-gray-900 rounded-md hover:bg-gray-700">Get Started</a>
