@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 
 import Link from 'next/link'
 
+import { InputTextComponent } from '@/components/InputTextComponent'
 
 const Login = () => {
   const router = useRouter()
@@ -48,91 +50,46 @@ const Login = () => {
 
   return (
     <>
-      <Head>
-        <meta charSet="UTF-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/CSS/normalize.css" />
-        <link rel="stylesheet" href="/CSS/StyleLogin.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="true"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-        <link rel="shortcut icon" href="/img/face.png" type="image/x-icon" />
-        <title>LookPay</title>
-      </Head>
-
-      <nav className={styles.mainNav}>
-        <a>
-          <img className="mainNav__img" src="/img/face.png" alt="logo" />
-        </a>
-        <a className="mainNav__option" href="nosotros.html">
-          Sobre Nosotros
-        </a>
-      </nav>
-
-      <main className="contenedor">
-        <div className="login sombra">
-          <div className="login__Apart login__Apart--transformar">
-            <img src="/img/lookPay.png" alt="" />
-          </div>
-
-          <div className="login__Bpart">
-            <h1>Bienvenido!</h1>
-
-            <form className="form">
-              <p className="form__txt userText">Correo electrónico:</p>
-              <input
-                className="form__input userType"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+      <div className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+        <div className="px-6 py-4">
+          <div className=" justify-center mx-auto">
+            <div className="place-self-center flex justify-center">
+              <img
+                className=" w-auto h-7 sm:h-8"
+                src="https://merakiui.com/images/logo.svg"
+                alt=""
               />
-
-              <p className="form__txt userPsswd">Contraseña:</p>
-              <input
-                className="form__input psswType"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            </div>
+            <div>
+              <h3 className="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
+                MyPos System
+              </h3>
+              <p className="mt-1 text-center text-gray-500 dark:text-gray-400">
+                Inicio de sesión
+              </p>
+            </div>
+            <form>
+              <div className="w-full mt-4">
+                <InputTextComponent
+                  id="username"
+                  name="username"
+                  labelText="Username"
+                  placeholder="Username"
+                  onChange={() => {}}
+                />
+              </div>
             </form>
 
-            <div className="form__button">
-              <button
-                className="form__button--ingresar button login__submit"
-                type="button"
-                onClick={handleLogin}
-              >
-                Ingresar
-              </button>
-
-              <Link href="registro.html">
-                <a className="form__button--crear">Crear una cuenta</a>
-              </Link>
+            <div>
+              <div className="flex items-center justify-center content-center mt-4">
+                <button className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                  Iniciar sesión
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </main>
-
-      <footer className="footer">
-        <Link href="principalAdmin.html">
-          <a>
-            <p>Vista admin</p>
-          </a>
-        </Link>
-        <Link href="principalEmpresa">
-          <a>
-            <p>Vista empresa</p>
-          </a>
-        </Link>
-      </footer>
+      </div>
     </>
   )
 }
