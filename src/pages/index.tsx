@@ -5,12 +5,14 @@ import Hiro from '@/components/Hiro'
 import Footer from '@/components/Footer'
 import SideNav from '@/components/SideNav'
 
+
 const HomePage: NextPage = () => (
   <>
     <Navegador />
     <Hiro />
     <Footer />
     <SideNav />
+
 
     <style jsx>
       {`

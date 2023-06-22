@@ -77,15 +77,11 @@ function SideNav() {
 
                             <span className="mx-2 text-sm font-medium">Exit</span>
                         </a>
-
-
-
-
                     </nav>
-
 
                 </div>
             </aside>
+
         </div>
     )
 }
