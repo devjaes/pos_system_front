@@ -4,6 +4,7 @@ import Navegador from '@/components/Navegador'
 import Hiro from '@/components/Hiro'
 import Footer from '@/components/Footer'
 import Table from '@/components/Table'
+import { Loading } from '@/components/Loading'
 
 const HomePage: NextPage = () => (
   <>
@@ -23,6 +24,8 @@ const HomePage: NextPage = () => (
       ]}
       data={['1', '1', '1', '1', '1', '1', '1', '1']}
     />
+    <Loading />
+
 
     <style jsx>
       {`
