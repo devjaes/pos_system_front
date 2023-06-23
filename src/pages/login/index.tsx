@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/router'
-import Head from 'next/head'
 
-import Link from 'next/link'
+import Image from 'next/image'
 
 import { InputTextComponent } from '@/components/InputTextComponent'
-import Image from 'next/image'
 
 const Login = () => {
   const router = useRouter()
@@ -15,6 +13,8 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      console.log('username', username)
+      console.log('password', password)
       // Enviar los datos de inicio de sesión al backend
       const response = await fetch('http://localhost:8080/auth/login', {
         method: 'POST',
@@ -30,42 +30,47 @@ const Login = () => {
       // Verificar la respuesta del backend
       if (response.ok) {
         const data = await response.json()
-        const userId = data.id
-        const userIdLong = Number(userId)
-
-        console.log('Hola ')
-
+        const id = data.user.id
         // eslint-disable-next-line prettier/prettier
-        router.push("/dashboard?userId=${userIdLong}")
+
+        window.localStorage.setItem('userId', JSON.stringify(id))
+        console.log('user', id)
+
+        router.push(`/dashboard`)
         // Realizar la redirección después de la autenticación exitosa
       } else {
         const errorData = await response.json()
         // Manejar el error de autenticación
         console.error(errorData)
+        console.log('Error de autenticación')
       }
     } catch (error) {
       // Manejar cualquier error de red u otros errores
       console.error(error)
+      console.log('Error de red')
     }
+  }
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault()
+    handleLogin()
   }
 
   return (
     <>
-      <div className='flex items-center justify-center h-screen bg-gray-900'>
+      <div className="flex items-center justify-center h-screen bg-gray-900">
         <div className="w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
           <div className="px-6 py-4">
             <div className=" justify-center mx-auto">
               <div className="place-self-center flex justify-center">
-
                 <Image
                   className=" w-auto h-7 sm:h-8"
                   src="https://merakiui.com/images/logo.svg"
                   alt=""
-                  layout='fixed'
+                  layout="fixed"
                   width={100}
                   height={100}
                 />
-
               </div>
               <div>
                 <h3 className="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
@@ -75,14 +80,17 @@ const Login = () => {
                   Inicio de sesión
                 </p>
               </div>
-              <form>
+              <form onSubmit={handleFormSubmit}>
                 <div className="w-full mt-4">
                   <InputTextComponent
                     id="username"
                     name="username"
                     labelText="Username"
                     placeholder="Username"
-                    onChange={() => { }}
+                    value={username}
+                    onChange={(e) => {
+                      setUsername(e.target.value)
+                    }}
                   />
                 </div>
                 <div className="w-full mt-4">
@@ -91,14 +99,21 @@ const Login = () => {
                     name="password"
                     labelText="Password"
                     placeholder="Password"
-                    onChange={() => { }}
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value)
+                    }}
                   />
                 </div>
               </form>
 
               <div>
                 <div className="flex items-center justify-center content-center mt-4">
-                  <button className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                  <button
+                    type="submit"
+                    className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                    onClick={handleLogin}
+                  >
                     Iniciar sesión
                   </button>
                 </div>
