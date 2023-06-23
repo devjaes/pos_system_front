@@ -12,7 +12,10 @@ const HomePage: NextPage = () => (
     <Hiro />
     <Footer />
     <SideNav />
-    <Table />
+    <Table
+      headings={["id", "mainCode", "AuxCode", "description", "Amount", "UnitPrice", "Discount", "Total sin impuestos"]}
+      data={["1", "1", "1", "1", "1", "1", "1", "1"]}
+    />
 
     <style jsx>
       {`
