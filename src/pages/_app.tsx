@@ -6,6 +6,7 @@ import { persistor, store } from '@/store/store'
 import { ModalContainer } from '@/containers/ModalContainer'
 import '../theme/globals.scss'
 
+
 // eslint-disable-next-line
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <Provider store={store}>

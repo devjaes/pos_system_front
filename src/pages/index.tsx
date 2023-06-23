@@ -5,6 +5,7 @@ import Hiro from '@/components/Hiro'
 import Footer from '@/components/Footer'
 import SideNav from '@/components/SideNav'
 import Table from '@/components/Table'
+import { Loading } from '@/components/Loading'
 
 const HomePage: NextPage = () => (
   <>
@@ -16,6 +17,8 @@ const HomePage: NextPage = () => (
       headings={["id", "mainCode", "AuxCode", "description", "Amount", "UnitPrice", "Discount", "Total sin impuestos"]}
       data={["1", "1", "1", "1", "1", "1", "1", "1"]}
     />
+    <Loading />
+
 
     <style jsx>
       {`
