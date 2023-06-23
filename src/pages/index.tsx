@@ -3,7 +3,6 @@ import type { NextPage } from 'next'
 import Navegador from '@/components/Navegador'
 import Hiro from '@/components/Hiro'
 import Footer from '@/components/Footer'
-import SideNav from '@/components/SideNav'
 import Table from '@/components/Table'
 
 const HomePage: NextPage = () => (
@@ -11,35 +10,38 @@ const HomePage: NextPage = () => (
     <Navegador />
     <Hiro />
     <Footer />
-    <SideNav />
     <Table
-      headings={["id", "mainCode", "AuxCode", "description", "Amount", "UnitPrice", "Discount", "Total sin impuestos"]}
-      data={["1", "1", "1", "1", "1", "1", "1", "1"]}
+      headings={[
+        'id',
+        'mainCode',
+        'AuxCode',
+        'description',
+        'Amount',
+        'UnitPrice',
+        'Discount',
+        'Total sin impuestos',
+      ]}
+      data={['1', '1', '1', '1', '1', '1', '1', '1']}
     />
 
     <style jsx>
       {`
-        
-
-          .mainHeader {
+        .mainHeader {
           display: flex;
           justify-content: center;
           flex-direction: row;
           background-image: url('https://img.freepik.com/vector-gratis/fondo-dia-internacional-gato-acuarela_23-2149506124.jpg?w=2000');
           background-size: cover;
-          
         }
-        .mainHeader__icon, .mainHeader__text {
+        .mainHeader__icon,
+        .mainHeader__text {
           flex: 1;
         }
-        
-        .contenedor{
+
+        .contenedor {
           max-width: 1200px;
           margin: 0 auto;
         }
-
-      
-
       `}
     </style>
   </>
