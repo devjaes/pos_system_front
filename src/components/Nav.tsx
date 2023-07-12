@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../public/images/face.png";
+import logo from "../../public/images/Logo marketing simple azul  (2).png";
 import Option from "./Option";
 import Link from "next/link";
 import { UrlObject } from "url";
@@ -15,15 +15,16 @@ export interface IOption {
 function Navegador({
   options,
   imageRedirect,
+
 }: {
   options: IOption[];
   imageRedirect: string;
 }) {
   return (
-    <div className="flex bg-blue-500 py-1 ">
+    <div className="flex bg-gray-800 py-1 ">
       <div className="flex-1 ml-12">
         <Link href={imageRedirect}>
-          <img className=" h-24" src={logo.src} alt="logo" />
+          <img className=" h-32" src={logo.src} alt="logo" />
         </Link>
       </div>
 
@@ -31,7 +32,7 @@ function Navegador({
         {options.map((option, index) => {
           if (option.type === "button") {
             return (
-              <div className="w-10p text-center" key={index}>
+              <div className="h-5/6 flex items-center justify-center gap-6 hover:bg-blue-600 my-4 rounded-md" key={index}>
                 <Button
                   texto={option.label as string}
                   key={option.label as string}
@@ -43,7 +44,7 @@ function Navegador({
 
           if (option.type === "option") {
             return (
-              <div className="w-10p text-center" key={index}>
+              <div className="h-5/6 flex items-center justify-center gap-6 hover:border-green-500  hover:text-blue-400 px-4 my-4 rounded-md" key={index}>
                 <Option
                   opcion={option.label}
                   redirect={option.redirect as string}
