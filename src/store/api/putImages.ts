@@ -18,36 +18,9 @@ const dynamo = new AWS.DynamoDB();
 
 export default async function handler(images: IImagesObject[]) {
   try {
-    const scanResponse = await dynamo
-      .scan({
-        TableName: "facerecognition",
-        FilterExpression: "UserId = :userId",
-        ExpressionAttributeValues: {
-          ":userId": { S: images[0].userId as string },
-        },
-      })
-      .promise();
-
-    const itemsToDelete = scanResponse.Items;
-
-    if (itemsToDelete && itemsToDelete.length > 0) {
-      const deletePromises = itemsToDelete.map((item) => {
-        return dynamo
-          .deleteItem({
-            TableName: "facerecognition",
-            Key: {
-              RekognitionId: item.RekognitionId,
-            },
-          })
-          .promise();
-      });
-
-      await Promise.all(deletePromises);
-    }
-
     for (const image of images) {
       const file = image.image; // Lee el archivo de imagen (implementa esta función según tus necesidades)
-      await uploadToS3(image.fileName, file, image.userId); // Sube el archivo a S3
+      await uploadToS3(image.fileName, file, image.productId); // Sube el archivo a S3
     }
 
     console.log({ message: "Imágenes subidas correctamente" });
@@ -69,16 +42,13 @@ export default async function handler(images: IImagesObject[]) {
 async function uploadToS3(
   fileName: string,
   file: Buffer,
-  userId: string
+  productId: string
 ): Promise<void> {
   await s3
     .putObject({
-      Bucket: "lookpay", // Reemplaza con el nombre de tu bucket de S3
-      Key: `index/${fileName}`, // Ruta del archivo en S3
+      Bucket: process.env.AWS_BUCKET_NAME as string, // Reemplaza con el nombre de tu bucket de S3
+      Key: `products/${fileName}`, // Ruta del archivo en S3
       Body: file, // Contenido del archivo (Buffer)
-      Metadata: {
-        UserId: userId, // Metadatos personalizados para el archivo
-      },
     })
     .promise();
 }

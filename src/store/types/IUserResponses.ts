@@ -82,5 +82,5 @@ export interface ILoginResponse {
 export interface IImagesObject {
   fileName: string;
   image: Buffer;
-  userId: string;
+  productId: string;
 }
