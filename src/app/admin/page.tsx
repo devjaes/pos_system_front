@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { UserRoles } from "@/store/types/IUserResponses";
 
 function HomePageAdmin() {
   const router = useRouter();
@@ -17,7 +18,7 @@ function HomePageAdmin() {
       router.push("/user/");
     }
 
-    if (userData.rol != "ADMIN") {
+    if (userData.rol != UserRoles.ADMIN) {
       toast.error("No tienes permisos para acceder a esta página");
       router.push("/");
     }
@@ -42,7 +43,7 @@ function HomePageAdmin() {
         <div className="opcion__empresa">
           <div className="opcionEmpresa__content h-full p-56 px-80 flex flex-col">
             <div className="font-bold text-white text-center flex-1">
-              <h1 className="text-5xl">Empresas</h1>
+              <h1 className="text-5xl">Productos</h1>
             </div>
             <div className="flex-1">
               <Link href="/admin/enterprises">

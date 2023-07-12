@@ -2,9 +2,7 @@
 import "@/app/globals.css";
 import Navegador from "@/components/Nav";
 import { IOption } from "@/components/Nav";
-import { ClientsCompaniesProvider } from "@/context/ClientsCompaniesProvider";
 import { useRouter } from "next/navigation";
-import { ProvinceProvider } from "@/context/ProvinceProvider";
 
 
 export default function AdminLayout({
@@ -27,11 +25,7 @@ export default function AdminLayout({
     <>
       <div>
         <Navegador options={options} imageRedirect="/admin" />
-        <ProvinceProvider>
-          <ClientsCompaniesProvider>
             <main>{children}</main>
-          </ClientsCompaniesProvider>
-        </ProvinceProvider>
       </div>
     </>
   );

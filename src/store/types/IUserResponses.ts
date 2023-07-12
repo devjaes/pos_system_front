@@ -1,16 +1,14 @@
 export default interface IUserResponse {
   id?: number;
   name: string;
+  lastName: string;
   email: string;
-  phoneNumber: string;
-  address: string;
-  city: string;
-  province: string;
   rol: string;
-  dni?: string;
-  gender?: string;
-  ruc?: string;
-  fundationDate?: string;
+}
+
+export enum UserRoles {
+  ADMIN = "Administrador",
+  USER = "Usuario",
 }
 
 export interface IUserUpdate {
