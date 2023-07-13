@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import Input, { IInputsForm } from '../components/Input';
 import Button from '../components/Button';
 import Navegador, { IOption } from '../components/Nav';
