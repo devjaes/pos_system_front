@@ -85,8 +85,8 @@ export default function AdminLayout({
 
   return (
     <div className='flex '>
-      <div className='min-h-screen bg-primary-Jair'>
-        <div className='h-full'>
+      <div className='min-h-screen bg-jair'>
+        <div className='h-full '>
           <div className='flex justify-center items-center'>
             <Image src={Logo.src} alt="" width={104} height={104} className='py-2 ' />
           </div>

@@ -1,4 +1,7 @@
 import "./globals.css";
+import "primereact/resources/themes/bootstrap4-dark-purple/theme.css";
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 
 import { Inter } from "next/font/google";
 
