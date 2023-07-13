@@ -1,5 +1,4 @@
 
-import { useForm } from "@/hooks/useForm";
 
 export interface IInputsForm {
   name: string;
