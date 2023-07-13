@@ -1,6 +1,6 @@
 import React from "react";
 import Navegador from "@/components/Nav";
-import LookPayN from "../../../public/images/lookPayNegro.png";
+import LookPayN from "../../../public/images/PostLogo5.png";
 import { HiOutlineLockClosed } from "react-icons/hi";
 import { HiOutlineGlobeAlt } from "react-icons/hi";
 import { HiOutlineCurrencyDollar } from "react-icons/hi";

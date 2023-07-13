@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../public/images/Logo marketing simple azul  (2).png";
+import logo from "../../public/images/PostLogo5.png";
 import Option from "./Option";
 import Link from "next/link";
 import { UrlObject } from "url";
