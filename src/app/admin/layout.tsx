@@ -13,21 +13,8 @@ const items: MenuItem[] = [
   {
     label: 'Productos',
     icon: 'pi pi-fw pi-tag',
+    url: '/admin/products'
 
-    items: [
-      {
-        label: 'Agregar',
-        icon: 'pi pi-fw pi-plus',
-        url: '/admin/addProduct'
-
-      },
-      {
-        label: 'Administrar',
-        icon: 'pi pi-fw pi-pencil',
-        url: '/admin/manageProduct'
-      },
-
-    ]
   },
 
   {
@@ -95,7 +82,7 @@ export default function AdminLayout({
         </div>
 
       </div>
-      <div className='flex justify-center items-center w-11/12'>
+      <div className='flex justify-center items-center w-11/12 bg-slate-600'>
         {children}
       </div>
     </div>
