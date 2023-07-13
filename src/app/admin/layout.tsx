@@ -36,7 +36,8 @@ const items: MenuItem[] = [
     items: [
       {
         label: 'Agregar',
-        icon: 'pi pi-fw pi-user-plus'
+        icon: 'pi pi-fw pi-user-plus',
+        url: '/admin/addUser'
       },
       {
         label: 'Administrar',

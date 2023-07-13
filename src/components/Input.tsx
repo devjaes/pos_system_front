@@ -1,11 +1,12 @@
-
-import { useForm } from "@/hooks/useForm";
+import { InputText } from 'primereact/inputtext';
+import { KeyFilterType } from 'primereact/keyfilter';
+import { Key } from 'react';
 
 export interface IInputsForm {
   name: string;
   label: string;
   alertText?: string;
-  type: string;
+  keyfilter: string | KeyFilterType;
   placeholder?: string;
   onChange?: (e: any) => void;
   disabled?: boolean;
@@ -24,12 +25,11 @@ export const InputForm = ({ allForm }: { allForm: IInputsForm[] }) => {
                 <span className="text-red-500 text-sm"> {input.alertText}</span>
               )}
             </label>
-            <input
+            <InputText
               className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
-              type={input.type}
+              keyfilter={input.keyfilter as KeyFilterType}
               placeholder={input.placeholder}
               onChange={input.onChange}
-              value={input.value}
               disabled={input.disabled}
             />
           </div>
