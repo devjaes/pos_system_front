@@ -1,10 +1,11 @@
 "use client";
 import React, { use, useEffect } from "react";
-import Button from "@/components/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { UserRoles } from "@/store/types/IUserResponses";
+import { Card } from 'primereact/card';
+import { Button } from 'primereact/button';
 
 function HomePageAdmin() {
   const router = useRouter();
@@ -25,35 +26,21 @@ function HomePageAdmin() {
   }, []);
 
   return (
-    <div>
-      <main className="flex h-screen">
-        <div className="opcion__usuario">
-          <div className="opcionUsuario__content h-full p-56 px-80 flex flex-col">
-            <div className="font-bold text-white text-center flex-1">
-              <h1 className="text-5xl">Usuarios</h1>
-            </div>
-            <div className="flex-1">
-              <Link href="/admin/users">
-                <Button texto="Administrar" />
-              </Link>
-            </div>
-          </div>
-        </div>
 
-        <div className="opcion__empresa">
-          <div className="opcionEmpresa__content h-full p-56 px-80 flex flex-col">
-            <div className="font-bold text-white text-center flex-1">
-              <h1 className="text-5xl">Productos</h1>
-            </div>
-            <div className="flex-1">
-              <Link href="/admin/enterprises">
-                <Button texto="Administrar" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+    <main className='bg-primary-Jair w-11/12'>
+      <div>
+        <Card title="Title">
+          <p className="m-0">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae
+            numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+          </p>
+        </Card>
+      </div>
+      <div >
+        <Button label='Prueba' severity='warning' />
+      </div>
+    </main>
+
   );
 }
 
