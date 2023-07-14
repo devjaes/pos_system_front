@@ -7,4 +7,6 @@ export interface IInputsForm {
     onChange?: (e: any) => void;
     disabled?: boolean;
     value?: string;
+    type?: string;
+    options?: any[];
 }

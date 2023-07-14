@@ -1,12 +1,16 @@
 import { IInputsForm } from "@/store/types/IForms";
 import { IProductResponse } from "@/store/types/IProducts";
+import { ICE, IRBPNR, IVAS } from "@/store/types/Tables";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
+import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { KeyFilterType } from "primereact/keyfilter";
 import { Toast } from "primereact/toast";
+import { classNames } from "primereact/utils";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
+import ComboBox from "./ComboBox";
 
 interface Props {
   product: IProductResponse;
@@ -21,7 +25,11 @@ export default function ModifyDialog({
   visible,
   setEditVisible,
 }: Props) {
+  const [selectedIVA, setSelectedIVA] = React.useState<any>(product?.ivaType);
+  const [selectedICE, setSelectedICE] = React.useState<any>(product?.iceType);
+  const [selectedIRBP, setSelectedIRBP] = React.useState<any>(product?.irbpType);
   const [productInfo, setProductInfo] = React.useState<IInputsForm[]>([]);
+
 
   const toast = React.useRef<Toast>(null);
 
@@ -40,7 +48,9 @@ export default function ModifyDialog({
         placeholder: "Nombre del Producto",
         alertText: "*El nombre es obligatorio",
         value: product?.name,
-        onChange: () => {},
+        onChange: () => { },
+        type: "InputText"
+
       },
       {
         name: "mainCode",
@@ -49,7 +59,8 @@ export default function ModifyDialog({
         placeholder: "Código Principal",
         alertText: "*El código principal es obligatorio",
         value: product?.mainCode,
-        onChange: () => {},
+        onChange: () => { },
+        type: "InputText"
       },
       {
         name: "auxCode",
@@ -58,7 +69,8 @@ export default function ModifyDialog({
         placeholder: "Código Auxiliar",
         alertText: "*El código auxiliar es obligatorio",
         value: product?.auxCode,
-        onChange: () => {},
+        onChange: () => { },
+        type: "InputText"
       },
       {
         name: "description",
@@ -67,7 +79,8 @@ export default function ModifyDialog({
         placeholder: "Contraseña",
         alertText: "*La contraseña es obligatoria",
         value: product?.description,
-        onChange: () => {},
+        onChange: () => { },
+        type: "InputText"
       },
       {
         name: "stock",
@@ -76,7 +89,8 @@ export default function ModifyDialog({
         placeholder: "Stock",
         alertText: "*El stock es obligatorio",
         value: product?.stock as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
+        type: "InputText"
       },
       {
         name: "unitPrice",
@@ -85,8 +99,10 @@ export default function ModifyDialog({
         placeholder: "Precio Unitario",
         alertText: "*El precio unitario es obligatorio",
         value: product?.unitPrice as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
+        type: "InputText"
       },
+
     ];
     setProductInfo(productInfo);
   };
@@ -108,12 +124,20 @@ export default function ModifyDialog({
     console.log(data);
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "productInfo"
+  })
+
+
+
   const renderDialogContent = (product: IProductResponse) => {
     return (
       <form>
         {productInfo.map((product, index) => (
           <div className="py-4 block" key={index}>
             <span className="p-float-label">
+              <Toast ref={toast} />
               <Controller
                 name={product.name}
                 control={control}
@@ -141,7 +165,22 @@ export default function ModifyDialog({
               </label>
             </span>
           </div>
+
         ))}
+
+        <div className="flex justify-evenly gap-4">
+          <div className="card flex justify-content-center py-4 w-full">
+            <ComboBox label="ICE" options={ICE} defaultValue={product.iceType ? product.iceType : "No aplica"} onChange={() => { }}></ComboBox>
+          </div>
+          <div className="card flex justify-content-center py-4 w-full">
+            <ComboBox label="IRBP" options={IRBPNR} defaultValue={product.irbpType ? product.irbpType : "No aplica"} onChange={() => { }}></ComboBox>
+          </div>
+          <div className="card flex justify-content-center py-4 w-full">
+            <ComboBox label="IVA" options={IVAS} initialValue={selectedIVA} onChange={() => { }}></ComboBox>
+          </div>
+        </div>
+
+
         <div className="flex justify-center">
           <Button
             icon="pi pi-check"
