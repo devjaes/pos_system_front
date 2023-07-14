@@ -15,7 +15,7 @@ import { KeyFilterType } from 'primereact/keyfilter';
 import { Dropdown } from 'primereact/dropdown';
 import { ICE, IRBPNR, IVAS } from '@/store/types/Tables';
 import { on } from 'events';
-import ModifyDialog from '@/components/modifyDialog';
+import Modal from '@/components/Modal';
 
 
 export default function DynamicColumnsDemo() {
@@ -150,6 +150,62 @@ export default function DynamicColumnsDemo() {
         toast.current?.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
     };
 
+    const productInfo: IInputsForm[] = [
+        {
+            name: 'name',
+            label: 'Nombre',
+            keyfilter: 'alpha',
+            placeholder: 'Nombre del Producto',
+            alertText: '*El nombre es obligatorio',
+            value: product?.name,
+            onChange: () => { },
+        },
+        {
+            name: 'mainCode',
+            label: 'Código Principal',
+            keyfilter: 'num',
+            placeholder: 'Código Principal',
+            alertText: '*El código principal es obligatorio',
+            value: product?.mainCode,
+            onChange: () => { },
+        },
+        {
+            name: 'auxCode',
+            label: 'Código Auxiliar',
+            keyfilter: 'num',
+            placeholder: 'Código Auxiliar',
+            alertText: '*El código auxiliar es obligatorio',
+            value: product?.auxCode,
+            onChange: () => { },
+        },
+        {
+            name: 'description',
+            label: 'Descripción',
+            keyfilter: 'alpha',
+            placeholder: 'Contraseña',
+            alertText: '*La contraseña es obligatoria',
+            value: product?.description,
+            onChange: () => { },
+        },
+        {
+            name: 'stock',
+            label: 'Stock',
+            keyfilter: 'num',
+            placeholder: 'Stock',
+            alertText: '*El stock es obligatorio',
+            value: product?.stock as unknown as string,
+            onChange: () => { },
+        },
+        {
+            name: 'unitPrice',
+            label: 'Precio Unitario',
+            keyfilter: 'money',
+            placeholder: 'Precio Unitario',
+            alertText: '*El precio unitario es obligatorio',
+            value: product?.unitPrice as unknown as string,
+            onChange: () => { },
+        },
+    ]
 
     return (
         <div className="flex flex-col gap-8">
@@ -214,7 +270,26 @@ export default function DynamicColumnsDemo() {
 
             {
                 product !== undefined && (
-                    <ModifyDialog visible={editVisible} setEditVisible={setEditVisible} product={product} onHide={() => { setEditVisible(false) }} />
+                    <Modal isVisible={editVisible} onClose={() => setEditVisible(false)} >
+                        {
+                            productInfo.map((product, index) => (
+                                <div className="py-4 block" key={index}>
+                                    <span className="p-float-label">
+                                        <InputText
+                                            id={product.name}
+                                            className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
+                                            keyfilter={product.keyfilter as KeyFilterType}
+                                            placeholder={product.placeholder}
+                                            value={product.value}
+                                            {...register(product.name, {
+                                                required: product.alertText,
+                                            })} />
+                                        <label className="block pb-2" htmlFor={product.name}>{product.label}</label>
+                                    </span>
+                                </div>
+                            ))
+                        }
+                    </Modal>
                 )
             }
 
