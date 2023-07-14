@@ -43,12 +43,9 @@ const items: MenuItem[] = [
         icon: 'pi pi-fw pi-plus-circle'
       },
       {
-        label: 'Agregar Caja',
-        icon: 'pi pi-fw pi-plus-circle'
-      },
-      {
-        label: 'Agregar Sucursal',
-        icon: 'pi pi-fw pi-plus-circle'
+        label: 'Agregar Sucursal/Caja',
+        icon: 'pi pi-fw pi-plus-circle',
+        url: '/admin/branchs'
       },
     ],
   },
