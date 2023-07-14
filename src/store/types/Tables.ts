@@ -1,4 +1,8 @@
-export const TAXES = ["IVA", "ICE", "IRBPNR"];
+export const TAXES = [
+  { name: "IVA", code: "IVA" },
+  { name: "ICE", code: "ICE" },
+  { name: "IRBPNR", code: "IRBPNR" },
+];
 
 export const IVAS = [
   { name: "0%", code: "0%" },
