@@ -24,9 +24,11 @@ function Navegador({
   return (
     <div className="flex py-1 bg-jair">
       <div className="flex-1 ml-12">
-        <Link href={imageRedirect}>
-          <img className=" h-32" src={logo.src} alt="logo" />
-        </Link>
+        <div className="flex justify-start w-2/6">
+          <Link href={imageRedirect}>
+            <img className=" h-32" src={logo.src} alt="logo" />
+          </Link>
+        </div>
       </div>
 
       <div className="flex-1 flex justify-end gap-x-4 mr-12 items-center">

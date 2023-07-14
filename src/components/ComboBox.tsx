@@ -29,7 +29,8 @@ const ComboBox = ({
   return (
     <div className="w-full">
       <select
-        className="border border-solid border-gray-600  py-2 px-4 bg-jair-black  rounded-md w-full "
+        className="border border-solid border-gray-600  py-2 px-4 bg-jair-black  rounded-md w-full 
+        appearance-none focus:outline-none focus:ring-1 focus:ring-white"
         onChange={handleOnChange}
         defaultValue={initialValue ? initialValue : ""}
       >

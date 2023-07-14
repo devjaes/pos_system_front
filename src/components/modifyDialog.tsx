@@ -1,5 +1,5 @@
 import { IInputsForm } from "@/store/types/IForms";
-import { IProductResponse } from "@/store/types/IProducts";
+import { IProductResponse, IProductUpdate } from "@/store/types/IProducts";
 import { ICE, IRBPNR, IVAS } from "@/store/types/Tables";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -11,6 +11,7 @@ import { classNames } from "primereact/utils";
 import React from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import ComboBox from "./ComboBox";
+import { handleUpdateProduct } from "@/store/api/productApi";
 
 interface Props {
   product: IProductResponse;
@@ -115,13 +116,34 @@ export default function ModifyDialog({
   } = useForm();
 
   const onSubmit = handleSubmit((data: any) => {
-    toast.current?.show({
-      severity: "success",
-      summary: "Confirmed",
-      detail: "Product Updated",
-      life: 3000,
+    const productToUpdate: IProductUpdate = {
+      name: data.name,
+      mainCode: data.mainCode,
+      auxCode: data.auxCode,
+      description: data.description,
+      stock: data.stock,
+      unitPrice: data.unitPrice,
+      ivaType: selectedIVA,
+      iceType: selectedICE,
+      irbpType: selectedIRBP,
+    };
+    handleUpdateProduct(product.id, productToUpdate).then((response) => {
+      if (response) {
+        toast.current?.show({
+          severity: "success",
+          summary: "Confirmed",
+          detail: "Product Updated",
+          life: 3000,
+        });
+      } else {
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Product not Updated",
+          life: 3000,
+        });
+      }
     });
-    console.log(data);
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -129,7 +151,17 @@ export default function ModifyDialog({
     name: "productInfo"
   })
 
+  const handleICE = (e: string) => {
+    setSelectedICE(e);
+  };
 
+  const handleIRBP = (e: string) => {
+    setSelectedIRBP(e);
+  };
+
+  const handleIVA = (e: string) => {
+    setSelectedIVA(e);
+  };
 
   const renderDialogContent = (product: IProductResponse) => {
     return (
@@ -171,13 +203,13 @@ export default function ModifyDialog({
 
           <div className="flex justify-evenly gap-4">
             <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox label="ICE" options={ICE} defaultValue={product.iceType ? product.iceType : "No aplica"} onChange={() => { }}></ComboBox>
+              <ComboBox label="ICE" options={ICE} defaultValue={product.iceType ? product.iceType : "No aplica"} onChange={(e) => { handleICE(e) }}></ComboBox>
             </div>
             <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox label="IRBP" options={IRBPNR} defaultValue={product.irbpType ? product.irbpType : "No aplica"} onChange={() => { }}></ComboBox>
+              <ComboBox label="IRBP" options={IRBPNR} defaultValue={product.irbpType ? product.irbpType : "No aplica"} onChange={(e) => { handleIRBP(e) }}></ComboBox>
             </div>
             <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox label="IVA" options={IVAS} initialValue={selectedIVA} onChange={() => { }}></ComboBox>
+              <ComboBox label="IVA" options={IVAS} initialValue={selectedIVA} onChange={(e) => { handleIVA(e) }}></ComboBox>
             </div>
           </div>
 
