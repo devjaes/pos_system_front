@@ -243,36 +243,28 @@ export default function DynamicColumnsDemo() {
                         <div className="card flex justify-content-center py-4">
                             <span className="p-float-label">
                                 <Dropdown inputId="IVA" value={selectedIVA} onChange={(e) => setSelectedIVA(e.value)}
-                                    options={
-                                        IVAS.map((iva) => ({
-                                            name: iva,
-                                            code: iva
-                                        }))} optionLabel="name" className="w-full md:w-14rem" />
+                                    options={IVAS} optionLabel="name" className="w-full md:w-14rem" />
                                 <label htmlFor="IVA">IVA</label>
                             </span>
                         </div>
                         <div className="card flex justify-content-center py-4">
                             <span className="p-float-label">
                                 <Dropdown inputId="ICE" value={selectedICE} onChange={(e) => setSelectedICE(e.value)}
-                                    options={
-                                        ICE.map((ice) => ({
-                                            name: ice,
-                                            code: ice
-                                        }))} optionLabel="name" className="w-full md:w-14rem" />
+                                    options={ICE} optionLabel="name" className="w-full md:w-14rem" />
                                 <label htmlFor="ICE">ICE</label>
                             </span>
                         </div>
                         <div className="card flex justify-content-center py-4">
                             <span className="p-float-label">
                                 <Dropdown inputId="IRBP" value={selectedIRBP} onChange={(e) => setSelectedIRBP(e.value)}
-                                    options={
-                                        IRBPNR.map((irbp) => ({
-                                            name: irbp,
-                                            code: irbp
-                                        }))} optionLabel="name" className="w-full md:w-14rem" />
+                                    options={IRBPNR} optionLabel="name" className="w-full md:w-14rem" />
                                 <label htmlFor="IRBP">IRBP</label>
                             </span>
                         </div>
+                    </div>
+                    <div className='flex justify-evenly gap-4 py-4'>
+                        <Button label="Agregar" severity="info" className='w-1/2' />
+                        <Button label="Cancelar" severity="danger" className='w-1/2' />
                     </div>
 
                 </div>
