@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, useRef, MouseEvent } from 'react';
+import React, { useState, useEffect, useRef, MouseEvent, use } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { handleGetAllProducts } from '@/store/api/productApi';
@@ -14,6 +14,8 @@ import { useForm } from 'react-hook-form';
 import { KeyFilterType } from 'primereact/keyfilter';
 import { Dropdown } from 'primereact/dropdown';
 import { ICE, IRBPNR, IVAS } from '@/store/types/Tables';
+import { on } from 'events';
+import ModifyDialog from '@/components/modifyDialog';
 
 
 export default function DynamicColumnsDemo() {
@@ -26,6 +28,7 @@ export default function DynamicColumnsDemo() {
     const [selectedIVA, setSelectedIVA] = useState<any>(null);
     const [selectedICE, setSelectedICE] = useState<any>(null);
     const [selectedIRBP, setSelectedIRBP] = useState<any>(null);
+
 
     const columns = [
         { field: 'id', header: 'ID' },
@@ -62,6 +65,7 @@ export default function DynamicColumnsDemo() {
     const handleModify = (product: IProductResponse) => {
         setProduct(product);
         setEditVisible(true);
+
     };
 
     const handleDelete = (product: IProductResponse) => {
@@ -183,7 +187,10 @@ export default function DynamicColumnsDemo() {
                                 header={col.header}
                                 body={(rowData) => (
                                     <div className="action-buttons flex gap-6">
-                                        <Button icon="pi pi-pencil" severity="info" aria-label="User" onClick={() => handleModify(rowData)} />
+                                        <Button icon="pi pi-pencil" severity="info" aria-label="User" onClick={() => {
+                                            handleModify(rowData)
+                                        }
+                                        } />
                                         <Toast ref={toast} />
                                         <ConfirmPopup />
                                         <Button icon="pi pi-eraser" severity="danger" aria-label="Cancel" onClick={(e) => confirm(e, rowData)} />
@@ -205,21 +212,13 @@ export default function DynamicColumnsDemo() {
                 })}
             </DataTable>
 
-            <Dialog header="Header" visible={editVisible} style={{ width: '50vw' }} onHide={() => setEditVisible(false)}>
-                <div>
-                    <h1 className='font-bold text-center text-3xl'>Modificar {product?.name}</h1>
-                    {product?.auxCode}
-                    {product?.description}
-                    {product?.iceType}
-                    {product?.id}
-                    {product?.irbpType}
-                    {product?.ivaType}
-                    {product?.mainCode}
-                    {product?.name}
-                    {product?.stock}
-                    {product?.unitPrice}
-                </div>
-            </Dialog>
+            {
+                product !== undefined && (
+                    <ModifyDialog visible={editVisible} setEditVisible={setEditVisible} product={product} onHide={() => { setEditVisible(false) }} />
+                )
+            }
+
+
 
             <Dialog visible={addVisible} style={{ width: '50vw' }} onHide={() => setAddVisible(false)}>
                 <div className='px-16'>
@@ -232,6 +231,7 @@ export default function DynamicColumnsDemo() {
                                     className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                                     keyfilter={allForm.keyfilter as KeyFilterType}
                                     placeholder={allForm.placeholder}
+                                    value=''
                                     {...register(allForm.name, {
                                         required: allForm.alertText,
                                     })} />
