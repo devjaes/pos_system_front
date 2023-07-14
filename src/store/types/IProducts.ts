@@ -22,3 +22,4 @@ export interface IProductUpdate {
   iceType: string;
   irbpType: string;
 }
+

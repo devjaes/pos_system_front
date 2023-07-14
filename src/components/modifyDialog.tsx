@@ -133,63 +133,69 @@ export default function ModifyDialog({
 
   const renderDialogContent = (product: IProductResponse) => {
     return (
-      <form>
-        {productInfo.map((product, index) => (
-          <div className="py-4 block" key={index}>
-            <span className="p-float-label">
-              <Toast ref={toast} />
-              <Controller
-                name={product.name}
-                control={control}
-                rules={{ required: true }}
-                defaultValue={product.value}
-                render={({ field }) => (
-                  <>
-                    <InputText
-                      {...field}
-                      className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
-                      keyfilter={product.keyfilter as KeyFilterType}
-                      placeholder={product.placeholder}
-                    />
-                    {errors[product.name] && (
-                      <small className="text-red-500">
-                        {product.alertText}
-                      </small>
-                    )}
-                  </>
-                )}
-                shouldUnregister
-              />
-              <label className="block pb-2" htmlFor={product.name}>
-                {product.label}
-              </label>
-            </span>
+      <div >
+        <form>
+          {productInfo.map((product, index) => (
+            <div className="py-4 block" key={index}>
+              <span className="p-float-label">
+                <Toast ref={toast} />
+                <Controller
+                  name={product.name}
+                  control={control}
+                  rules={{ required: true }}
+                  defaultValue={product.value}
+                  render={({ field }) => (
+                    <>
+                      <InputText
+                        {...field}
+                        className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
+                        keyfilter={product.keyfilter as KeyFilterType}
+                        placeholder={product.placeholder}
+                      />
+                      {errors[product.name] && (
+                        <small className="text-red-500">
+                          {product.alertText}
+                        </small>
+                      )}
+                    </>
+                  )}
+                  shouldUnregister
+                />
+                <label className="block pb-2" htmlFor={product.name}>
+                  {product.label}
+                </label>
+              </span>
+            </div>
+
+          ))}
+
+          <div className="flex justify-evenly gap-4">
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox label="ICE" options={ICE} defaultValue={product.iceType ? product.iceType : "No aplica"} onChange={() => { }}></ComboBox>
+            </div>
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox label="IRBP" options={IRBPNR} defaultValue={product.irbpType ? product.irbpType : "No aplica"} onChange={() => { }}></ComboBox>
+            </div>
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox label="IVA" options={IVAS} initialValue={selectedIVA} onChange={() => { }}></ComboBox>
+            </div>
           </div>
 
-        ))}
 
-        <div className="flex justify-evenly gap-4">
-          <div className="card flex justify-content-center py-4 w-full">
-            <ComboBox label="ICE" options={ICE} defaultValue={product.iceType ? product.iceType : "No aplica"} onChange={() => { }}></ComboBox>
+          <div className="flex justify-center gap-8">
+            <Button
+              icon="pi pi-check"
+              className="p-button-success p-mr-2 w-1/2"
+              label="Modificar"
+              onClick={onSubmit}
+            />
+
           </div>
-          <div className="card flex justify-content-center py-4 w-full">
-            <ComboBox label="IRBP" options={IRBPNR} defaultValue={product.irbpType ? product.irbpType : "No aplica"} onChange={() => { }}></ComboBox>
-          </div>
-          <div className="card flex justify-content-center py-4 w-full">
-            <ComboBox label="IVA" options={IVAS} initialValue={selectedIVA} onChange={() => { }}></ComboBox>
-          </div>
+        </form>
+        <div className="flex justify-center items-center py-6">
+          <Button label="Cancelar" severity="danger" className="w-1/2" onClick={() => { setEditVisible(false) }} icon="pi pi-times" />
         </div>
-
-
-        <div className="flex justify-center">
-          <Button
-            icon="pi pi-check"
-            className="p-button-success p-mr-2"
-            label="Modificar"
-            onClick={onSubmit}
-          />
-        </div>
-      </form>
+      </div>
     );
   };
 

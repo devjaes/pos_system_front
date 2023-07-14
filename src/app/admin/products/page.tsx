@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef, MouseEvent, use } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { handleGetAllProducts } from "@/store/api/productApi";
-import { IProductResponse } from "@/store/types/IProducts";
+import { handleCreateProduct, handleGetAllProducts } from "@/store/api/productApi";
+import { IProductResponse, IProductUpdate } from "@/store/types/IProducts";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -16,6 +16,7 @@ import { Dropdown } from "primereact/dropdown";
 import { ICE, IRBPNR, IVAS } from "@/store/types/Tables";
 import Modal from "@/components/Modal";
 import ModifyDialog from "@/components/modifyDialog";
+import ComboBox from "@/components/ComboBox";
 
 export default function DynamicColumnsDemo() {
   const toast = useRef<Toast>(null);
@@ -97,7 +98,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "alpha",
       placeholder: "Nombre del Producto",
       alertText: "*El nombre es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "mainCodeRegister",
@@ -105,7 +106,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Código Principal",
       alertText: "*El código principal es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "auxCodeRegister",
@@ -113,15 +114,15 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Código Auxiliar",
       alertText: "*El código auxiliar es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "descriptionRegister",
       label: "Descripción",
-      keyfilter: "alpha",
+      keyfilter: "alphanum",
       placeholder: "Descripción",
       alertText: "*La descripción es obligatoria",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "stockRegister",
@@ -129,7 +130,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Stock",
       alertText: "*El stock es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "unitPriceRegister",
@@ -137,7 +138,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "money",
       placeholder: "Precio Unitario",
       alertText: "*El precio unitario es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
   ];
 
@@ -175,7 +176,7 @@ export default function DynamicColumnsDemo() {
         placeholder: "Nombre del Producto",
         alertText: "*El nombre es obligatorio",
         value: product?.name,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "mainCode",
@@ -184,7 +185,7 @@ export default function DynamicColumnsDemo() {
         placeholder: "Código Principal",
         alertText: "*El código principal es obligatorio",
         value: product?.mainCode,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "auxCode",
@@ -193,7 +194,7 @@ export default function DynamicColumnsDemo() {
         placeholder: "Código Auxiliar",
         alertText: "*El código auxiliar es obligatorio",
         value: product?.auxCode,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "description",
@@ -202,7 +203,7 @@ export default function DynamicColumnsDemo() {
         placeholder: "Descripción",
         alertText: "*La descripción es obligatoria",
         value: product?.description,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "stock",
@@ -211,7 +212,7 @@ export default function DynamicColumnsDemo() {
         placeholder: "Stock",
         alertText: "*El stock es obligatorio",
         value: product?.stock as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "unitPrice",
@@ -220,20 +221,59 @@ export default function DynamicColumnsDemo() {
         placeholder: "Precio Unitario",
         alertText: "*El precio unitario es obligatorio",
         value: product?.unitPrice as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
       },
     ];
     setProductInfo(productInfo);
   };
 
   const handleRegister = handleSubmit((data: any) => {
-    console.log("hlas");
-    console.log(data.name, { data });
+    const product: IProductUpdate = {
+      name: data.nameRegister,
+      mainCode: data.mainCodeRegister,
+      auxCode: data.auxCodeRegister,
+      description: data.descriptionRegister,
+      stock: data.stockRegister as number,
+      unitPrice: data.unitPriceRegister,
+      ivaType: selectedIVA,
+      iceType: selectedICE,
+      irbpType: selectedIRBP,
+    };
+
+    console.log({ product });
+
+    handleCreateProduct(product).then((res) => {
+      if (res) {
+        setAddVisible(false);
+        toast.current?.show({
+          severity: "success",
+          summary: "Producto Creado",
+          detail: "El producto ha sido creado correctamente",
+          life: 3000,
+        });
+        console.log(res);
+      }
+    }
+    );
+
   });
 
   const onHide = () => {
     setModifyDialog(false);
   };
+
+  const handleICE = (e: string) => {
+    setSelectedICE(e);
+  };
+
+  const handleIRBP = (e: string) => {
+    setSelectedIRBP(e);
+  };
+
+  const handleIVA = (e: string) => {
+    setSelectedIVA(e);
+  };
+
 
   return (
     <div className="flex flex-col gap-8">
@@ -345,59 +385,31 @@ export default function DynamicColumnsDemo() {
                     required: allForm.alertText,
                   })}
                 />
-                {errors[allForm.name] && (
-                  <small className="text-red-500">{allForm.alertText}</small>
-                )}
                 <label className="block pb-2" htmlFor={allForm.name}>
                   {allForm.label}
                 </label>
+
               </span>
+              {errors[allForm.name] && (
+                <small className="text-red-500">{allForm.alertText}</small>
+              )}
             </div>
           ))}
-          <div className="flex justify-around">
-            <div className="card flex justify-content-center py-4">
-              <span className="p-float-label">
-                <Dropdown
-                  inputId="IVA"
-                  value={selectedIVA}
-                  onChange={(e) => setSelectedIVA(e.value)}
-                  options={IVAS}
-                  optionLabel="name"
-                  className="w-full md:w-14rem"
-                />
-                <label htmlFor="IVA">IVA</label>
-              </span>
+
+          <div className="flex justify-evenly gap-4">
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox label="ICE" options={ICE} defaultValue="Selecciona una opción" onChange={(e) => { handleICE(e) }}></ComboBox>
             </div>
-            <div className="card flex justify-content-center py-4">
-              <span className="p-float-label">
-                <Dropdown
-                  inputId="ICE"
-                  value={selectedICE}
-                  onChange={(e) => setSelectedICE(e.value)}
-                  options={ICE}
-                  optionLabel="name"
-                  className="w-full md:w-14rem"
-                />
-                <label htmlFor="ICE">ICE</label>
-              </span>
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox label="IRBP" options={IRBPNR} defaultValue="Selecciona una opción" onChange={(e) => { handleIRBP(e) }}></ComboBox>
             </div>
-            <div className="card flex justify-content-center py-4">
-              <span className="p-float-label">
-                <Dropdown
-                  inputId="IRBP"
-                  value={selectedIRBP}
-                  onChange={(e) => setSelectedIRBP(e.value)}
-                  options={IRBPNR}
-                  optionLabel="name"
-                  className="w-full md:w-14rem"
-                />
-                <label htmlFor="IRBP">IRBP</label>
-              </span>
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox label="IVA" options={IVAS} defaultValue="Selecciona una opción" onChange={(e) => { handleIVA(e) }}></ComboBox>
             </div>
           </div>
           <div className="flex justify-evenly gap-4 py-4">
             <Button label="Agregar" severity="info" className="w-1/2" />
-            <Button label="Cancelar" severity="danger" className="w-1/2" />
+            <Button label="Cancelar" severity="danger" className="w-1/2" onClick={() => { setAddVisible(false) }} />
           </div>
         </form>
       </Dialog>
