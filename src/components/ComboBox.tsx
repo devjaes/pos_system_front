@@ -29,9 +29,8 @@ const ComboBox = ({
 
   return (
     <div>
-      <label className="block pb-2">{label}</label>
       <select
-        className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
+        className="border border-solid border-gray-600  py-2 px-4 bg-gray-800  rounded-full w-full "
         onChange={handleOnChange}
       >
         {defaultValue && <option value="">{defaultValue}</option>}
