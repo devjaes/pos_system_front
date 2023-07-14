@@ -10,9 +10,9 @@ export const IVAS = [
   "IVA variable",
 ];
 
-export const ICE = ["0%", "5%", "10%", "15%", "20%"];
+export const ICE = ["0%"];
 
-export const IRBPNR = ["0%", "1%", "2%", "3%", "4%", "5%"];
+export const IRBPNR = ["0%"];
 
 export const IDENTIFICATION_TYPES = [
   "RUC",

@@ -12,6 +12,8 @@ import { Toast } from 'primereact/toast';
 import { IInputsForm } from '@/store/types/IForms';
 import { useForm } from 'react-hook-form';
 import { KeyFilterType } from 'primereact/keyfilter';
+import { Dropdown } from 'primereact/dropdown';
+import { ICE, IRBPNR, IVAS } from '@/store/types/Tables';
 
 
 export default function DynamicColumnsDemo() {
@@ -21,6 +23,9 @@ export default function DynamicColumnsDemo() {
     const [editVisible, setEditVisible] = useState(false);
     const [addVisible, setAddVisible] = useState(false);
     const [product, setProduct] = useState<IProductResponse>();
+    const [selectedIVA, setSelectedIVA] = useState<any>(null);
+    const [selectedICE, setSelectedICE] = useState<any>(null);
+    const [selectedIRBP, setSelectedIRBP] = useState<any>(null);
 
     const columns = [
         { field: 'id', header: 'ID' },
@@ -79,34 +84,51 @@ export default function DynamicColumnsDemo() {
             name: 'name',
             label: 'Nombre',
             keyfilter: 'alpha',
-            placeholder: 'Nombre del Usuario',
+            placeholder: 'Nombre del Producto',
             alertText: '*El nombre es obligatorio',
             onChange: () => { },
         },
         {
-            name: 'lastName',
-            label: 'Apellido',
+            name: 'mainCode',
+            label: 'Código Principal',
+            keyfilter: 'num',
+            placeholder: 'Código Principal',
+            alertText: '*El código principal es obligatorio',
+            onChange: () => { },
+        },
+        {
+            name: 'auxCode',
+            label: 'Código Auxiliar',
+            keyfilter: 'num',
+            placeholder: 'Código Auxiliar',
+            alertText: '*El código auxiliar es obligatorio',
+            onChange: () => { },
+        },
+        {
+            name: 'description',
+            label: 'Descripción',
             keyfilter: 'alpha',
-            placeholder: 'Apellido del Usuario',
-            alertText: '*El apellido es obligatorio',
-            onChange: () => { },
-        },
-        {
-            name: 'email',
-            label: 'Correo',
-            keyfilter: 'email',
-            placeholder: 'Correo electrónico',
-            alertText: '*El correo es obligatorio',
-            onChange: () => { },
-        },
-        {
-            name: 'password',
-            label: 'Contraseña',
-            keyfilter: 'alphanum',
             placeholder: 'Contraseña',
             alertText: '*La contraseña es obligatoria',
             onChange: () => { },
         },
+        {
+            name: 'stock',
+            label: 'Stock',
+            keyfilter: 'num',
+            placeholder: 'Stock',
+            alertText: '*El stock es obligatorio',
+            onChange: () => { },
+        },
+        {
+            name: 'unitPrice',
+            label: 'Precio Unitario',
+            keyfilter: 'money',
+            placeholder: 'Precio Unitario',
+            alertText: '*El precio unitario es obligatorio',
+            onChange: () => { },
+        },
+
     ]
 
     const {
@@ -184,33 +206,76 @@ export default function DynamicColumnsDemo() {
             </DataTable>
 
             <Dialog header="Header" visible={editVisible} style={{ width: '50vw' }} onHide={() => setEditVisible(false)}>
-                <h1 className='font-bold text-center text-3xl'>Modificar {product?.name}</h1>
-                {product?.auxCode}
-                {product?.description}
-                {product?.iceType}
-                {product?.id}
-                {product?.irbpType}
-                {product?.ivaType}
-                {product?.mainCode}
-                {product?.name}
-                {product?.stock}
-                {product?.unitPrice}
+                <div>
+                    <h1 className='font-bold text-center text-3xl'>Modificar {product?.name}</h1>
+                    {product?.auxCode}
+                    {product?.description}
+                    {product?.iceType}
+                    {product?.id}
+                    {product?.irbpType}
+                    {product?.ivaType}
+                    {product?.mainCode}
+                    {product?.name}
+                    {product?.stock}
+                    {product?.unitPrice}
+                </div>
             </Dialog>
 
             <Dialog visible={addVisible} style={{ width: '50vw' }} onHide={() => setAddVisible(false)}>
-                <h1 className='text-center font-bold text-3xl'>Agregar un producto</h1>
-                {allForms.map((allForm, index) => (
-                    <div className="pb-4 block" key={index}>
-                        <label className="block pb-2">{allForm.label}</label>
-                        <InputText
-                            className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
-                            keyfilter={allForm.keyfilter as KeyFilterType}
-                            placeholder={allForm.placeholder}
-                            {...register(allForm.name, {
-                                required: allForm.alertText,
-                            })} />
+                <div className='px-16'>
+                    <h1 className='text-center font-bold text-3xl'>Agregar un producto</h1>
+                    {allForms.map((allForm, index) => (
+                        <div className="py-4 block" key={index}>
+                            <span className="p-float-label">
+                                <InputText
+                                    id={allForm.name}
+                                    className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
+                                    keyfilter={allForm.keyfilter as KeyFilterType}
+                                    placeholder={allForm.placeholder}
+                                    {...register(allForm.name, {
+                                        required: allForm.alertText,
+                                    })} />
+                                <label className="block pb-2" htmlFor={allForm.name}>{allForm.label}</label>
+                            </span>
+                        </div>
+                    ))}
+                    <div className='flex justify-around'>
+                        <div className="card flex justify-content-center py-4">
+                            <span className="p-float-label">
+                                <Dropdown inputId="IVA" value={selectedIVA} onChange={(e) => setSelectedIVA(e.value)}
+                                    options={
+                                        IVAS.map((iva) => ({
+                                            name: iva,
+                                            code: iva
+                                        }))} optionLabel="name" className="w-full md:w-14rem" />
+                                <label htmlFor="IVA">IVA</label>
+                            </span>
+                        </div>
+                        <div className="card flex justify-content-center py-4">
+                            <span className="p-float-label">
+                                <Dropdown inputId="ICE" value={selectedICE} onChange={(e) => setSelectedICE(e.value)}
+                                    options={
+                                        ICE.map((ice) => ({
+                                            name: ice,
+                                            code: ice
+                                        }))} optionLabel="name" className="w-full md:w-14rem" />
+                                <label htmlFor="ICE">ICE</label>
+                            </span>
+                        </div>
+                        <div className="card flex justify-content-center py-4">
+                            <span className="p-float-label">
+                                <Dropdown inputId="IRBP" value={selectedIRBP} onChange={(e) => setSelectedIRBP(e.value)}
+                                    options={
+                                        IRBPNR.map((irbp) => ({
+                                            name: irbp,
+                                            code: irbp
+                                        }))} optionLabel="name" className="w-full md:w-14rem" />
+                                <label htmlFor="IRBP">IRBP</label>
+                            </span>
+                        </div>
                     </div>
-                ))}
+
+                </div>
             </Dialog>
 
         </div >
