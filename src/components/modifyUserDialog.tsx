@@ -93,16 +93,20 @@ export default function modifyUserDialog(
     const onSubmit = handleSubmit((data: any) => {
 
         const userToUpdate: IUserUpdate = {
-            name: data.name === user.name ? '' : data.name,
-            lastName: data.lastName === user.lastName ? '' : data.lastName,
-            email: data.email === user.email ? '' : data.email,
-            password: data.password,
+            name: data.name === user.name ? null : data.name,
+            lastName: data.lastName === user.lastName ? null : data.lastName,
+            email: data.email === user.email ? null : data.email,
+            password: data.password === undefined ? null : data.password,
         }
 
-        if (data.password !== data.confirmPassword) {
-            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Las contraseñas no coinciden', life: 3000 });
-            console.log("Las contraseñas no coinciden");
-            return;
+        console.log(userToUpdate);
+
+        if (data.password !== '' || data.password !== undefined) {
+            if (data.password !== data.confirmPassword) {
+                toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Las contraseñas no coinciden', life: 3000 });
+                console.log("Las contraseñas no coinciden");
+                return;
+            }
         }
 
         handleUpdateUser(user.id, userToUpdate).then((res) => {

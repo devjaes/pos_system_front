@@ -26,12 +26,12 @@ const items: MenuItem[] = [
     icon: "pi pi-fw pi-shopping-bag",
     items: [
       {
-        label: "Agregar Cliente",
+        label: "Administrar clientes",
         icon: "pi pi-fw pi-plus-circle",
         url: "/admin/customer",
       },
       {
-        label: "Agregar Sucursal/Caja",
+        label: "Administrar Sucursal/Caja",
         icon: "pi pi-fw pi-plus-circle",
         url: "/admin/branches",
       },
@@ -40,6 +40,7 @@ const items: MenuItem[] = [
   {
     label: "Configuración",
     icon: "pi pi-fw pi-wrench",
+    url: "/admin/settings",
   },
 ];
 

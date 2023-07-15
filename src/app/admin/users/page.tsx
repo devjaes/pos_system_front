@@ -164,6 +164,7 @@ export default function DynamicColumnsDemo() {
       password: data.password,
       rol: newUserRol as UserRoles,
     }
+    console.log(newUser);
 
     handleCreateUser(newUser).then((res) => {
       if (res) {

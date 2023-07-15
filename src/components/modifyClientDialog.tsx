@@ -32,7 +32,7 @@ export default function modifyClientDialog(
 ) {
 
     const [customerInfo, setCustomerInfo] = React.useState<IInputsForm[]>([]);
-    const [IdType, setIdType] = React.useState<string>("");
+    const [IdType, setIdType] = React.useState<string | null>();
     const {
         control,
         handleSubmit,
@@ -108,13 +108,13 @@ export default function modifyClientDialog(
     const onSubmit = handleSubmit(
         (data: any) => {
             const customerToUpdate: ICustomerUpdate = {
-                name: data.name === customer.name ? '' : data.name,
-                lastName: data.lastName === customer.lastName ? '' : data.lastName,
-                email: data.email === customer.email ? '' : data.email,
-                businessName: data.businessName === customer.businessName ? '' : data.businessName,
-                identification: data.identification === customer.identification ? '' : data.identification,
-                address: data.address === customer.address ? '' : data.address,
-                identificationType: IdType === customer.identificationType ? '' : IdType,
+                name: data.name === customer.name ? null : data.name,
+                lastName: data.lastName === customer.lastName ? null : data.lastName,
+                email: data.email === customer.email ? null : data.email,
+                businessName: data.businessName === customer.businessName ? null : data.businessName,
+                identification: data.identification === customer.identification ? null : data.identification,
+                address: data.address === customer.address ? null : data.address,
+                identificationType: IdType === customer.identificationType ? null : IdType,
             };
             console.log(customerToUpdate);
             handleUpdateCustomer(customer.id, customerToUpdate).then((response) => {
@@ -158,7 +158,6 @@ export default function modifyClientDialog(
                     {customerInfo.map((customer, index) => (
                         <div className="py-4 block" key={index}>
                             <span className="p-float-label">
-                                <Toast ref={toast} />
                                 <Controller
                                     name={customer.name}
                                     control={control}
