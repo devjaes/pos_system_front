@@ -165,7 +165,7 @@ export default function ModifyDialog({
 
   const renderDialogContent = (product: IProductResponse) => {
     return (
-      <div >
+      <div>
         <form>
           {productInfo.map((product, index) => (
             <div className="py-4 block" key={index}>

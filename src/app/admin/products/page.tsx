@@ -65,9 +65,7 @@ export default function DynamicColumnsDemo() {
 
     const handleModify = async (product: IProductResponse) => {
         setProduct(product);
-        console.log({ product });
         await generateProductInfo(product);
-        console.log({ productInfo });
         setEditVisible(true);
     };
 
