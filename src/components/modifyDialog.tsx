@@ -3,20 +3,17 @@ import { IProductResponse, IProductUpdate } from "@/store/types/IProducts";
 import { ICE, IRBPNR, IVAS } from "@/store/types/Tables";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { KeyFilterType } from "primereact/keyfilter";
 import { Toast } from "primereact/toast";
-import { classNames } from "primereact/utils";
 import React, { RefObject } from "react";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import ComboBox from "./ComboBox";
 import { handleUpdateProduct } from "@/store/api/productApi";
 
 interface Props {
   toast: RefObject<Toast>;
   product: IProductResponse;
-  onHide: () => void;
   visible: boolean;
   setEditVisible: (value: boolean) => void;
   setProducts: any;
@@ -24,7 +21,6 @@ interface Props {
 
 export default function ModifyDialog({
   product,
-  onHide,
   visible,
   setEditVisible,
   setProducts,
@@ -178,7 +174,7 @@ export default function ModifyDialog({
 
   const renderDialogContent = (product: IProductResponse) => {
     return (
-      <div>
+      <div className="p-4">
         <form>
           {productInfo.map((product, index) => (
             <div className="py-4 block" key={index}>
@@ -254,26 +250,26 @@ export default function ModifyDialog({
             </div>
           </div>
 
-          <div className="flex justify-center gap-8">
+          <div className="flex justify-center gap-8 p-4">
             <Button
               icon="pi pi-check"
               className="p-button-success p-mr-2 w-1/2"
               label="Modificar"
+              typeof="submit"
               onClick={onSubmit}
+            />
+            <Button
+              label="Cancelar"
+              severity="danger"
+              className="w-1/2"
+              type="button"
+              onClick={() => {
+                setEditVisible(false);
+              }}
+              icon="pi pi-times"
             />
           </div>
         </form>
-        <div className="flex justify-center items-center py-6">
-          <Button
-            label="Cancelar"
-            severity="danger"
-            className="w-1/2"
-            onClick={() => {
-              setEditVisible(false);
-            }}
-            icon="pi pi-times"
-          />
-        </div>
       </div>
     );
   };
@@ -281,7 +277,7 @@ export default function ModifyDialog({
   return (
     <>
       <Dialog
-        header={"Modificar " + `${product?.name}`}
+        header={"Modificar Producto: " + `${product?.name}`}
         headerClassName="text-center text-3xl font-bold"
         visible={visible}
         style={{ width: "50vw" }}

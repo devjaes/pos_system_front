@@ -31,7 +31,7 @@ export const handleGetBranch = async (branchId: number) => {
   }
 };
 
-export const handleGetAllBranchs = async () => {
+export const handleGetAllBranches = async () => {
   try {
     const response = await fetch(`${config.API_REST_BASE_URL}/branches`, {
       method: "GET",
@@ -45,14 +45,14 @@ export const handleGetAllBranchs = async () => {
       return;
     }
     const data = await response.json();
-    const branchsData: IBranchResponse[] = data;
+    const branchesData: IBranchResponse[] = data;
 
-    if (!branchsData) {
+    if (!branchesData) {
       console.log("Error al obtener las sucursales.");
       return;
     }
 
-    return branchsData;
+    return branchesData;
   } catch (error) {
     console.log({ error });
   }
@@ -92,7 +92,7 @@ export const handleUpdateBranch = async (
   }
 };
 
-export const handleRegisterBranch = async (branchUpdate: IBranchUpdate) => {
+export const handleCreateBranch = async (branchUpdate: IBranchUpdate) => {
   try {
     const response = await fetch(
       `${config.API_REST_BASE_URL}/branches/register`,

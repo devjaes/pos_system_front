@@ -2,34 +2,31 @@
 import { useState, useEffect, useRef, MouseEvent } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import {
-  handleCreateProduct,
-  handleDeleteProduct,
-  handleGetAllProducts,
-} from "@/store/api/productApi";
-import { IProductCreate, IProductResponse } from "@/store/types/IProducts";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
 import { Toast } from "primereact/toast";
 import { IInputsForm } from "@/store/types/IForms";
-import { KeyFilterType } from "primereact/keyfilter";
-import { ICE, IRBPNR, IVAS } from "@/store/types/Tables";
-import ModifyDialog from "@/components/modifyDialog";
-import ComboBox from "@/components/ComboBox";
 import { useForm } from "react-hook-form";
+import { KeyFilterType } from "primereact/keyfilter";
+import { IBranchCreate, IBranchResponse } from "@/store/types/IBranch";
+import {
+  handleCreateBranch,
+  handleDeleteBranch,
+  handleGetAllBranches,
+} from "@/store/api/branchApi";
+import ModifyBranchDialog from "@/components/ModifyBranchDialog";
+import BoxTableModal from "@/components/BoxTableModal";
 
-export default function DynamicColumnsDemo() {
+const branchs = () => {
   const toast = useRef<Toast>(null);
-  const [products, setProducts] = useState<IProductResponse[]>([]);
+  const [branches, setBranches] = useState<IBranchResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [editVisible, setEditVisible] = useState(false);
   const [addVisible, setAddVisible] = useState(false);
-  const [product, setProduct] = useState<IProductResponse>();
-  const [selectedIVA, setSelectedIVA] = useState<any>(null);
-  const [selectedICE, setSelectedICE] = useState<any>(null);
-  const [selectedIRBP, setSelectedIRBP] = useState<any>(null);
+  const [branch, setBranch] = useState<IBranchResponse | null>(null);
+  const [branchBox, setBranchBox] = useState<IBranchResponse | null>(null);
 
   const {
     reset,
@@ -40,22 +37,16 @@ export default function DynamicColumnsDemo() {
 
   const columns = [
     { field: "id", header: "ID" },
-    { field: "name", header: "Nombre" },
-    { field: "mainCode", header: "Código Principal" },
-    { field: "auxCode", header: "Código Auxiliar" },
-    { field: "description", header: "Descripción" },
-    { field: "stock", header: "Stock" },
-    { field: "unitPrice", header: "Precio Unitario" },
-    { field: "ivaType", header: "Tipo de IVA" },
-    { field: "iceType", header: "Tipo de ICE" },
-    { field: "irbpType", header: "Tipo de IRBP" },
+    { field: "key", header: "Key" },
+    { field: "name", header: "Nombre sucursal" },
+    { field: "address", header: "Dirección" },
     { field: "actions", header: "Acciones" },
   ];
 
   useEffect(() => {
-    handleGetAllProducts().then((res) => {
+    handleGetAllBranches().then((res) => {
       if (res) {
-        setProducts(res);
+        setBranches(res);
       }
     });
   }, []);
@@ -64,50 +55,81 @@ export default function DynamicColumnsDemo() {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProducts = products.filter((product) =>
-    Object.values(product).some((value) =>
+  const filteredBranchs = branches.filter((branch) =>
+    Object.values(branch).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
-  const handleModify = async (product: IProductResponse) => {
-    setProduct(product);
-    console.log({ product });
+  const handleModify = (branch: IBranchResponse) => {
+    setBranch(branch);
     setEditVisible(true);
   };
 
-  const handleDelete = (product: IProductResponse) => {
-    handleDeleteProduct(product.id).then((res) => {
+  const handleDelete = (branch: IBranchResponse) => {
+    handleDeleteBranch(branch.id).then((res) => {
       if (res) {
         toast.current?.show({
           severity: "success",
-          summary: "Successful",
-          detail: "Producto Eliminado",
+          summary: "Producto Eliminado",
+          detail: "La sucursal ha sido eliminada correctamente",
           life: 3000,
         });
-        setProducts(products.filter((p) => p.id !== product.id));
+        setBranches(branches.filter((item) => item.id !== branch.id));
+        setBranchBox(null);
       } else {
         toast.current?.show({
           severity: "error",
           summary: "Error",
-          detail: "No se pudo eliminar el producto",
+          detail: "Ha ocurrido un error al eliminar la sucursal",
           life: 3000,
         });
       }
     });
   };
 
+  const handleRegister = handleSubmit((data: any) => {
+    const branch: IBranchCreate = {
+      name: data.name,
+      address: data.address,
+    };
+
+    console.log({ branch });
+
+    handleCreateBranch(branch).then((res) => {
+      if (res) {
+        setAddVisible(false);
+        toast.current?.show({
+          severity: "success",
+          summary: "Producto Creado",
+          detail: "La sucursal ha sido creada correctamente",
+          life: 3000,
+        });
+        console.log(res);
+        setBranches([...branches, res]);
+        reset();
+      } else {
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Ha ocurrido un error al crear la sucursal",
+          life: 3000,
+        });
+      }
+    });
+  });
+
   const confirm = (
     event: MouseEvent<HTMLButtonElement>,
-    product: IProductResponse
+    branch: IBranchResponse
   ) => {
     confirmPopup({
       target: event.currentTarget,
-      message: "Quieres eliminar este producto?",
+      message: "Do you want to delete this record?",
       icon: "pi pi-info-circle",
       acceptClassName: "p-button-danger",
       accept() {
-        accept(product);
+        accept(branch);
       },
       reject,
     });
@@ -115,129 +137,47 @@ export default function DynamicColumnsDemo() {
 
   const allForms: IInputsForm[] = [
     {
-      name: "nameRegister",
+      name: "name",
       label: "Nombre",
-      keyfilter: /^[A-Za-z ]$/,
-      placeholder: "Nombre del Producto",
+      keyfilter: "alpha",
+      placeholder: "Nombre de la sucursal",
       alertText: "*El nombre es obligatorio",
-      onChange: () => {},
       maxLength: 50,
-    },
-    {
-      name: "mainCodeRegister",
-      label: "Código Principal",
-      keyfilter: "num",
-      placeholder: "Código Principal",
-      alertText: "*El código principal es obligatorio",
-      onChange: () => {},
-      maxLength: 4,
-    },
-    {
-      name: "auxCodeRegister",
-      label: "Código Auxiliar",
-      keyfilter: "num",
-      placeholder: "Código Auxiliar",
-      alertText: "*El código auxiliar es obligatorio",
       onChange: () => {},
     },
     {
-      name: "descriptionRegister",
-      label: "Descripción",
-      keyfilter: /^[A-Za-z ]$/,
-      placeholder: "Descripción",
-      alertText: "*La descripción es obligatoria",
-      onChange: () => {},
-      maxLength: 50,
-    },
-    {
-      name: "stockRegister",
-      label: "Stock",
-      keyfilter: "num",
-      placeholder: "Stock",
-      alertText: "*El stock es obligatorio",
-      onChange: () => {},
-    },
-    {
-      name: "unitPriceRegister",
-      label: "Precio Unitario",
-      keyfilter: "money",
-      placeholder: "Precio Unitario",
-      alertText: "*El precio unitario es obligatorio",
+      name: "address",
+      label: "Dirección",
+      keyfilter: "alpha",
+      placeholder: "Dirección de la sucursal",
+      alertText: "*La dirección es obligatoria",
+      maxLength: 100,
       onChange: () => {},
     },
   ];
 
-  const accept = (product: IProductResponse) => {
-    handleDelete(product);
+  const accept = (branch: IBranchResponse) => {
+    handleDelete(branch);
   };
 
   const reject = () => {
     toast.current?.show({
       severity: "warn",
       summary: "Rejected",
-      detail: "Has Cancelado la Eliminación del Producto",
+      detail: "Has cancelado la eliminación de la sucursal",
       life: 3000,
     });
-  };
-
-  const handleRegister = handleSubmit((data: any) => {
-    const product: IProductCreate = {
-      name: data.nameRegister,
-      mainCode: data.mainCodeRegister,
-      auxCode: data.auxCodeRegister,
-      description: data.descriptionRegister,
-      stock: Number(data.stockRegister),
-      unitPrice: Number(data.unitPriceRegister),
-      ivaType: selectedIVA,
-      iceType: selectedICE,
-      irbpType: selectedIRBP,
-    };
-
-    console.log({ product });
-
-    handleCreateProduct(product).then((res) => {
-      if (res) {
-        setAddVisible(false);
-        toast.current?.show({
-          severity: "success",
-          summary: "Producto Creado",
-          detail: "El producto ha sido creado correctamente",
-          life: 3000,
-        });
-        console.log(res);
-        setProducts([...products, res]);
-        reset();
-      } else {
-        toast.current?.show({
-          severity: "error",
-          summary: "Error",
-          detail: "Ha ocurrido un error al crear el producto",
-          life: 3000,
-        });
-      }
-    });
-  });
-
-  const handleICE = (e: string) => {
-    setSelectedICE(e);
-  };
-
-  const handleIRBP = (e: string) => {
-    setSelectedIRBP(e);
-  };
-
-  const handleIVA = (e: string) => {
-    setSelectedIVA(e);
   };
 
   return (
     <div className="flex flex-col gap-8">
       <Toast ref={toast} />
+
       <h1 className="text-neutral-100 text-3xl text-center font-bold">
         <span>
           <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
         </span>{" "}
-        Listado de productos
+        Listado de sucursales
       </h1>
 
       <div className="flex gap-4 justify-between">
@@ -251,7 +191,7 @@ export default function DynamicColumnsDemo() {
           />
         </div>
         <Button
-          label="Agregar Producto"
+          label="Agregar Sucursal"
           severity="info"
           raised
           className="w-56"
@@ -262,12 +202,16 @@ export default function DynamicColumnsDemo() {
         />
       </div>
       <DataTable
-        value={filteredProducts}
+        value={filteredBranchs}
         tableStyle={{ minWidth: "50rem" }}
         className="centered-table"
         paginator
         rows={5}
         rowsPerPageOptions={[5, 10, 25, 50]}
+        rowHover={true}
+        onRowClick={(e) => {
+          setBranchBox(e.data as IBranchResponse);
+        }}
       >
         {columns.map((col, i) => {
           if (col.field === "actions") {
@@ -276,6 +220,7 @@ export default function DynamicColumnsDemo() {
                 key={col.field}
                 style={{ display: "flex", justifyContent: "center" }}
                 header={col.header}
+                alignHeader={"center"}
                 body={(rowData) => (
                   <div className="action-buttons flex gap-6">
                     <Button
@@ -303,6 +248,7 @@ export default function DynamicColumnsDemo() {
                 key={col.field}
                 field={col.field}
                 header={col.header}
+                alignHeader={"center"}
                 body={(rowData) => rowData[col.field] || "-"}
                 style={{ textAlign: "center" }}
               />
@@ -311,13 +257,13 @@ export default function DynamicColumnsDemo() {
         })}
       </DataTable>
 
-      {product !== undefined && (
-        <ModifyDialog
-          product={product}
+      {branch !== undefined && branch !== null && (
+        <ModifyBranchDialog
+          toast={toast}
+          branch={branch}
+          setBranches={setBranches}
           visible={editVisible}
           setEditVisible={setEditVisible}
-          setProducts={setProducts}
-          toast={toast}
         />
       )}
 
@@ -331,21 +277,19 @@ export default function DynamicColumnsDemo() {
       >
         <form className="px-16">
           <h1 className="text-center font-bold text-3xl">
-            Agregar un producto
+            Agregar una sucursal
           </h1>
           {allForms.map((allForm, index) => (
             <div className="py-4 block" key={index}>
               <span className="p-float-label">
                 <InputText
+                  id={allForm.name}
                   className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                   keyfilter={allForm.keyfilter as KeyFilterType}
                   placeholder={allForm.placeholder}
                   maxLength={allForm.maxLength}
                   {...register(allForm.name, {
-                    required:
-                      allForm.name === "auxCodeRegister"
-                        ? false
-                        : allForm.alertText,
+                    required: allForm.alertText,
                   })}
                 />
                 <label className="block pb-2" htmlFor={allForm.name}>
@@ -357,51 +301,19 @@ export default function DynamicColumnsDemo() {
               )}
             </div>
           ))}
-
-          <div className="flex justify-evenly gap-4">
-            <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox
-                label="ICE"
-                options={ICE}
-                defaultValue="Selecciona una opción"
-                onChange={(e) => {
-                  handleICE(e);
-                }}
-              ></ComboBox>
-            </div>
-            <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox
-                label="IRBP"
-                options={IRBPNR}
-                defaultValue="Selecciona una opción"
-                onChange={(e) => {
-                  handleIRBP(e);
-                }}
-              ></ComboBox>
-            </div>
-            <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox
-                label="IVA"
-                options={IVAS}
-                defaultValue="Selecciona una opción"
-                onChange={(e) => {
-                  handleIVA(e);
-                }}
-              ></ComboBox>
-            </div>
-          </div>
           <div className="flex justify-evenly gap-4 py-4">
             <Button
               label="Agregar"
               severity="info"
               className="w-1/2"
+              type="submit"
               onClick={handleRegister}
             />
             <Button
               label="Cancelar"
-              type="button"
               severity="danger"
               className="w-1/2"
+              type="button"
               onClick={() => {
                 reset();
                 setAddVisible(false);
@@ -410,6 +322,10 @@ export default function DynamicColumnsDemo() {
           </div>
         </form>
       </Dialog>
+
+      {<BoxTableModal branchBox={branchBox} toast={toast} />}
     </div>
   );
-}
+};
+
+export default branchs;
