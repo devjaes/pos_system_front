@@ -16,5 +16,5 @@ export interface ICustomerUpdate {
   businessName: string;
   identification: string;
   address: string;
-  identificationType: string;
+  identificationType?: string | null;
 }

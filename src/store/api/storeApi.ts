@@ -28,13 +28,14 @@ export const handleGetStore = async () => {
   }
 };
 
-export const handleUpdateStore = async (storeData: IStoreUpdate) => {
+export const handleUpdateStore = async (storeDataUpdate: IStoreUpdate) => {
   try {
-    const response = await fetch(`${config.API_REST_BASE_URL}/store`, {
-      method: "GET",
+    const response = await fetch(`${config.API_REST_BASE_URL}/store/1`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(storeDataUpdate),
     });
 
     if (!response.ok) {
