@@ -23,7 +23,9 @@ export default function DynamicColumnsDemo() {
   const [addVisible, setAddVisible] = useState(false);
   const [userM, setUser] = useState<IUserResponse>();
   const [newUserRol, setNewUserRol] = useState<string>('');
+
   const {
+    reset,
     register,
     handleSubmit,
     formState: { errors },
@@ -65,13 +67,14 @@ export default function DynamicColumnsDemo() {
     console.log(user);
     handleDeleteUser(user.id).then((res) => {
       if (res) {
-        setUsers(users.filter((u) => u.id !== user.id));
         toast.current?.show({
           severity: 'success',
           summary: 'Usuario eliminado',
           detail: `El usuario ${user.name} ha sido eliminado con éxito`,
           life: 3000,
         });
+        setUsers(users.filter((u) => u.id !== user.id));
+
       } else {
         toast.current?.show({
           severity: 'error',
@@ -225,7 +228,11 @@ export default function DynamicColumnsDemo() {
                     <Button icon="pi pi-pencil" severity="info" aria-label="User" onClick={() => handleModify(rowData)} />
                     <Toast ref={toast} />
                     <ConfirmPopup />
-                    <Button icon="pi pi-eraser" severity="danger" aria-label="Cancel" onClick={(e) => confirm(e, rowData)} />
+                    <Button
+                      icon="pi pi-eraser"
+                      severity="danger"
+                      aria-label="Cancel"
+                      onClick={(e) => confirm(e, rowData)} />
                   </div>
                 )}
               />
@@ -254,12 +261,22 @@ export default function DynamicColumnsDemo() {
             onHide={() => setEditVisible(false)}
             visible={editVisible}
             setEditVisible={setEditVisible}
+            setUsers={setUsers}
+            toast={toast}
           />
         )
       }
 
-      <Dialog header="Agregar Usuario" visible={addVisible} style={{ width: '50vw' }} onHide={() => setAddVisible(false)}>
-        <form onSubmit={handleRegister} className="px-16">
+      <Dialog
+
+        visible={addVisible}
+        style={{ width: '50vw' }}
+        onHide={() => {
+          reset();
+          setAddVisible(false)
+        }}
+      >
+        <form className="px-16">
           <h1 className="text-center font-bold text-3xl">Agregar un usuario</h1>
           {allForms.map((form, i) => (
             <div className="py-3 block mt-3" key={i} >
@@ -279,14 +296,30 @@ export default function DynamicColumnsDemo() {
             </div>
           ))}
           <div className="card flex justify-content-center py-4 w-full">
-            <ComboBox label="ICE" options={['Usuario', 'Administrador']} defaultValue="Selecciona una opción" onChange={(e) => { handleRol(e) }}></ComboBox>
+            <ComboBox
+              label="Rol"
+              options={['Usuario', 'Administrador']}
+              defaultValue="Selecciona una opción"
+              onChange={(e) => { handleRol(e) }}></ComboBox>
           </div>
           <div className="flex justify-center gap-4 py-4">
-            <Button label="Agregar" severity="info" className="w-1/2" />
+            <Button
+              label="Agregar"
+              severity="info"
+              className="w-1/2"
+              onClick={handleRegister}
+            />
           </div>
         </form>
         <div className="flex justify-center px-16">
-          <Button label="Cancelar" severity="danger" className="w-1/2" onClick={() => { setAddVisible(false) }} />
+          <Button
+            label="Cancelar"
+            severity="danger"
+            className="w-1/2"
+            onClick={() => {
+              reset()
+              setAddVisible(false)
+            }} />
         </div>
       </Dialog>
 

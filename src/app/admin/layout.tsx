@@ -19,17 +19,7 @@ const items: MenuItem[] = [
   {
     label: "Usuarios",
     icon: "pi pi-fw pi-user",
-    items: [
-      {
-        label: "Agregar",
-        icon: "pi pi-fw pi-user-plus",
-        url: "/admin/addUser",
-      },
-      {
-        label: "Administrar",
-        icon: "pi pi-fw pi-pencil",
-      },
-    ],
+    url: "/admin/users",
   },
   {
     label: "Mi Empresa",
@@ -38,6 +28,7 @@ const items: MenuItem[] = [
       {
         label: "Agregar Cliente",
         icon: "pi pi-fw pi-plus-circle",
+        url: "/admin/customer",
       },
       {
         label: "Agregar Sucursal/Caja",

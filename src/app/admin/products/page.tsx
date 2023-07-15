@@ -72,7 +72,6 @@ export default function DynamicColumnsDemo() {
 
   const handleModify = async (product: IProductResponse) => {
     setProduct(product);
-    console.log({ product });
     setEditVisible(true);
   };
 
@@ -113,60 +112,6 @@ export default function DynamicColumnsDemo() {
     });
   };
 
-  const allForms: IInputsForm[] = [
-    {
-      name: "nameRegister",
-      label: "Nombre",
-      keyfilter: /^[A-Za-z ]$/,
-      placeholder: "Nombre del Producto",
-      alertText: "*El nombre es obligatorio",
-      onChange: () => {},
-      maxLength: 50,
-    },
-    {
-      name: "mainCodeRegister",
-      label: "Código Principal",
-      keyfilter: "num",
-      placeholder: "Código Principal",
-      alertText: "*El código principal es obligatorio",
-      onChange: () => {},
-      maxLength: 4,
-    },
-    {
-      name: "auxCodeRegister",
-      label: "Código Auxiliar",
-      keyfilter: "num",
-      placeholder: "Código Auxiliar",
-      alertText: "*El código auxiliar es obligatorio",
-      onChange: () => {},
-    },
-    {
-      name: "descriptionRegister",
-      label: "Descripción",
-      keyfilter: /^[A-Za-z ]$/,
-      placeholder: "Descripción",
-      alertText: "*La descripción es obligatoria",
-      onChange: () => {},
-      maxLength: 50,
-    },
-    {
-      name: "stockRegister",
-      label: "Stock",
-      keyfilter: "num",
-      placeholder: "Stock",
-      alertText: "*El stock es obligatorio",
-      onChange: () => {},
-    },
-    {
-      name: "unitPriceRegister",
-      label: "Precio Unitario",
-      keyfilter: "money",
-      placeholder: "Precio Unitario",
-      alertText: "*El precio unitario es obligatorio",
-      onChange: () => {},
-    },
-  ];
-
   const accept = (product: IProductResponse) => {
     handleDelete(product);
   };
@@ -179,6 +124,61 @@ export default function DynamicColumnsDemo() {
       life: 3000,
     });
   };
+
+  const allForms: IInputsForm[] = [
+    {
+      name: "nameRegister",
+      label: "Nombre",
+      keyfilter: /^[A-Za-z ]$/,
+      placeholder: "Nombre del Producto",
+      alertText: "*El nombre es obligatorio",
+      onChange: () => { },
+      maxLength: 50,
+    },
+    {
+      name: "mainCodeRegister",
+      label: "Código Principal",
+      keyfilter: "num",
+      placeholder: "Código Principal",
+      alertText: "*El código principal es obligatorio",
+      onChange: () => { },
+      maxLength: 4,
+    },
+    {
+      name: "auxCodeRegister",
+      label: "Código Auxiliar",
+      keyfilter: "num",
+      placeholder: "Código Auxiliar",
+      alertText: "*El código auxiliar es obligatorio",
+      onChange: () => { },
+    },
+    {
+      name: "descriptionRegister",
+      label: "Descripción",
+      keyfilter: /^[A-Za-z ]$/,
+      placeholder: "Descripción",
+      alertText: "*La descripción es obligatoria",
+      onChange: () => { },
+      maxLength: 50,
+    },
+    {
+      name: "stockRegister",
+      label: "Stock",
+      keyfilter: "num",
+      placeholder: "Stock",
+      alertText: "*El stock es obligatorio",
+      onChange: () => { },
+    },
+    {
+      name: "unitPriceRegister",
+      label: "Precio Unitario",
+      keyfilter: "money",
+      placeholder: "Precio Unitario",
+      alertText: "*El precio unitario es obligatorio",
+      onChange: () => { },
+    },
+  ];
+
 
   const handleRegister = handleSubmit((data: any) => {
     const product: IProductCreate = {

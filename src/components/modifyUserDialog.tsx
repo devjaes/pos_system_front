@@ -1,4 +1,3 @@
-import { handleUpdateProduct } from '@/store/api/productApi';
 import { handleUpdateUser } from '@/store/api/userApi';
 import { IInputsForm } from '@/store/types/IForms';
 import IUserResponse, { IUserUpdate } from '@/store/types/IUserResponses';
@@ -7,14 +6,17 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from 'primereact/inputtext';
 import { KeyFilterType } from 'primereact/keyfilter';
 import { Toast } from 'primereact/toast';
-import React from 'react'
+import React, { RefObject } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 
 interface Props {
+    toast: RefObject<Toast>;
     user: IUserResponse;
     onHide: () => void;
     visible: boolean;
     setEditVisible: (value: boolean) => void;
+    setUsers: any;
+
 }
 
 export default function modifyUserDialog(
@@ -23,49 +25,23 @@ export default function modifyUserDialog(
         onHide,
         visible,
         setEditVisible,
+        setUsers,
+        toast,
     }: Props
 ) {
 
     const [userInfo, setUserInfo] = React.useState<IInputsForm[]>([]);
-    const toast = React.useRef<Toast>(null);
     const {
         control,
-        register,
         handleSubmit,
         formState: { errors },
     } = useForm();
-
 
     React.useEffect(() => {
         if (user !== undefined) {
             createUserInfo(user);
         }
     }, [user]);
-
-    const onSubmit = handleSubmit((data: any) => {
-
-        const userUpdate: IUserUpdate = {
-            name: data.name === user.name ? '' : data.name,
-            lastName: data.lastName === user.lastName ? '' : data.lastName,
-            email: data.email === user.email ? '' : data.email,
-            password: data.password,
-        }
-
-        if (data.password !== data.confirmPassword) {
-            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Las contraseñas no coinciden', life: 3000 });
-            console.log("Las contraseñas no coinciden");
-            return;
-        }
-
-        handleUpdateUser(user.id, userUpdate).then((res) => {
-            if (res) {
-                toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Usuario Modificado', life: 3000 });
-                setEditVisible(false);
-            } else {
-                toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al modificar el usuario', life: 3000 });
-            }
-        });
-    });
 
     const createUserInfo = (user: IUserResponse) => {
         const userInfo: IInputsForm[] = [
@@ -114,6 +90,35 @@ export default function modifyUserDialog(
         setUserInfo(userInfo);
     }
 
+    const onSubmit = handleSubmit((data: any) => {
+
+        const userToUpdate: IUserUpdate = {
+            name: data.name === user.name ? '' : data.name,
+            lastName: data.lastName === user.lastName ? '' : data.lastName,
+            email: data.email === user.email ? '' : data.email,
+            password: data.password,
+        }
+
+        if (data.password !== data.confirmPassword) {
+            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Las contraseñas no coinciden', life: 3000 });
+            console.log("Las contraseñas no coinciden");
+            return;
+        }
+
+        handleUpdateUser(user.id, userToUpdate).then((res) => {
+            if (res) {
+                toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Usuario Modificado', life: 3000 });
+                setEditVisible(false);
+                setUsers((prevState: IUserResponse[]) => {
+                    const index = prevState.findIndex((p) => p.id === user.id);
+                    prevState[index] = res;
+                    return [...prevState];
+                })
+            } else {
+                toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al modificar el usuario', life: 3000 });
+            }
+        });
+    });
 
     const renderModifyDialog = (user: IUserResponse) => {
         return (
@@ -152,20 +157,25 @@ export default function modifyUserDialog(
                         </div>
                     ))}
 
-
-
                 </form>
                 <div className="flex justify-center gap-8">
                     <Button
                         icon="pi pi-check"
                         className="p-button-success p-mr-2 w-1/2"
                         label="Modificar"
+                        typeof='submit'
                         onClick={onSubmit}
                     />
 
                 </div>
                 <div className="flex justify-center items-center py-6">
-                    <Button label="Cancelar" severity="danger" className="w-1/2" onClick={() => { setEditVisible(false) }} icon="pi pi-times" />
+                    <Button
+                        label="Cancelar"
+                        severity="danger"
+                        className="w-1/2"
+                        type='button'
+                        onClick={() => { setEditVisible(false) }}
+                        icon="pi pi-times" />
                 </div>
 
             </div>
@@ -176,15 +186,14 @@ export default function modifyUserDialog(
         <>
             <Dialog
                 header={"Modificar " + `${user?.name}`}
+                headerClassName='text-center text-3xl font-bold'
                 visible={visible}
                 onHide={onHide}
                 style={{ width: '50vw' }}
                 modal={true}
             >
                 {renderModifyDialog(user)}
-
             </Dialog>
-
         </>
     )
 }
