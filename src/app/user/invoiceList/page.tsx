@@ -1,10 +1,10 @@
 import React from 'react'
-import CustomerTable from '@/components/customerTable'
+import Invoices from '@/components/allInvoice'
 
 export default function page() {
     return (
         <div>
-            <CustomerTable />
+            <Invoices />
         </div>
     )
 }
