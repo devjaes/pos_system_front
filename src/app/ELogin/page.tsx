@@ -102,16 +102,16 @@ function Login() {
                             <img
                                 className="w-auto h-7 sm:h-8"
                                 src="https://merakiui.com/images/logo.svg"
-                                alt=""
+                                alt="login-logo"
                             />
                         </div>
 
-                        <h3 className="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
-                            Welcome Back
+                        <h3 className="mt-3 text-xl font-medium text-center text-gray-200">
+                            Bienvenido de vuelta
                         </h3>
 
-                        <p className="mt-1 text-center text-gray-500 dark:text-gray-400">
-                            Login or create account
+                        <p className="my-1 text-center text-gray-400">
+                            Iniciar sesión
                         </p>
 
                         <form>
@@ -135,13 +135,14 @@ function Login() {
                                 </div>
                             ))}
 
-                            <div className="flex items-center justify-between mt-4">
-                                <a
+                            <div className="flex items-center justify-center mt-4">
+                                {/*} <a
                                     href="#"
                                     className="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
                                 >
                                     Forget Password?
                                 </a>
+                                */}
 
                                 <button
                                     className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
@@ -154,18 +155,6 @@ function Login() {
                         </form>
                     </div>
 
-                    <div className="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700">
-                        <span className="text-sm text-gray-600 dark:text-gray-200">
-                            Don't have an account?{" "}
-                        </span>
-
-                        <a
-                            href="#"
-                            className="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline"
-                        >
-                            Register
-                        </a>
-                    </div>
                 </div>
             </main>
         </div>

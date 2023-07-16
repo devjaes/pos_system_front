@@ -15,7 +15,6 @@ const items: MenuItem[] = [
     icon: "pi pi-fw pi-tag",
     url: "/admin/products",
   },
-
   {
     label: "Usuarios",
     icon: "pi pi-fw pi-user",
@@ -42,6 +41,14 @@ const items: MenuItem[] = [
     icon: "pi pi-fw pi-wrench",
     url: "/admin/settings",
   },
+  {
+    label: "Salir",
+    icon: "pi pi-fw pi-sign-out",
+    command: () => {
+      window.localStorage.removeItem("user");
+      window.location.href = "/";
+    }
+  },
 ];
 
 export default function AdminLayout({
@@ -53,7 +60,6 @@ export default function AdminLayout({
 
   const handleLogout = () => {
     window.localStorage.removeItem("user");
-
     router.push(`/`);
   };
 
