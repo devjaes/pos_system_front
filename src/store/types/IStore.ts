@@ -6,6 +6,7 @@ export interface IStoreResponse {
   address: string;
   especialTaxpayer: boolean;
   forcedAccounting: boolean;
+  electronicSignatureKey: string;
 }
 
 export interface IStoreUpdate {
@@ -13,6 +14,4 @@ export interface IStoreUpdate {
   tradeName: string;
   ruc: string;
   address: string;
-  especialTaxpayer: boolean;
-  forcedAccounting: boolean;
 }

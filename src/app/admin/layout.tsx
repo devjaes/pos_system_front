@@ -9,59 +9,52 @@ import "primeicons/primeicons.css";
 import Image from "next/image";
 import Logo from "../../../public/images/PostLogo5.png";
 
-const items: MenuItem[] = [
-  {
-    label: "Productos",
-    icon: "pi pi-fw pi-tag",
-    url: "/admin/products",
-  },
-  {
-    label: "Usuarios",
-    icon: "pi pi-fw pi-user",
-    url: "/admin/users",
-  },
-  {
-    label: "Mi Empresa",
-    icon: "pi pi-fw pi-shopping-bag",
-    items: [
-      {
-        label: "Administrar clientes",
-        icon: "pi pi-fw pi-plus-circle",
-        url: "/admin/customer",
-      },
-      {
-        label: "Administrar Sucursal/Caja",
-        icon: "pi pi-fw pi-plus-circle",
-        url: "/admin/branches",
-      },
-    ],
-  },
-  {
-    label: "Configuración",
-    icon: "pi pi-fw pi-wrench",
-    url: "/admin/settings",
-  },
-  {
-    label: "Salir",
-    icon: "pi pi-fw pi-sign-out",
-    command: () => {
-      window.localStorage.removeItem("user");
-      window.location.href = "/";
-    }
-  },
-];
-
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("user");
-    router.push(`/`);
-  };
+  const items: MenuItem[] = [
+    {
+      label: "Productos",
+      icon: "pi pi-fw pi-tag",
+      url: "/admin/products",
+    },
+    {
+      label: "Usuarios",
+      icon: "pi pi-fw pi-user",
+      url: "/admin/users",
+    },
+    {
+      label: "Mi Empresa",
+      icon: "pi pi-fw pi-shopping-bag",
+      items: [
+        {
+          label: "Administrar clientes",
+          icon: "pi pi-fw pi-plus-circle",
+          url: "/admin/customer",
+        },
+        {
+          label: "Administrar Sucursal/Caja",
+          icon: "pi pi-fw pi-plus-circle",
+          url: "/admin/branches",
+        },
+      ],
+    },
+    {
+      label: "Configuración",
+      icon: "pi pi-fw pi-wrench",
+      url: "/admin/settings",
+    },
+    {
+      label: "Salir",
+      icon: "pi pi-fw pi-sign-out",
+      command: () => {
+        window.localStorage.removeItem("user");
+        window.location.href = "/";
+      },
+    },
+  ];
 
   return (
     <div className="flex ">
