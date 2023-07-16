@@ -1,18 +1,21 @@
 "use client"
 import { handleGetAllInvoices } from '@/store/api/invoiceApi'
 import React, { useEffect, useRef, useState } from 'react'
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableRowClickEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { set } from 'date-fns';
+import { IInvoiceResponse } from '@/store/types/IInvoices';
+import InvoiceInfo from '@/components/invoiceInfo';
 
 export default function allInvoice() {
     const toast = useRef<Toast>(null);
     const [invoices, setInvoices] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [showVisible, setShowVisible] = useState(false);
+    const [selectedRowData, setSelectedRowData] = useState<IInvoiceResponse>();
 
     const columns = [
         { field: "id", header: "ID" },
@@ -43,6 +46,12 @@ export default function allInvoice() {
         )
     );
 
+    const handleRowClick = (event: DataTableRowClickEvent) => {
+        const rowData = event.data as IInvoiceResponse;
+        setSelectedRowData(rowData);
+        setShowVisible(true);
+    };
+
     return (
         <div className='flex flex-col gap-8'>
             <Toast ref={toast} />
@@ -72,7 +81,7 @@ export default function allInvoice() {
                 rows={5}
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 rowHover
-
+                onRowClick={handleRowClick}
             >
                 {columns.map((col, i) => {
                     return (
@@ -91,6 +100,19 @@ export default function allInvoice() {
                 )}
 
             </DataTable>
+
+            {
+                selectedRowData && (
+                    <InvoiceInfo
+                        invoice={selectedRowData}
+                        visible={showVisible}
+                        setShowVisible={setShowVisible}
+                        onHide={() => {
+                            setShowVisible(false)
+                        }}
+                    />
+                )
+            }
 
         </div>
     )
