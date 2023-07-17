@@ -1,21 +1,24 @@
 "use client";
-import React, { useState, useEffect, useRef, MouseEvent, use } from "react";
+import { useState, useEffect, useRef, MouseEvent } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { handleGetAllProducts } from "@/store/api/productApi";
-import { IProductResponse } from "@/store/types/IProducts";
+import {
+  handleCreateProduct,
+  handleDeleteProduct,
+  handleGetAllProducts,
+} from "@/store/api/productApi";
+import { IProductCreate, IProductResponse } from "@/store/types/IProducts";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
 import { Toast } from "primereact/toast";
 import { IInputsForm } from "@/store/types/IForms";
-import { Controller, useForm } from "react-hook-form";
 import { KeyFilterType } from "primereact/keyfilter";
-import { Dropdown } from "primereact/dropdown";
 import { ICE, IRBPNR, IVAS } from "@/store/types/Tables";
-import Modal from "@/components/Modal";
 import ModifyDialog from "@/components/modifyDialog";
+import ComboBox from "@/components/ComboBox";
+import { useForm } from "react-hook-form";
 
 export default function DynamicColumnsDemo() {
   const toast = useRef<Toast>(null);
@@ -27,8 +30,13 @@ export default function DynamicColumnsDemo() {
   const [selectedIVA, setSelectedIVA] = useState<any>(null);
   const [selectedICE, setSelectedICE] = useState<any>(null);
   const [selectedIRBP, setSelectedIRBP] = useState<any>(null);
-  const [productInfo, setProductInfo] = useState<IInputsForm[]>([]);
-  const [modifyDialog, setModifyDialog] = useState(false);
+
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const columns = [
     { field: "id", header: "ID" },
@@ -64,14 +72,28 @@ export default function DynamicColumnsDemo() {
 
   const handleModify = async (product: IProductResponse) => {
     setProduct(product);
-    console.log({ product });
-    await generateProductInfo(product);
-    console.log({ productInfo });
     setEditVisible(true);
   };
 
   const handleDelete = (product: IProductResponse) => {
-    console.log(product);
+    handleDeleteProduct(product.id).then((res) => {
+      if (res) {
+        toast.current?.show({
+          severity: "success",
+          summary: "Successful",
+          detail: "Producto Eliminado",
+          life: 3000,
+        });
+        setProducts(products.filter((p) => p.id !== product.id));
+      } else {
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "No se pudo eliminar el producto",
+          life: 3000,
+        });
+      }
+    });
   };
 
   const confirm = (
@@ -80,7 +102,7 @@ export default function DynamicColumnsDemo() {
   ) => {
     confirmPopup({
       target: event.currentTarget,
-      message: "Do you want to delete this record?",
+      message: "Quieres eliminar este producto?",
       icon: "pi pi-info-circle",
       acceptClassName: "p-button-danger",
       accept() {
@@ -90,70 +112,7 @@ export default function DynamicColumnsDemo() {
     });
   };
 
-  const allForms: IInputsForm[] = [
-    {
-      name: "nameRegister",
-      label: "Nombre",
-      keyfilter: "alpha",
-      placeholder: "Nombre del Producto",
-      alertText: "*El nombre es obligatorio",
-      onChange: () => {},
-    },
-    {
-      name: "mainCodeRegister",
-      label: "Código Principal",
-      keyfilter: "num",
-      placeholder: "Código Principal",
-      alertText: "*El código principal es obligatorio",
-      onChange: () => {},
-    },
-    {
-      name: "auxCodeRegister",
-      label: "Código Auxiliar",
-      keyfilter: "num",
-      placeholder: "Código Auxiliar",
-      alertText: "*El código auxiliar es obligatorio",
-      onChange: () => {},
-    },
-    {
-      name: "descriptionRegister",
-      label: "Descripción",
-      keyfilter: "alpha",
-      placeholder: "Descripción",
-      alertText: "*La descripción es obligatoria",
-      onChange: () => {},
-    },
-    {
-      name: "stockRegister",
-      label: "Stock",
-      keyfilter: "num",
-      placeholder: "Stock",
-      alertText: "*El stock es obligatorio",
-      onChange: () => {},
-    },
-    {
-      name: "unitPriceRegister",
-      label: "Precio Unitario",
-      keyfilter: "money",
-      placeholder: "Precio Unitario",
-      alertText: "*El precio unitario es obligatorio",
-      onChange: () => {},
-    },
-  ];
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
   const accept = (product: IProductResponse) => {
-    toast.current?.show({
-      severity: "info",
-      summary: "Confirmed",
-      detail: "You have accepted",
-      life: 3000,
-    });
     handleDelete(product);
   };
 
@@ -161,82 +120,119 @@ export default function DynamicColumnsDemo() {
     toast.current?.show({
       severity: "warn",
       summary: "Rejected",
-      detail: "You have rejected",
+      detail: "Has Cancelado la Eliminación del Producto",
       life: 3000,
     });
   };
 
-  const generateProductInfo = (product: IProductResponse) => {
-    const productInfo: IInputsForm[] = [
-      {
-        name: "name",
-        label: "Nombre",
-        keyfilter: "alpha",
-        placeholder: "Nombre del Producto",
-        alertText: "*El nombre es obligatorio",
-        value: product?.name,
-        onChange: () => {},
-      },
-      {
-        name: "mainCode",
-        label: "Código Principal",
-        keyfilter: "num",
-        placeholder: "Código Principal",
-        alertText: "*El código principal es obligatorio",
-        value: product?.mainCode,
-        onChange: () => {},
-      },
-      {
-        name: "auxCode",
-        label: "Código Auxiliar",
-        keyfilter: "num",
-        placeholder: "Código Auxiliar",
-        alertText: "*El código auxiliar es obligatorio",
-        value: product?.auxCode,
-        onChange: () => {},
-      },
-      {
-        name: "description",
-        label: "Descripción",
-        keyfilter: "alpha",
-        placeholder: "Descripción",
-        alertText: "*La descripción es obligatoria",
-        value: product?.description,
-        onChange: () => {},
-      },
-      {
-        name: "stock",
-        label: "Stock",
-        keyfilter: "num",
-        placeholder: "Stock",
-        alertText: "*El stock es obligatorio",
-        value: product?.stock as unknown as string,
-        onChange: () => {},
-      },
-      {
-        name: "unitPrice",
-        label: "Precio Unitario",
-        keyfilter: "money",
-        placeholder: "Precio Unitario",
-        alertText: "*El precio unitario es obligatorio",
-        value: product?.unitPrice as unknown as string,
-        onChange: () => {},
-      },
-    ];
-    setProductInfo(productInfo);
-  };
+  const allForms: IInputsForm[] = [
+    {
+      name: "nameRegister",
+      label: "Nombre",
+      keyfilter: /^[A-Za-z ]$/,
+      placeholder: "Nombre del Producto",
+      alertText: "*El nombre es obligatorio",
+      onChange: () => { },
+      maxLength: 50,
+    },
+    {
+      name: "mainCodeRegister",
+      label: "Código Principal",
+      keyfilter: "num",
+      placeholder: "Código Principal",
+      alertText: "*El código principal es obligatorio",
+      onChange: () => { },
+      maxLength: 4,
+    },
+    {
+      name: "auxCodeRegister",
+      label: "Código Auxiliar",
+      keyfilter: "num",
+      placeholder: "Código Auxiliar",
+      alertText: "*El código auxiliar es obligatorio",
+      onChange: () => { },
+    },
+    {
+      name: "descriptionRegister",
+      label: "Descripción",
+      keyfilter: /^[A-Za-z ]$/,
+      placeholder: "Descripción",
+      alertText: "*La descripción es obligatoria",
+      onChange: () => { },
+      maxLength: 50,
+    },
+    {
+      name: "stockRegister",
+      label: "Stock",
+      keyfilter: "num",
+      placeholder: "Stock",
+      alertText: "*El stock es obligatorio",
+      onChange: () => { },
+    },
+    {
+      name: "unitPriceRegister",
+      label: "Precio Unitario",
+      keyfilter: "money",
+      placeholder: "Precio Unitario",
+      alertText: "*El precio unitario es obligatorio",
+      onChange: () => { },
+    },
+  ];
+
 
   const handleRegister = handleSubmit((data: any) => {
-    console.log("hlas");
-    console.log(data.name, { data });
+    const product: IProductCreate = {
+      name: data.nameRegister,
+      mainCode: data.mainCodeRegister,
+      auxCode: data.auxCodeRegister,
+      description: data.descriptionRegister,
+      stock: Number(data.stockRegister),
+      unitPrice: Number(data.unitPriceRegister),
+      ivaType: selectedIVA,
+      iceType: selectedICE,
+      irbpType: selectedIRBP,
+    };
+
+    console.log({ product });
+
+    handleCreateProduct(product).then((res) => {
+      if (res) {
+        setAddVisible(false);
+        toast.current?.show({
+          severity: "success",
+          summary: "Producto Creado",
+          detail: "El producto ha sido creado correctamente",
+          life: 3000,
+        });
+        console.log(res);
+        setProducts([...products, res]);
+        reset();
+      } else {
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Ha ocurrido un error al crear el producto",
+          life: 3000,
+        });
+      }
+    });
   });
 
-  const onHide = () => {
-    setModifyDialog(false);
+  const handleICE = (e: string) => {
+    setSelectedICE(e);
+  };
+
+  const handleIRBP = (e: string) => {
+    setSelectedIRBP(e);
+  };
+
+  const handleIVA = (e: string) => {
+    setSelectedIVA(e);
   };
 
   return (
     <div className="flex flex-col gap-8">
+      <Toast ref={toast} />
       <h1 className="text-neutral-100 text-3xl text-center font-bold">
         <span>
           <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
@@ -290,7 +286,6 @@ export default function DynamicColumnsDemo() {
                         handleModify(rowData);
                       }}
                     />
-                    <Toast ref={toast} />
                     <ConfirmPopup />
                     <Button
                       icon="pi pi-eraser"
@@ -319,18 +314,22 @@ export default function DynamicColumnsDemo() {
       {product !== undefined && (
         <ModifyDialog
           product={product}
-          onHide={onHide}
           visible={editVisible}
           setEditVisible={setEditVisible}
+          setProducts={setProducts}
+          toast={toast}
         />
       )}
 
       <Dialog
         visible={addVisible}
         style={{ width: "50vw" }}
-        onHide={() => setAddVisible(false)}
+        onHide={() => {
+          reset();
+          setAddVisible(false);
+        }}
       >
-        <form className="px-16" onSubmit={handleRegister}>
+        <form className="px-16">
           <h1 className="text-center font-bold text-3xl">
             Agregar un producto
           </h1>
@@ -341,63 +340,73 @@ export default function DynamicColumnsDemo() {
                   className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                   keyfilter={allForm.keyfilter as KeyFilterType}
                   placeholder={allForm.placeholder}
+                  maxLength={allForm.maxLength}
                   {...register(allForm.name, {
-                    required: allForm.alertText,
+                    required:
+                      allForm.name === "auxCodeRegister"
+                        ? false
+                        : allForm.alertText,
                   })}
                 />
-                {errors[allForm.name] && (
-                  <small className="text-red-500">{allForm.alertText}</small>
-                )}
                 <label className="block pb-2" htmlFor={allForm.name}>
                   {allForm.label}
                 </label>
               </span>
+              {errors[allForm.name] && (
+                <small className="text-red-500">{allForm.alertText}</small>
+              )}
             </div>
           ))}
-          <div className="flex justify-around">
-            <div className="card flex justify-content-center py-4">
-              <span className="p-float-label">
-                <Dropdown
-                  inputId="IVA"
-                  value={selectedIVA}
-                  onChange={(e) => setSelectedIVA(e.value)}
-                  options={IVAS}
-                  optionLabel="name"
-                  className="w-full md:w-14rem"
-                />
-                <label htmlFor="IVA">IVA</label>
-              </span>
+
+          <div className="flex justify-evenly gap-4">
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox
+                label="ICE"
+                options={ICE}
+                defaultValue="Selecciona una opción"
+                onChange={(e) => {
+                  handleICE(e);
+                }}
+              ></ComboBox>
             </div>
-            <div className="card flex justify-content-center py-4">
-              <span className="p-float-label">
-                <Dropdown
-                  inputId="ICE"
-                  value={selectedICE}
-                  onChange={(e) => setSelectedICE(e.value)}
-                  options={ICE}
-                  optionLabel="name"
-                  className="w-full md:w-14rem"
-                />
-                <label htmlFor="ICE">ICE</label>
-              </span>
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox
+                label="IRBP"
+                options={IRBPNR}
+                defaultValue="Selecciona una opción"
+                onChange={(e) => {
+                  handleIRBP(e);
+                }}
+              ></ComboBox>
             </div>
-            <div className="card flex justify-content-center py-4">
-              <span className="p-float-label">
-                <Dropdown
-                  inputId="IRBP"
-                  value={selectedIRBP}
-                  onChange={(e) => setSelectedIRBP(e.value)}
-                  options={IRBPNR}
-                  optionLabel="name"
-                  className="w-full md:w-14rem"
-                />
-                <label htmlFor="IRBP">IRBP</label>
-              </span>
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox
+                label="IVA"
+                options={IVAS}
+                defaultValue="Selecciona una opción"
+                onChange={(e) => {
+                  handleIVA(e);
+                }}
+              ></ComboBox>
             </div>
           </div>
           <div className="flex justify-evenly gap-4 py-4">
-            <Button label="Agregar" severity="info" className="w-1/2" />
-            <Button label="Cancelar" severity="danger" className="w-1/2" />
+            <Button
+              label="Agregar"
+              severity="info"
+              className="w-1/2"
+              onClick={handleRegister}
+            />
+            <Button
+              label="Cancelar"
+              type="button"
+              severity="danger"
+              className="w-1/2"
+              onClick={() => {
+                reset();
+                setAddVisible(false);
+              }}
+            />
           </div>
         </form>
       </Dialog>

@@ -55,14 +55,44 @@ export const handleGetAllBoxes = async () => {
   }
 };
 
-export const handleCreateBox = async (branchName: { branchName: string }) => {
+export const handleGetBoxesByBranchId = async (branchId: number) => {
+  try {
+    const response = await fetch(
+      `${config.API_REST_BASE_URL}/boxes/branch/${branchId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      console.log("No se pudo obtener las cajas.");
+      return;
+    }
+    const data = await response.json();
+    const boxesData: IBoxResponse[] = data;
+
+    if (!boxesData) {
+      console.log("Error al obtener las cajas.");
+      return;
+    }
+
+    return boxesData;
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
+export const handleCreateBox = async (branchId: { branchId: number }) => {
   try {
     const response = await fetch(`${config.API_REST_BASE_URL}/boxes/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(branchName),
+      body: JSON.stringify(branchId),
     });
 
     if (!response.ok) {

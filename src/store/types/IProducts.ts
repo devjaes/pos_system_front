@@ -11,7 +11,7 @@ export interface IProductResponse {
   irbpType: string;
 }
 
-export interface IProductUpdate {
+export interface IProductCreate {
   name: string;
   mainCode: string;
   auxCode: string;
@@ -21,4 +21,16 @@ export interface IProductUpdate {
   ivaType: string;
   iceType: string;
   irbpType: string;
+}
+
+export interface IProductUpdate {
+  name?: string;
+  mainCode?: string;
+  auxCode?: string;
+  description?: string;
+  stock?: number;
+  unitPrice?: number;
+  ivaType?: string;
+  iceType?: string;
+  irbpType?: string;
 }

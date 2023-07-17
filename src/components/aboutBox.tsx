@@ -1,6 +1,6 @@
-function bloquesNosotros({ titulo, svg }: { titulo: string, svg: any }) {
+function bloquesNosotros({ titulo, svg, texto }: { titulo: string, svg: any, texto: string }) {
     return (
-        <div className='flex flex-col justify-center items-center'>
+        <div className='flex flex-col justify-center items-center flex-1'>
             <div className="flex-1">
                 {svg}
             </div>
@@ -9,10 +9,7 @@ function bloquesNosotros({ titulo, svg }: { titulo: string, svg: any }) {
                     {titulo}
                 </h3>
                 <p className='text-center my-4'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint ad
-                    corporis, deleniti quisquam illo id perferendis nemo harum placeat
-                    neque. Ipsum commodi sequi cumque nesciunt ducimus ipsam minus
-                    quaerat corporis.
+                    {texto}
                 </p>
             </div>
 

@@ -6,6 +6,11 @@ export interface IBranchResponse {
 }
 
 export interface IBranchUpdate {
+  name?: string;
+  address?: string;
+}
+
+export interface IBranchCreate {
   name: string;
   address: string;
 }

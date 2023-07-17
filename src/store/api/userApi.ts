@@ -68,6 +68,7 @@ export const handleCreateUser = async (user: IUserRegister) => {
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(user),
     });
 
     if (!response.ok) {

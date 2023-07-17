@@ -1,10 +1,10 @@
 import React from 'react'
+import CustomerTable from '@/components/customerTable'
 
 export default function page() {
     return (
         <div>
-            <h1>Chao</h1>
-
+            <CustomerTable />
         </div>
     )
 }

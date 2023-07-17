@@ -1,5 +1,5 @@
 export default interface IUserResponse {
-  id?: number;
+  id: number;
   name: string;
   lastName: string;
   email: string;
