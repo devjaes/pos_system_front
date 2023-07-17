@@ -14,6 +14,8 @@ export interface IInvoiceResponse {
   total: number;
   currency: string;
   boxId: number;
+  boxKey: number;
+  branchName: string;
 }
 
 export interface IInvoiceCreate {

@@ -4,17 +4,19 @@ interface IComboOptions {
   onChange: (selectedValue: string) => void;
   defaultValue?: string;
   disabled?: boolean;
+  initialValue?: string;
 }
 
 const ComboBox = ({
   label = "",
   options = [],
-  onChange = () => {},
+  onChange = () => { },
   defaultValue = "",
   disabled = false,
+  initialValue,
 }: IComboOptions): JSX.Element => {
   const OpcionesCombo = options.map((opcion, index) => (
-    <option value={opcion} key={index} disabled={disabled}>
+    <option value={opcion} key={index} disabled={disabled} >
       {opcion}
     </option>
   ));
@@ -25,10 +27,13 @@ const ComboBox = ({
   };
 
   return (
-    <div>
+    <div className="w-full">
+      <label className="text-white text-sm ">{label}</label>
       <select
-        className="border border-solid border-gray-600  py-2 px-4 bg-gray-800  rounded-full w-full "
+        className="border border-solid border-gray-600 mt-3 py-2 px-4 bg-jair-black  rounded-md w-full 
+        appearance-none focus:outline-none focus:ring-1 focus:ring-white"
         onChange={handleOnChange}
+        defaultValue={initialValue ? initialValue : ""}
       >
         {defaultValue && <option value="">{defaultValue}</option>}
         {OpcionesCombo}

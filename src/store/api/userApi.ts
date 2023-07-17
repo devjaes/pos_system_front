@@ -68,6 +68,7 @@ export const handleCreateUser = async (user: IUserRegister) => {
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(user),
     });
 
     if (!response.ok) {
@@ -86,7 +87,7 @@ export const handleCreateUser = async (user: IUserRegister) => {
   } catch (error) {
     console.log({ error });
   }
-};
+}; 
 
 export const handleUpdateUser = async (userId: number, user: IUserUpdate) => {
   try {
