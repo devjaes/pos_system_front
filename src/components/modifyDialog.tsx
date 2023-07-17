@@ -117,7 +117,7 @@ export default function ModifyDialog({
               <Controller
                 name={product.name}
                 control={control}
-                rules={{ required: true }}
+                rules={{ required: false }}
                 defaultValue={product.value}
                 render={({ field }) => (
                   <>
