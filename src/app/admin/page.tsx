@@ -9,6 +9,9 @@ import { Button } from 'primereact/button';
 
 function HomePageAdmin() {
   const router = useRouter();
+  const header = (
+    <img alt="Card" src="https://primefaces.org/cdn/primereact/images/usercard.png" />
+);
 
   useEffect(() => {
     const user = window.localStorage.getItem("user");
@@ -28,16 +31,13 @@ function HomePageAdmin() {
   return (
 
     <main className='bg-primary-Jair w-11/12'>
-      <div>
-        <Card title="Title">
+      <div className="card justify-center items-center bg-center flex h-screen">
+        <Card  header = {header} className="w-2/3">
+        <h1 className="text-2xl font-bold text-center">{"POST SISTEM"}</h1>
           <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae
-            numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
+            Bienvenido! Aquí podrás administrar tu empresa.
           </p>
         </Card>
-      </div>
-      <div >
-        <Button label='Prueba' severity='warning' />
       </div>
     </main>
 
