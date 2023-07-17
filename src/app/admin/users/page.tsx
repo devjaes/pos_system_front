@@ -27,7 +27,6 @@ export default function DynamicColumnsDemo() {
     { field: 'name', header: 'Nombre' },
     { field: 'lastName', header: 'Apellido' },
     { field: 'email', header: 'Correo' },
-    { field: 'password', header: 'Contraseña' },
     { field: 'rol', header: 'Rol' },
     { field: 'actions', header: 'Acciones' },
   ];
@@ -44,8 +43,8 @@ export default function DynamicColumnsDemo() {
     setSearchTerm(event.target.value);
   }
 
-  const filteredUsers = users.filter((user) =>
-    Object.values(user).some((value) =>
+  const filteredUsers = users.filter((users) =>
+    Object.values(users).some((value) =>
       String(value).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
@@ -59,8 +58,9 @@ export default function DynamicColumnsDemo() {
     console.log(user);
   }
 
-  const confirm = (user: IUserResponse) => {
+  const confirm = (event: MouseEvent<HTMLButtonElement>,user: IUserResponse) => {
     confirmPopup({
+      target: event.currentTarget,
       message: '¿Está seguro que desea eliminar este usuario?',
       icon: 'pi pi-exclamation-triangle',
       acceptClassName: 'p-button-danger',
@@ -163,7 +163,7 @@ export default function DynamicColumnsDemo() {
                     <Button icon="pi pi-pencil" severity="info" aria-label="User" onClick={() => handleModify(rowData)} />
                     <Toast ref={toast} />
                     <ConfirmPopup />
-                    <Button icon="pi pi-eraser" severity="danger" aria-label="Cancel" onClick={(e) => confirm(rowData)} />
+                    <Button icon="pi pi-eraser" severity="danger" aria-label="Cancel" onClick={(e) => confirm(e,rowData)} />
                     </div>
                   )}
 
@@ -183,7 +183,7 @@ export default function DynamicColumnsDemo() {
           }}
         )}
         </DataTable>
-        <Dialog header="Editar Usuario" visible={editVisible} style={{ width: '50vw' }} onHide={() => setEditVisible(false)}>
+        <Dialog header="Modificar Usuario" visible={editVisible} style={{ width: '50vw' }} onHide={() => setEditVisible(false)}>
         <h1 className='font-bold text-center text-3xl'>Modificar {userM?.name}</h1>
         {allForms.map((form, i) => (
           <div className="pb-4 block" key={i}>
@@ -198,6 +198,10 @@ export default function DynamicColumnsDemo() {
             />
           </div>
         ))}
+         <div className="flex justify-between space-x-8">
+            <Button label="Aceptar" severity= "info" raised icon="pi pi-check" className="p-button-success w-1/2" onClick={() => setAddVisible(true)} />
+            <Button label="Cancelar" severity= "danger" raised icon="pi pi-times" className="p-button-success w-1/2 " onClick={() => setAddVisible(true)} />
+          </div>
         </Dialog>
 
         <Dialog header="Agregar Usuario" visible={addVisible} style={{ width: '50vw' }} onHide={() => setAddVisible(false)}>
@@ -212,8 +216,14 @@ export default function DynamicColumnsDemo() {
                 {...register(form.name, {
                   required: form.alertText,
               })} />
+              
             </div>
+           
           ))}
+          <div className="flex justify-between space-x-8">
+            <Button label="Aceptar" severity= "info" raised icon="pi pi-check" className="p-button-success w-1/2" onClick={() => setAddVisible(true)} />
+            <Button label="Cancelar" severity= "danger" raised icon="pi pi-times" className="p-button-success w-1/2 " onClick={() => setAddVisible(true)} />
+          </div>
         </Dialog>
 
     </div>
