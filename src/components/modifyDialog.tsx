@@ -174,36 +174,6 @@ export default function ModifyDialog({
 
   const renderDialogContent = (product: IProductResponse) => {
     return (
-<<<<<<< HEAD
-      <form>
-        {productInfo.map((product, index) => (
-          <div className="py-4 block" key={index}>
-            <span className="p-float-label">
-              <Controller
-                name={product.name}
-                control={control}
-                rules={{ required: false }}
-                defaultValue={product.value}
-                render={({ field }) => (
-                  <>
-                    <InputText
-                      {...field}
-                      className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
-                      keyfilter={product.keyfilter as KeyFilterType}
-                      placeholder={product.placeholder}
-                    />
-                    {errors[product.name] && (
-                      <small className="text-red-500">
-                        {product.alertText}
-                      </small>
-                    )}
-                  </>
-                )}
-                shouldUnregister
-              />
-              <label className="block pb-2" htmlFor={product.name}>
-                {product.label}
-=======
       <div className="p-4">
         <form>
           {productInfo.map((product, index) => (
@@ -242,7 +212,6 @@ export default function ModifyDialog({
             <div className="card flex flex-col justify-content-center py-4 w-full">
               <label className="block pb-2" htmlFor="ICE">
                 ICE
->>>>>>> 5692404c9171a1d3cf0eb444884f5b3c3d8e01d8
               </label>
               <ComboBox
                 label="ICE"
