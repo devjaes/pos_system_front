@@ -36,6 +36,23 @@ export default function page() {
     });
   }, []);
 
+  useEffect(() => {
+    if (store) updateStoreLocal(store);
+  }, [store]);
+
+  const updateStoreLocal = (store: IStoreResponse) => {
+    const storeLocal = window.localStorage.getItem("storeLocal");
+    if (storeLocal) {
+      const storeLocalParsed = JSON.parse(storeLocal);
+      storeLocalParsed.storeLocal.store = store;
+      window.localStorage.removeItem("storeLocal");
+      window.localStorage.setItem(
+        "storeLocal",
+        JSON.stringify(storeLocalParsed)
+      );
+    }
+  };
+
   const storeInfo: IInputsForm[] = [
     {
       name: "storeName",

@@ -4,8 +4,11 @@ export interface IProductResponse {
   mainCode: string;
   auxCode: string;
   description: string;
+  category: string;
   stock: number;
   unitPrice: number;
+  ivaVariable: string;
+  imageUrl: string;
   ivaType: string;
   iceType: string;
   irbpType: string;
@@ -18,6 +21,7 @@ export interface IProductCreate {
   description: string;
   stock: number;
   unitPrice: number;
+  ivaVariable: string;
   ivaType: string;
   iceType: string;
   irbpType: string;
@@ -30,6 +34,7 @@ export interface IProductUpdate {
   description?: string;
   stock?: number;
   unitPrice?: number;
+  ivaVariable?: string;
   ivaType?: string;
   iceType?: string;
   irbpType?: string;

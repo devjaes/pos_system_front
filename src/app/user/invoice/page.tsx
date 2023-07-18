@@ -25,6 +25,8 @@ import { ICustomerResponse } from "@/store/types/ICustomer";
 import { handleGetAllCustomers } from "@/store/api/customerApi";
 import CustomerTable from "@/components/customerTable";
 import { InputNumber } from "primereact/inputnumber";
+import { useRouter } from "next/navigation";
+import { IStoreLocal } from "@/store/types/IStore";
 
 const invoicer = () => {
   const [product, setProduct] = useState<IProductResponse>();
@@ -34,28 +36,38 @@ const invoicer = () => {
   const [customer, setCustomer] = useState<ICustomerResponse>();
   const [addCustomer, setAddCustomer] = useState<boolean>(false);
   const [change, setChange] = useState<number>(0);
+  const [subtotal, setSubtotal] = useState<number>(0);
   const [customersDropdown, setCustomersDropdown] = useState<{}[]>([]);
   const [productsDropdown, setProductsDropdown] = useState<{}[]>([]);
+  const [storeLocal, setStoreLocal] = useState<IStoreLocal>();
+  const [disables, setDisables] = useState<boolean>(false);
+  const [ivasObject, setIvasObject] = useState<[]>([]);
+  const [subTotals, setSubTotals] = useState<any>([]);
+  const router = useRouter();
 
-  const PaymentTypesDropdown = PAYMENTS.map((payment) => {
-    return {
-      label: payment.name,
-      value: payment,
-    };
-  });
+  const myIVAS = IVAS;
 
   const {
     register,
     reset,
     setValue,
     handleSubmit,
+    getValues,
     getFieldState,
     watch,
     control,
-    formState: { errors },
+    formState: { errors, touchedFields },
   } = useForm();
 
   useEffect(() => {
+    const storeLocal = window.localStorage.getItem("storeLocal");
+    if (storeLocal) {
+      const storeLocalParsed = JSON.parse(storeLocal);
+      setStoreLocal(storeLocalParsed.storeLocal);
+    } else {
+      router.push("/user/branchBox");
+    }
+
     handleGetAllProducts().then((response) => {
       if (response) {
         setProducts(response);
@@ -89,6 +101,86 @@ const invoicer = () => {
   }, []);
 
   useEffect(() => {
+    let subtotal = 0;
+    productTable.forEach((product) => {
+      subtotal += Number(
+        (
+          product.unitPrice * (watch("quantity." + product.id) as number)
+        ).toFixed(2)
+      );
+    });
+    setSubtotal(subtotal.toFixed(2) as unknown as number);
+    setSubTotals(getSubTotals(productTable));
+    setIvasObject(getIvasObject(productTable));
+  }, [productTable, getValues()]);
+
+  const getSubTotals = (productTable: IProductResponse[]) => {
+    const subTotals = productTable.map((product) => {
+      return {
+        [product.id]: Number(
+          (
+            product.unitPrice * (watch("quantity." + product.id) as number)
+          ).toFixed(2)
+        ),
+      };
+    });
+
+    return subTotals;
+  };
+
+  const getIvasObject = (productTable: IProductResponse[]) => {
+    const ivaObject = myIVAS.map((iva: string) => {
+      return {
+        [iva]: getSubTotals(
+          productTable.filter((product) => product.ivaType == iva)
+        )
+          .map((subTotal) => {
+            return subTotal[Object.keys(subTotal)[0] as any] as number;
+          })
+          .reduce((a, b) => a + b, 0),
+      };
+    });
+
+    const ivaVariables: string[] = [];
+    productTable.map((product) => {
+      if (
+        product.ivaVariable != undefined &&
+        product.ivaVariable != null &&
+        product.ivaVariable != ""
+      ) {
+        ivaVariables.push(product.ivaVariable);
+      }
+    });
+
+    if (ivaVariables.length > 0) {
+      ivaVariables.forEach((ivaVariable: string) => {
+        const products = productTable.filter(
+          (product) => product.ivaVariable == ivaVariable
+        );
+        const subTotals = getSubTotals(products);
+        const subTotal = subTotals.map((subTotal) => {
+          return subTotal[Object.keys(subTotal)[0] as any] as number;
+        });
+        const total = subTotal.reduce((a, b) => a + b, 0);
+        const iva = total * (Number(ivaVariable) / 100);
+        ivaObject.push({ [ivaVariable]: iva });
+      });
+    }
+
+    return ivaObject;
+  };
+
+  useEffect(() => {
+    const productsDropdown = products.map((product) => {
+      return {
+        label: product.name + " " + product.mainCode,
+        value: product,
+      };
+    });
+    setProductsDropdown(productsDropdown);
+  }, [products]);
+
+  useEffect(() => {
     const customersDropdown = customers.map((customer) => {
       return {
         label:
@@ -117,6 +209,14 @@ const invoicer = () => {
     },
     { field: "total", header: "Total", align: "center", width: "10%" },
   ];
+
+  const handleDelete = (product: IProductResponse) => {
+    const productsFiltered = productTable.filter(
+      (productFiltered) => productFiltered.id !== product.id
+    );
+    setProductTable(productsFiltered);
+    setProducts([...products, product]);
+  };
 
   const onSubmit = handleSubmit((data) => {
     console.log({ data });
@@ -149,11 +249,13 @@ const invoicer = () => {
                 filter
                 className="w-full md:w-14rem"
                 onChange={(e) => setCustomer(e.value)}
+                disabled={disables}
               />
               <Button
                 className="p-button-success h-10 w-1/12"
                 icon="pi pi-plus"
                 type="button"
+                disabled={disables}
                 onClick={() => setAddCustomer(true)}
               />
             </div>
@@ -209,7 +311,13 @@ const invoicer = () => {
                 <strong>Agregar Producto:</strong>
               </label>
               <Dropdown
-                onChange={(e) => setProductTable([...productTable, e.value])}
+                onChange={(e) => {
+                  setProductTable([...productTable, e.value]);
+                  setProducts(
+                    products.filter((product) => product.id !== e.value.id)
+                  );
+                  setDisables(true);
+                }}
                 options={productsDropdown}
                 placeholder="Seleccione un producto"
                 filter
@@ -249,7 +357,10 @@ const invoicer = () => {
                             <Button
                               className="p-button-danger"
                               icon="pi pi-trash"
-                              onClick={() => handleDeleteProduct(rowData)}
+                              onClick={() => {
+                                setValue(rowData.id + "quantity", 1);
+                                handleDelete(rowData);
+                              }}
                             />
                           );
                         }}
@@ -267,7 +378,7 @@ const invoicer = () => {
                         body={(rowData) => {
                           return (
                             <Controller
-                              name={rowData.id + "quantity"}
+                              name={"quantity." + rowData.id}
                               control={control}
                               rules={{ required: true }}
                               defaultValue={1}
@@ -280,7 +391,7 @@ const invoicer = () => {
                                   max={rowData.stock}
                                   min={1}
                                   onValueChange={(e) => {
-                                    setValue(rowData.id + "quantity", e.value);
+                                    setValue("quantity." + rowData.id, e.value);
                                   }}
                                 />
                               )}
@@ -302,7 +413,7 @@ const invoicer = () => {
                             <label className="text-lg font-bold">
                               {(
                                 (rowData.unitPrice as number) *
-                                (watch(rowData.id + "quantity") as number)
+                                (watch("quantity." + rowData.id) as number)
                               ).toFixed(2)}
                             </label>
                           );
@@ -326,20 +437,24 @@ const invoicer = () => {
                 <div className="justify-between pt-4">
                   <div className="flex flex-row justify-between">
                     <p className="text-lg font-bold">SUBTOTAL: </p>
-                    <label className="text-lg font-bold pl-4">0.00</label>
+                    <label className="text-lg font-bold pl-4">
+                      {productTable.length > 0 ? subtotal : "0.0"}
+                    </label>
                   </div>
                   <div className="flex flex-row justify-between">
                     <p className="text-lg font-bold">DESCUENTO: </p>
                     <label className="text-lg font-bold pl-4">0.00</label>
                   </div>
-                  <div className="flex flex-row justify-between">
-                    <p className="text-lg font-bold">IVA: </p>
-                    <label className="text-lg font-bold pl-4">0.00</label>
-                  </div>
-                  <div className="flex flex-row justify-between">
-                    <p className="text-lg font-bold">VALOR DEL IVA: </p>
-                    <label className="text-lg font-bold pl-4">0.00</label>
-                  </div>
+                  {ivasObject.map((iva: string) => {
+                    return (
+                      <div className="flex flex-row justify-between">
+                        <p className="text-lg font-bold">{iva}:</p>
+                        <label className="text-lg font-bold pl-4">
+                          {ivasObject[iva]}
+                        </label>
+                      </div>
+                    );
+                  })}
                   <div className="flex flex-row justify-between">
                     <p className="text-lg font-bold">TOTAL: </p>
                     <label className="text-lg font-bold pl-4">0.00</label>
@@ -347,14 +462,28 @@ const invoicer = () => {
                 </div>
               </div>
             </div>
+            <div className="flex flex-row justify-between gap-4">
+              <Button
+                className="p-button-danger p-mt-4  ml-4 w-full px-4"
+                label="Cancelar"
+                type="button"
+                onClick={() => {
+                  setCustomer(undefined);
+                  reset();
+                  setProductTable([]);
+                  setDisables(false);
+                  router.refresh();
+                }}
+              />
+              <Button
+                className="p-button-success p-mt-4 w-full px-4"
+                label="Guardar"
+                type="submit"
+                onSubmit={onSubmit}
+              />
+            </div>
           </div>
         )}
-        <Button
-          className="p-button-success p-mt-4"
-          label="Guardar"
-          type="submit"
-          onSubmit={onSubmit}
-        />
       </form>
       <Dialog
         header="Agregar Cliente"

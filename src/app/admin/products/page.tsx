@@ -134,7 +134,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Nombre del Producto",
       alertText: "*El nombre es obligatorio",
-      onChange: () => { },
+      onChange: () => {},
       maxLength: 50,
     },
     {
@@ -143,7 +143,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Código Principal",
       alertText: "*El código principal es obligatorio",
-      onChange: () => { },
+      onChange: () => {},
       maxLength: 4,
     },
     {
@@ -152,7 +152,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Código Auxiliar",
       alertText: "*El código auxiliar es obligatorio",
-      onChange: () => { },
+      onChange: () => {},
     },
     {
       name: "descriptionRegister",
@@ -160,7 +160,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Descripción",
       alertText: "*La descripción es obligatoria",
-      onChange: () => { },
+      onChange: () => {},
       maxLength: 50,
     },
     {
@@ -169,7 +169,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Stock",
       alertText: "*El stock es obligatorio",
-      onChange: () => { },
+      onChange: () => {},
     },
     {
       name: "unitPriceRegister",
@@ -177,7 +177,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "money",
       placeholder: "Precio Unitario",
       alertText: "*El precio unitario es obligatorio",
-      onChange: () => { },
+      onChange: () => {},
     },
   ];
 
@@ -190,8 +190,8 @@ export default function DynamicColumnsDemo() {
       stock: Number(data.stockRegister),
       unitPrice: Number(data.unitPriceRegister),
       ivaType: selectedIVA,
-      iceType: selectedICE,
-      irbpType: selectedIRBP,
+      iceType: selectedICE ? selectedICE : "0%",
+      irbpType: selectedIRBP ? selectedIRBP : "0%",
     };
 
     console.log({ product });
@@ -361,8 +361,6 @@ export default function DynamicColumnsDemo() {
                 {errors[allForm.name] && (
                   <small className="text-red-500">{allForm.alertText}</small>
                 )}
-
-
               </div>
             ))}
 
@@ -370,13 +368,16 @@ export default function DynamicColumnsDemo() {
               <h1 className="pb-4">Imagen del producto</h1>
               <FileUpload
                 name="productImage"
-                url={'/api/upload'}
-                multiple accept="image/*"
+                url={"/api/upload"}
+                multiple
+                accept="image/*"
                 maxFileSize={1000000}
                 onUpload={(e) => console.log(e)}
                 customUpload={true}
                 uploadHandler={handleImage}
-                emptyTemplate={<p className="m-0">Agrega la imagen del producto.</p>}
+                emptyTemplate={
+                  <p className="m-0">Agrega la imagen del producto.</p>
+                }
                 auto={true}
               />
             </div>

@@ -1,3 +1,5 @@
+import { IBoxResponse } from "./IBoxes";
+
 export interface IStoreResponse {
   id: number;
   storeName: string;
@@ -14,4 +16,9 @@ export interface IStoreUpdate {
   tradeName: string;
   ruc: string;
   address: string;
+}
+
+export interface IStoreLocal {
+  store: IStoreResponse;
+  box: IBoxResponse;
 }
