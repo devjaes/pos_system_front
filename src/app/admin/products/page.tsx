@@ -19,6 +19,7 @@ import { ICE, IRBPNR, IVAS } from "@/store/types/Tables";
 import ModifyDialog from "@/components/modifyDialog";
 import ComboBox from "@/components/ComboBox";
 import { useForm } from "react-hook-form";
+import { FileUpload } from "primereact/fileupload";
 
 export default function DynamicColumnsDemo() {
   const toast = useRef<Toast>(null);
@@ -46,6 +47,7 @@ export default function DynamicColumnsDemo() {
     { field: "description", header: "Descripción" },
     { field: "stock", header: "Stock" },
     { field: "unitPrice", header: "Precio Unitario" },
+    { field: "img", header: "Imagen" },
     { field: "ivaType", header: "Tipo de IVA" },
     { field: "iceType", header: "Tipo de ICE" },
     { field: "irbpType", header: "Tipo de IRBP" },
@@ -179,7 +181,6 @@ export default function DynamicColumnsDemo() {
     },
   ];
 
-
   const handleRegister = handleSubmit((data: any) => {
     const product: IProductCreate = {
       name: data.nameRegister,
@@ -228,6 +229,10 @@ export default function DynamicColumnsDemo() {
 
   const handleIVA = (e: string) => {
     setSelectedIVA(e);
+  };
+
+  const handleImage = ({ files }: any) => {
+    console.log(files);
   };
 
   return (
@@ -355,8 +360,25 @@ export default function DynamicColumnsDemo() {
               {errors[allForm.name] && (
                 <small className="text-red-500">{allForm.alertText}</small>
               )}
+
+
             </div>
           ))}
+
+          <div className="card">
+            <h1 className="pb-4">Imagen del producto</h1>
+            <FileUpload
+              name="productImage"
+              url={'/api/upload'}
+              multiple accept="image/*"
+              maxFileSize={1000000}
+              onUpload={(e) => console.log(e)}
+              customUpload={true}
+              uploadHandler={handleImage}
+              emptyTemplate={<p className="m-0">Agrega la imagen del producto.</p>}
+              auto={true}
+            />
+          </div>
 
           <div className="flex justify-evenly gap-4">
             <div className="card flex justify-content-center py-4 w-full">

@@ -1,4 +1,5 @@
 import { IInvoiceResponse } from '@/store/types/IInvoices'
+import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog'
 import React from 'react'
 
@@ -41,26 +42,27 @@ export default function invoiceInfo(
                     <p>Clave de la caja:</p>
                     <p>Nombre de la sucursal:</p>
                 </div>
-                <div>
-                    <p>{invoice.id}</p>
-                    <p>{invoice.environmentType}</p>
-                    <p>{invoice.emissionType}</p>
-                    <p>{invoice.accessKey}</p>
-                    <p>{invoice.receiptType}</p>
-                    <p>{invoice.customerId}</p>
-                    <p>{invoice.emissionDate}</p>
-                    <p>{invoice.remissionGuide}</p>
-                    <p>{invoice.totalWithoutTax}</p>
-                    <p>{invoice.totalDiscount}</p>
-                    <p>{invoice.tip}</p>
-                    <p>{invoice.paymentType}</p>
-                    <p>{invoice.total}</p>
-                    <p>{invoice.currency}</p>
-                    <p>{invoice.boxId}</p>
-                    <p>{invoice.boxKey}</p>
-                    <p>{invoice.branchName}</p>
+                <div className='flex flex-col'>
+                    <p >{invoice.id ? invoice.id : '-'}</p>
+                    <p >{invoice.environmentType ? invoice.environmentType : '-'}</p>
+                    <p >{invoice.emissionType ? invoice.emissionType : '-'}</p>
+                    <p >{invoice.accessKey ? invoice.accessKey : '-'}</p>
+                    <p >{invoice.receiptType ? invoice.receiptType : '-'}</p>
+                    <p >{invoice.customerId ? invoice.customerId : '-'}</p>
+                    <p >{invoice.emissionDate ? invoice.emissionDate : '-'}</p>
+                    <p >{invoice.remissionGuide ? invoice.remissionGuide : '-'}</p>
+                    <p >{invoice.totalWithoutTax ? invoice.totalWithoutTax : '-'}</p>
+                    <p >{invoice.totalDiscount ? invoice.totalDiscount : '-'}</p>
+                    <p >{invoice.tip ? invoice.tip : '-'}</p>
+                    <p >{invoice.paymentType ? invoice.paymentType : '-'}</p>
+                    <p >{invoice.total ? invoice.total : '-'}</p>
+                    <p >{invoice.currency ? invoice.currency : '-'}</p>
+                    <p >{invoice.boxId ? invoice.boxId : '-'}</p>
+                    <p >{invoice.boxKey ? invoice.boxKey : '-'}</p>
+                    <p >{invoice.branchName ? invoice.branchName : '-'}</p>
                 </div>
             </div>
+
         </Dialog>
 
     )

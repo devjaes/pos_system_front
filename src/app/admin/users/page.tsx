@@ -176,6 +176,7 @@ export default function DynamicColumnsDemo() {
           detail: `El usuario ${res.name} ha sido creado con éxito`,
           life: 3000,
         });
+        reset();
       } else {
         toast.current?.show({
           severity: 'error',
