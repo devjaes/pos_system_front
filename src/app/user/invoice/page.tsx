@@ -27,6 +27,7 @@ import CustomerTable from "@/components/customerTable";
 import { InputNumber } from "primereact/inputnumber";
 import { useRouter } from "next/navigation";
 import { IStoreLocal } from "@/store/types/IStore";
+import { round } from "@/store/utils/uuid";
 
 const invoicer = () => {
   const [product, setProduct] = useState<IProductResponse>();
@@ -41,8 +42,10 @@ const invoicer = () => {
   const [productsDropdown, setProductsDropdown] = useState<{}[]>([]);
   const [storeLocal, setStoreLocal] = useState<IStoreLocal>();
   const [disables, setDisables] = useState<boolean>(false);
-  const [ivasObject, setIvasObject] = useState<[]>([]);
+  const [ivasObject, setIvasObject] = useState<any>([]);
   const [subTotals, setSubTotals] = useState<any>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [effect, setEffect] = useState<boolean>(false);
   const router = useRouter();
 
   const myIVAS = IVAS;
@@ -56,7 +59,7 @@ const invoicer = () => {
     getFieldState,
     watch,
     control,
-    formState: { errors, touchedFields },
+    formState,
   } = useForm();
 
   useEffect(() => {
@@ -103,24 +106,29 @@ const invoicer = () => {
   useEffect(() => {
     let subtotal = 0;
     productTable.forEach((product) => {
-      subtotal += Number(
-        (
-          product.unitPrice * (watch("quantity." + product.id) as number)
-        ).toFixed(2)
+      subtotal += round(
+        Number(product.unitPrice * Number(watch("quantity." + product.id)))
       );
     });
-    setSubtotal(subtotal.toFixed(2) as unknown as number);
+    setSubtotal(round(subtotal));
     setSubTotals(getSubTotals(productTable));
     setIvasObject(getIvasObject(productTable));
-  }, [productTable, getValues()]);
+
+    const taxesTotal = round(
+      getIvasObject(productTable)
+        .map((ivas: any) => Object.values(ivas))
+        .reduce((a: any, b: any) => a + b, 0)
+    );
+
+    setTotal(round(Number(subtotal) + Number(taxesTotal)));
+    console.log(getValues());
+  }, [productTable, effect]);
 
   const getSubTotals = (productTable: IProductResponse[]) => {
     const subTotals = productTable.map((product) => {
       return {
         [product.id]: Number(
-          (
-            product.unitPrice * (watch("quantity." + product.id) as number)
-          ).toFixed(2)
+          round(product.unitPrice * Number(watch("quantity." + product.id)))
         ),
       };
     });
@@ -132,10 +140,13 @@ const invoicer = () => {
     const ivaObject = myIVAS.map((iva: string) => {
       return {
         [iva]: getSubTotals(
-          productTable.filter((product) => product.ivaType == iva)
+          productTable.filter(
+            (product) => !product.ivaVariable && product.ivaType == iva
+          )
         )
           .map((subTotal) => {
-            return subTotal[Object.keys(subTotal)[0] as any] as number;
+            console.log(subTotal);
+            return round(Number(subTotal[Object.keys(subTotal)[0] as any]));
           })
           .reduce((a, b) => a + b, 0),
       };
@@ -148,7 +159,9 @@ const invoicer = () => {
         product.ivaVariable != null &&
         product.ivaVariable != ""
       ) {
-        ivaVariables.push(product.ivaVariable);
+        if (!ivaVariables.includes(product.ivaVariable)) {
+          ivaVariables.push(product.ivaVariable);
+        }
       }
     });
 
@@ -159,13 +172,40 @@ const invoicer = () => {
         );
         const subTotals = getSubTotals(products);
         const subTotal = subTotals.map((subTotal) => {
-          return subTotal[Object.keys(subTotal)[0] as any] as number;
+          return round(Number(subTotal[Object.keys(subTotal)[0] as any]));
         });
         const total = subTotal.reduce((a, b) => a + b, 0);
-        const iva = total * (Number(ivaVariable) / 100);
+        const iva = round(total * round(Number(ivaVariable) / 100));
         ivaObject.push({ [ivaVariable]: iva });
       });
     }
+
+    ivaObject.map((iva: any) => {
+      const key = Object.keys(iva)[0];
+      const value = iva[key];
+      switch (key) {
+        case "0%":
+          iva[key] = 0;
+          break;
+        case "12%":
+          iva[key] = round(value * 0.12);
+          break;
+        case "14%":
+          iva[key] = round(value * 0.14);
+          break;
+        case "No Objeto de Impuesto":
+          iva[key] = Number(0);
+          break;
+        case "Exento de IVA":
+          iva[key] = Number(0);
+          break;
+        case "IVA diferenciado":
+          iva[key] = round(value * 0.12);
+          break;
+        default:
+          break;
+      }
+    });
 
     return ivaObject;
   };
@@ -259,7 +299,7 @@ const invoicer = () => {
                 onClick={() => setAddCustomer(true)}
               />
             </div>
-            {errors["customer"] && (
+            {formState.errors["customer"] && (
               <small className="text-red-500">
                 Debe seleccionar un cliente
               </small>
@@ -358,7 +398,7 @@ const invoicer = () => {
                               className="p-button-danger"
                               icon="pi pi-trash"
                               onClick={() => {
-                                setValue(rowData.id + "quantity", 1);
+                                setValue("quantity." + rowData.id, 1);
                                 handleDelete(rowData);
                               }}
                             />
@@ -392,6 +432,7 @@ const invoicer = () => {
                                   min={1}
                                   onValueChange={(e) => {
                                     setValue("quantity." + rowData.id, e.value);
+                                    setEffect(!effect);
                                   }}
                                 />
                               )}
@@ -411,10 +452,10 @@ const invoicer = () => {
                         body={(rowData) => {
                           return (
                             <label className="text-lg font-bold">
-                              {(
-                                (rowData.unitPrice as number) *
-                                (watch("quantity." + rowData.id) as number)
-                              ).toFixed(2)}
+                              {round(
+                                Number(rowData.unitPrice) *
+                                  Number(watch("quantity." + rowData.id))
+                              )}
                             </label>
                           );
                         }}
@@ -438,26 +479,34 @@ const invoicer = () => {
                   <div className="flex flex-row justify-between">
                     <p className="text-lg font-bold">SUBTOTAL: </p>
                     <label className="text-lg font-bold pl-4">
-                      {productTable.length > 0 ? subtotal : "0.0"}
+                      {productTable.length > 0 ? subtotal : "0.00"}
                     </label>
                   </div>
                   <div className="flex flex-row justify-between">
                     <p className="text-lg font-bold">DESCUENTO: </p>
                     <label className="text-lg font-bold pl-4">0.00</label>
                   </div>
-                  {ivasObject.map((iva: string) => {
+                  {ivasObject.map((iva: any, index: number) => {
+                    const key = Object.keys(iva)[0]; // Acceder a la única key del objeto
+                    const value = iva[key];
+                    console.log({ ivasObject }, { total });
                     return (
-                      <div className="flex flex-row justify-between">
-                        <p className="text-lg font-bold">{iva}:</p>
+                      <div
+                        className="flex flex-row justify-between"
+                        key={index}
+                      >
+                        <p className="text-lg font-bold">{key}:</p>
                         <label className="text-lg font-bold pl-4">
-                          {ivasObject[iva]}
+                          {value.toFixed(2)}
                         </label>
                       </div>
                     );
                   })}
                   <div className="flex flex-row justify-between">
                     <p className="text-lg font-bold">TOTAL: </p>
-                    <label className="text-lg font-bold pl-4">0.00</label>
+                    <label className="text-lg font-bold pl-4">
+                      {total.toFixed(2)}
+                    </label>
                   </div>
                 </div>
               </div>

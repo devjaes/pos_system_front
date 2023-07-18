@@ -65,7 +65,7 @@ const BranchBox = () => {
   };
 
   return (
-    <div className="border p-4 border-opacity-5 bg-gray-800 w-full m-16">
+    <div className="border p-4 border-opacity-5 bg-gray-800  w-full rounded-md">
       {!box && (
         <div>
           <h1 className="text-2xl text-white font-bold">

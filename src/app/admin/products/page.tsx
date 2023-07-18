@@ -189,6 +189,7 @@ export default function DynamicColumnsDemo() {
       description: data.descriptionRegister,
       stock: Number(data.stockRegister),
       unitPrice: Number(data.unitPriceRegister),
+      ivaVariable: "",
       ivaType: selectedIVA,
       iceType: selectedICE ? selectedICE : "0%",
       irbpType: selectedIRBP ? selectedIRBP : "0%",
