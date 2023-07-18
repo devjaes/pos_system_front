@@ -215,8 +215,8 @@ export default function page() {
 
     return (
         <>
-            <div className='flex flex-col gap-8'>
-                <h1 className='text-neutral-100 text-3xl text-center font-bold'><span><i className="pi pi-search" style={{ fontSize: '1.5rem' }}></i></span> Listado de Clientes</h1>
+            <div className='flex flex-col gap-6'>
+                <h1 className='text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md'><span><i className="pi pi-search" style={{ fontSize: '1.5rem' }}></i></span> Listado de Clientes</h1>
                 <div className='flex gap-4 justify-between'>
                     <div className='p-input-icon-left'>
                         <i className="pi pi-search" style={{ fontSize: '1.2rem' }}></i>

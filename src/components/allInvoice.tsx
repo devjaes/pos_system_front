@@ -64,7 +64,7 @@ export default function allInvoice() {
     return (
         <div className='flex flex-col gap-8'>
             <Toast ref={toast} />
-            <h1 className="text-neutral-100 text-3xl text-center font-bold">
+            <h1 className="text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md">
                 <span>
                     <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
                 </span>{" "}

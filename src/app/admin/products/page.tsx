@@ -236,202 +236,204 @@ export default function DynamicColumnsDemo() {
   };
 
   return (
-    <div className="flex flex-col gap-8">
-      <Toast ref={toast} />
-      <h1 className="text-neutral-100 text-3xl text-center font-bold">
-        <span>
-          <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
-        </span>{" "}
-        Listado de productos
-      </h1>
+    <div className="border p-4 border-opacity-5 bg-gray-700 w-full mx-16">
+      <div className="flex flex-col gap-6">
+        <Toast ref={toast} />
+        <h1 className="text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md">
+          <span>
+            <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
+          </span>{" "}
+          Listado de productos
+        </h1>
 
-      <div className="flex gap-4 justify-between">
-        <div className="p-input-icon-left">
-          <i className="pi pi-search"></i>
-          <InputText
-            placeholder="Buscar"
-            value={searchTerm}
-            onChange={handleSearch}
-            className="w-96"
+        <div className="flex gap-4 justify-between">
+          <div className="p-input-icon-left">
+            <i className="pi pi-search"></i>
+            <InputText
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={handleSearch}
+              className="w-96"
+            />
+          </div>
+          <Button
+            label="Agregar Producto"
+            severity="info"
+            raised
+            className="w-56"
+            icon="pi pi-plus"
+            onClick={() => {
+              setAddVisible(true);
+            }}
           />
         </div>
-        <Button
-          label="Agregar Producto"
-          severity="info"
-          raised
-          className="w-56"
-          icon="pi pi-plus"
-          onClick={() => {
-            setAddVisible(true);
-          }}
-        />
-      </div>
-      <DataTable
-        value={filteredProducts}
-        tableStyle={{ minWidth: "50rem" }}
-        className="centered-table"
-        paginator
-        rows={5}
-        rowsPerPageOptions={[5, 10, 25, 50]}
-      >
-        {columns.map((col, i) => {
-          if (col.field === "actions") {
-            return (
-              <Column
-                key={col.field}
-                style={{ display: "flex", justifyContent: "center" }}
-                header={col.header}
-                body={(rowData) => (
-                  <div className="action-buttons flex gap-6">
-                    <Button
-                      icon="pi pi-pencil"
-                      severity="info"
-                      aria-label="User"
-                      onClick={() => {
-                        handleModify(rowData);
-                      }}
-                    />
-                    <ConfirmPopup />
-                    <Button
-                      icon="pi pi-eraser"
-                      severity="danger"
-                      aria-label="Cancel"
-                      onClick={(e) => confirm(e, rowData)}
-                    />
-                  </div>
-                )}
-              />
-            );
-          } else {
-            return (
-              <Column
-                key={col.field}
-                field={col.field}
-                header={col.header}
-                body={(rowData) => rowData[col.field] || "-"}
-                style={{ textAlign: "center" }}
-              />
-            );
-          }
-        })}
-      </DataTable>
-
-      {product !== undefined && (
-        <ModifyDialog
-          product={product}
-          visible={editVisible}
-          setEditVisible={setEditVisible}
-          setProducts={setProducts}
-          toast={toast}
-        />
-      )}
-
-      <Dialog
-        visible={addVisible}
-        style={{ width: "50vw" }}
-        onHide={() => {
-          reset();
-          setAddVisible(false);
-        }}
-      >
-        <form className="px-16">
-          <h1 className="text-center font-bold text-3xl">
-            Agregar un producto
-          </h1>
-          {allForms.map((allForm, index) => (
-            <div className="py-4 block" key={index}>
-              <span className="p-float-label">
-                <InputText
-                  className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
-                  keyfilter={allForm.keyfilter as KeyFilterType}
-                  placeholder={allForm.placeholder}
-                  maxLength={allForm.maxLength}
-                  {...register(allForm.name, {
-                    required:
-                      allForm.name === "auxCodeRegister"
-                        ? false
-                        : allForm.alertText,
-                  })}
+        <DataTable
+          value={filteredProducts}
+          tableStyle={{ minWidth: "50rem" }}
+          className="centered-table"
+          paginator
+          rows={5}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+        >
+          {columns.map((col, i) => {
+            if (col.field === "actions") {
+              return (
+                <Column
+                  key={col.field}
+                  style={{ display: "flex", justifyContent: "center" }}
+                  header={col.header}
+                  body={(rowData) => (
+                    <div className="action-buttons flex gap-6">
+                      <Button
+                        icon="pi pi-pencil"
+                        severity="info"
+                        aria-label="User"
+                        onClick={() => {
+                          handleModify(rowData);
+                        }}
+                      />
+                      <ConfirmPopup />
+                      <Button
+                        icon="pi pi-eraser"
+                        severity="danger"
+                        aria-label="Cancel"
+                        onClick={(e) => confirm(e, rowData)}
+                      />
+                    </div>
+                  )}
                 />
-                <label className="block pb-2" htmlFor={allForm.name}>
-                  {allForm.label}
-                </label>
-              </span>
-              {errors[allForm.name] && (
-                <small className="text-red-500">{allForm.alertText}</small>
-              )}
+              );
+            } else {
+              return (
+                <Column
+                  key={col.field}
+                  field={col.field}
+                  header={col.header}
+                  body={(rowData) => rowData[col.field] || "-"}
+                  style={{ textAlign: "center" }}
+                />
+              );
+            }
+          })}
+        </DataTable>
+
+        {product !== undefined && (
+          <ModifyDialog
+            product={product}
+            visible={editVisible}
+            setEditVisible={setEditVisible}
+            setProducts={setProducts}
+            toast={toast}
+          />
+        )}
+
+        <Dialog
+          visible={addVisible}
+          style={{ width: "50vw" }}
+          onHide={() => {
+            reset();
+            setAddVisible(false);
+          }}
+        >
+          <form className="px-16">
+            <h1 className="text-center font-bold text-3xl">
+              Agregar un producto
+            </h1>
+            {allForms.map((allForm, index) => (
+              <div className="py-4 block" key={index}>
+                <span className="p-float-label">
+                  <InputText
+                    className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
+                    keyfilter={allForm.keyfilter as KeyFilterType}
+                    placeholder={allForm.placeholder}
+                    maxLength={allForm.maxLength}
+                    {...register(allForm.name, {
+                      required:
+                        allForm.name === "auxCodeRegister"
+                          ? false
+                          : allForm.alertText,
+                    })}
+                  />
+                  <label className="block pb-2" htmlFor={allForm.name}>
+                    {allForm.label}
+                  </label>
+                </span>
+                {errors[allForm.name] && (
+                  <small className="text-red-500">{allForm.alertText}</small>
+                )}
 
 
+              </div>
+            ))}
+
+            <div className="card">
+              <h1 className="pb-4">Imagen del producto</h1>
+              <FileUpload
+                name="productImage"
+                url={'/api/upload'}
+                multiple accept="image/*"
+                maxFileSize={1000000}
+                onUpload={(e) => console.log(e)}
+                customUpload={true}
+                uploadHandler={handleImage}
+                emptyTemplate={<p className="m-0">Agrega la imagen del producto.</p>}
+                auto={true}
+              />
             </div>
-          ))}
 
-          <div className="card">
-            <h1 className="pb-4">Imagen del producto</h1>
-            <FileUpload
-              name="productImage"
-              url={'/api/upload'}
-              multiple accept="image/*"
-              maxFileSize={1000000}
-              onUpload={(e) => console.log(e)}
-              customUpload={true}
-              uploadHandler={handleImage}
-              emptyTemplate={<p className="m-0">Agrega la imagen del producto.</p>}
-              auto={true}
-            />
-          </div>
-
-          <div className="flex justify-evenly gap-4">
-            <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox
-                label="ICE"
-                options={ICE}
-                defaultValue="Selecciona una opción"
-                onChange={(e) => {
-                  handleICE(e);
+            <div className="flex justify-evenly gap-4">
+              <div className="card flex justify-content-center py-4 w-full">
+                <ComboBox
+                  label="ICE"
+                  options={ICE}
+                  defaultValue="Selecciona una opción"
+                  onChange={(e) => {
+                    handleICE(e);
+                  }}
+                ></ComboBox>
+              </div>
+              <div className="card flex justify-content-center py-4 w-full">
+                <ComboBox
+                  label="IRBP"
+                  options={IRBPNR}
+                  defaultValue="Selecciona una opción"
+                  onChange={(e) => {
+                    handleIRBP(e);
+                  }}
+                ></ComboBox>
+              </div>
+              <div className="card flex justify-content-center py-4 w-full">
+                <ComboBox
+                  label="IVA"
+                  options={IVAS}
+                  defaultValue="Selecciona una opción"
+                  onChange={(e) => {
+                    handleIVA(e);
+                  }}
+                ></ComboBox>
+              </div>
+            </div>
+            <div className="flex justify-evenly gap-4 py-4">
+              <Button
+                label="Agregar"
+                severity="info"
+                className="w-1/2"
+                onClick={handleRegister}
+              />
+              <Button
+                label="Cancelar"
+                type="button"
+                severity="danger"
+                className="w-1/2"
+                onClick={() => {
+                  reset();
+                  setAddVisible(false);
                 }}
-              ></ComboBox>
+              />
             </div>
-            <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox
-                label="IRBP"
-                options={IRBPNR}
-                defaultValue="Selecciona una opción"
-                onChange={(e) => {
-                  handleIRBP(e);
-                }}
-              ></ComboBox>
-            </div>
-            <div className="card flex justify-content-center py-4 w-full">
-              <ComboBox
-                label="IVA"
-                options={IVAS}
-                defaultValue="Selecciona una opción"
-                onChange={(e) => {
-                  handleIVA(e);
-                }}
-              ></ComboBox>
-            </div>
-          </div>
-          <div className="flex justify-evenly gap-4 py-4">
-            <Button
-              label="Agregar"
-              severity="info"
-              className="w-1/2"
-              onClick={handleRegister}
-            />
-            <Button
-              label="Cancelar"
-              type="button"
-              severity="danger"
-              className="w-1/2"
-              onClick={() => {
-                reset();
-                setAddVisible(false);
-              }}
-            />
-          </div>
-        </form>
-      </Dialog>
+          </form>
+        </Dialog>
+      </div>
     </div>
   );
 }
