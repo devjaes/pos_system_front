@@ -254,7 +254,7 @@ export default function DynamicColumnsDemo() {
           label="Agregar Producto"
           severity="info"
           raised
-          className="w-56"
+          className="w-56 p-button-success"
           icon="pi pi-plus"
           onClick={() => {
             setAddVisible(true);

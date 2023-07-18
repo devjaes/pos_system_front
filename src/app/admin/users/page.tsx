@@ -193,7 +193,7 @@ export default function DynamicColumnsDemo() {
   }
 
   return (
-    <div className='flex flex-col gap-8'>
+    <div className='flex flex-col gap-8 '>
       <h1 className='text-neutral-100 text-3xl text-center font-bold'><span><i className="pi pi-search" style={{ fontSize: '1.5rem' }}></i></span> Listado de Usuarios</h1>
       <div className='flex gap-4 justify-between'>
         <div className='p-input-icon-left'>
@@ -230,6 +230,7 @@ export default function DynamicColumnsDemo() {
                     <Toast ref={toast} />
                     <ConfirmPopup />
                     <Button
+                    
                       icon="pi pi-eraser"
                       severity="danger"
                       aria-label="Cancel"
