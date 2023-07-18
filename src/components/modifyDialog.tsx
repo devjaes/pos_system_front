@@ -10,6 +10,7 @@ import React, { RefObject } from "react";
 import { Controller, useForm } from "react-hook-form";
 import ComboBox from "./ComboBox";
 import { handleUpdateProduct } from "@/store/api/productApi";
+import { FileUpload } from "primereact/fileupload";
 
 interface Props {
   toast: RefObject<Toast>;
@@ -52,7 +53,7 @@ export default function ModifyDialog({
         placeholder: "Nombre del Producto",
         alertText: "*El nombre es obligatorio",
         value: product?.name,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
       {
@@ -62,7 +63,7 @@ export default function ModifyDialog({
         placeholder: "Código Principal",
         alertText: "*El código principal es obligatorio",
         value: product?.mainCode,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
       {
@@ -72,7 +73,7 @@ export default function ModifyDialog({
         placeholder: "Código Auxiliar",
         alertText: "*El código auxiliar es obligatorio",
         value: product?.auxCode,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
       {
@@ -82,7 +83,7 @@ export default function ModifyDialog({
         placeholder: "Contraseña",
         alertText: "*La contraseña es obligatoria",
         value: product?.description,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
       {
@@ -92,7 +93,7 @@ export default function ModifyDialog({
         placeholder: "Stock",
         alertText: "*El stock es obligatorio",
         value: product?.stock as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
       {
@@ -102,7 +103,7 @@ export default function ModifyDialog({
         placeholder: "Precio Unitario",
         alertText: "*El precio unitario es obligatorio",
         value: product?.unitPrice as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
     ];
@@ -172,6 +173,10 @@ export default function ModifyDialog({
     setSelectedIVA(e);
   };
 
+  const handleImage = ({ files }: any) => {
+    console.log(files);
+  };
+
   const renderDialogContent = (product: IProductResponse) => {
     return (
       <div className="p-4">
@@ -208,11 +213,35 @@ export default function ModifyDialog({
             </div>
           ))}
 
+          <div className="card w-full">
+            <ComboBox
+              label="Categoria"
+              options={ICE}
+              defaultValue={product.iceType ? product.iceType : "No aplica"}
+              onChange={(e) => {
+                handleICE(e);
+              }}
+            ></ComboBox>
+          </div>
+
+          <div className="card">
+            <h1 className="pb-4">Imagen del producto</h1>
+            <FileUpload
+              name="productImage"
+              url={'/api/upload'}
+              multiple accept="image/*"
+              maxFileSize={1000000}
+              onUpload={(e) => console.log(e)}
+              customUpload={true}
+              uploadHandler={handleImage}
+              emptyTemplate={<p className="m-0">Agrega la imagen del producto.</p>}
+              auto={true}
+            />
+          </div>
+
           <div className="flex justify-evenly gap-4">
             <div className="card flex flex-col justify-content-center py-4 w-full">
-              <label className="block pb-2" htmlFor="ICE">
-                ICE
-              </label>
+
               <ComboBox
                 label="ICE"
                 options={ICE}
@@ -223,9 +252,7 @@ export default function ModifyDialog({
               ></ComboBox>
             </div>
             <div className="card flex flex-col justify-content-center py-4 w-full">
-              <label className="block pb-2" htmlFor="IRBP">
-                IRBP
-              </label>
+
               <ComboBox
                 label="IRBP"
                 options={IRBPNR}
@@ -236,9 +263,6 @@ export default function ModifyDialog({
               ></ComboBox>
             </div>
             <div className="card flex flex-col justify-content-center py-4 w-full">
-              <label className="block pb-2" htmlFor="IVA">
-                IVA
-              </label>
               <ComboBox
                 label="IVA"
                 options={IVAS}
