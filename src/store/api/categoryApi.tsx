@@ -1,4 +1,4 @@
-import { ICategoryResponse } from "../types/ICategory";
+import { ICategoryResponse, ICategoryUpdate } from "../types/ICategory";
 import config from "../../../config/serverConfig";
 
 export const handleGetAllCategories = async () => {
@@ -24,4 +24,57 @@ export const handleGetAllCategories = async () => {
     } catch (error) {
         console.log({ error });
     }
+}
+
+export const handleCreateCategory = async (category: ICategoryUpdate) => {
+    try {
+        const response = await fetch(`${config.API_REST_BASE_URL}/categories/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(category),
+        });
+
+        if (!response.ok) {
+            console.log("No se pudo crear la categoria.");
+            return;
+        }
+        const data = await response.json();
+        const categoryData: ICategoryResponse = data;
+        if (!categoryData) {
+            console.log("Error al crear la categoria.");
+            return;
+        }
+        return categoryData;
+    } catch (error) {
+        console.log({ error });
+    }
+
+}
+
+export const handleDeleteCategory = async (id: number) => {
+    try {
+        const response = await fetch(`${config.API_REST_BASE_URL}/categories/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            console.log("No se pudo eliminar la categoria.");
+            return;
+        }
+        const data = await response.json();
+        if (!data) {
+            console.log("Error al eliminar la categoria.");
+            return;
+        }
+
+        return data;
+
+    } catch (error) {
+        console.log({ error });
+    }
+
 }
