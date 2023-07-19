@@ -1,15 +1,20 @@
 "use client";
 import "@/app/globals.css";
-import { PanelMenu } from "primereact/panelmenu";
+
 import { MenuItem } from "primereact/menuitem";
 import "primereact/resources/themes/bootstrap4-dark-purple/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import Image from "next/image";
 import Logo from "../../../public/images/PostLogo5.png";
-import { Menu } from 'primereact/menu';
+import { Menu } from "primereact/menu";
 
 const items: MenuItem[] = [
+  {
+    label: "Seleccionar Sucursal/Caja",
+    icon: "pi pi-fw pi-building",
+    url: "/user/branchBox",
+  },
   {
     label: "Facturación",
     icon: "pi pi-fw pi-tag",
@@ -32,7 +37,7 @@ const items: MenuItem[] = [
     command: () => {
       window.localStorage.removeItem("user");
       window.location.href = "/";
-    }
+    },
   },
 ];
 
@@ -41,7 +46,6 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <div className="flex ">
       <div className="min-h-screen bg-jair">
@@ -55,10 +59,7 @@ export default function AdminLayout({
               className="py-2 "
             />
           </div>
-          <Menu
-            model={items}
-            className="w-52 md:w-25rem mb-4 bg-gray-700"
-          />
+          <Menu model={items} className="w-52 md:w-25rem mb-4 bg-gray-700" />
         </div>
       </div>
       <div className="flex justify-center items-center w-11/12 bg-slate-600">

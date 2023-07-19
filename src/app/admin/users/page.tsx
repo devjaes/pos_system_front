@@ -176,6 +176,7 @@ export default function DynamicColumnsDemo() {
           detail: `El usuario ${res.name} ha sido creado con éxito`,
           life: 3000,
         });
+        reset();
       } else {
         toast.current?.show({
           severity: 'error',
@@ -193,138 +194,139 @@ export default function DynamicColumnsDemo() {
   }
 
   return (
-    <div className='flex flex-col gap-8 '>
-      <h1 className='text-neutral-100 text-3xl text-center font-bold'><span><i className="pi pi-search" style={{ fontSize: '1.5rem' }}></i></span> Listado de Usuarios</h1>
-      <div className='flex gap-4 justify-between'>
-        <div className='p-input-icon-left'>
-          <i className="pi pi-search" style={{ fontSize: '1.2rem' }}></i>
-          <InputText
-            type='search'
-            placeholder='Buscar'
-            value={searchTerm}
-            onChange={handleSearch}
-            className="w-96"
-          />
-        </div>
-        <Button label="Agregar Usuario" severity="info" raised icon="pi pi-plus" className="p-button-success" onClick={() => setAddVisible(true)} />
-      </div>
-      <DataTable
-        value={filteredUsers}
-        tableStyle={{ minWidth: '50rem' }}
-        className='centered-table'
-        paginator
-        rows={5}
-        rowsPerPageOptions={[5, 10, 15]}
-      >
-        {columns.map((col, i) => {
-          if (col.field === 'actions') {
-            return (
-              <Column
-                key={col.field}
-                style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
-                header={col.header}
-                headerStyle={{ textAlign: 'center' }}
-                body={(rowData) => (
-                  <div className="action-buttons flex gap-6">
-                    <Button icon="pi pi-pencil" severity="info" aria-label="User" onClick={() => handleModify(rowData)} />
-                    <Toast ref={toast} />
-                    <ConfirmPopup />
-                    <Button
-                    
-                      icon="pi pi-eraser"
-                      severity="danger"
-                      aria-label="Cancel"
-                      onClick={(e) => confirm(e, rowData)} />
-                  </div>
-                )}
-              />
-            );
-
-          } else {
-            return (
-              <Column
-                key={col.field}
-                field={col.field}
-                header={col.header}
-                alignHeader={'center'}
-                body={(rowData) => rowData[col.field] || '-'}
-                style={{ textAlign: 'center' }}
-              />
-            );
-          }
-        }
-        )}
-      </DataTable>
-
-      {
-        userM !== undefined && (
-          <ModifyUserDialog
-            user={userM}
-            onHide={() => setEditVisible(false)}
-            visible={editVisible}
-            setEditVisible={setEditVisible}
-            setUsers={setUsers}
-            toast={toast}
-          />
-        )
-      }
-
-      <Dialog
-
-        visible={addVisible}
-        style={{ width: '50vw' }}
-        onHide={() => {
-          reset();
-          setAddVisible(false)
-        }}
-      >
-        <form className="px-16">
-          <h1 className="text-center font-bold text-3xl">Agregar un usuario</h1>
-          {allForms.map((form, i) => (
-            <div className="py-3 block mt-3" key={i} >
-              <span className="p-float-label">
-                <InputText
-                  className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
-                  keyfilter={form.keyfilter as KeyFilterType}
-                  placeholder={form.placeholder}
-                  {...register(form.name, {
-                    required: form.alertText,
-                  })} />
-                <label className="block pb-2">{form.label}</label>
-              </span>
-              {errors[form.name] && (
-                <small className="text-red-500">{form.alertText}</small>
-              )}
-            </div>
-          ))}
-          <div className="card flex justify-content-center py-4 w-full">
-            <ComboBox
-              label="Rol"
-              options={['Usuario', 'Administrador']}
-              defaultValue="Selecciona una opción"
-              onChange={(e) => { handleRol(e) }}></ComboBox>
-          </div>
-          <div className="flex justify-center gap-4 py-4">
-            <Button
-              label="Agregar"
-              severity="info"
-              className="w-1/2"
-              onClick={handleRegister}
+    <div className="border p-4 border-opacity-5 bg-gray-700 w-full m-16">
+      <div className='flex flex-col gap-8'>
+        <h1 className='text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md'><span><i className="pi pi-search" style={{ fontSize: '1.5rem' }}></i></span> Listado de Usuarios</h1>
+        <div className='flex gap-4 justify-between'>
+          <div className='p-input-icon-left'>
+            <i className="pi pi-search" style={{ fontSize: '1.2rem' }}></i>
+            <InputText
+              type='search'
+              placeholder='Buscar'
+              value={searchTerm}
+              onChange={handleSearch}
+              className="w-96"
             />
           </div>
-        </form>
-        <div className="flex justify-center px-16">
-          <Button
-            label="Cancelar"
-            severity="danger"
-            className="w-1/2"
-            onClick={() => {
-              reset()
-              setAddVisible(false)
-            }} />
+          <Button label="Agregar Usuario" severity="info" raised icon="pi pi-plus" className="p-button-success" onClick={() => setAddVisible(true)} />
         </div>
-      </Dialog>
+        <DataTable
+          value={filteredUsers}
+          tableStyle={{ minWidth: '50rem' }}
+          className='centered-table'
+          paginator
+          rows={5}
+          rowsPerPageOptions={[5, 10, 15]}
+        >
+          {columns.map((col, i) => {
+            if (col.field === 'actions') {
+              return (
+                <Column
+                  key={col.field}
+                  style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+                  header={col.header}
+                  headerStyle={{ textAlign: 'center' }}
+                  body={(rowData) => (
+                    <div className="action-buttons flex gap-6">
+                      <Button icon="pi pi-pencil" severity="info" aria-label="User" onClick={() => handleModify(rowData)} />
+                      <Toast ref={toast} />
+                      <ConfirmPopup />
+                      <Button
+                        icon="pi pi-eraser"
+                        severity="danger"
+                        aria-label="Cancel"
+                        onClick={(e) => confirm(e, rowData)} />
+                    </div>
+                  )}
+                />
+              );
 
+            } else {
+              return (
+                <Column
+                  key={col.field}
+                  field={col.field}
+                  header={col.header}
+                  alignHeader={'center'}
+                  body={(rowData) => rowData[col.field] || '-'}
+                  style={{ textAlign: 'center' }}
+                />
+              );
+            }
+          }
+          )}
+        </DataTable>
+
+        {
+          userM !== undefined && (
+            <ModifyUserDialog
+              user={userM}
+              onHide={() => setEditVisible(false)}
+              visible={editVisible}
+              setEditVisible={setEditVisible}
+              setUsers={setUsers}
+              toast={toast}
+            />
+          )
+        }
+
+        <Dialog
+
+          visible={addVisible}
+          style={{ width: '50vw' }}
+          onHide={() => {
+            reset();
+            setAddVisible(false)
+          }}
+        >
+          <form className="px-16">
+            <h1 className="text-center font-bold text-3xl">Agregar un usuario</h1>
+            {allForms.map((form, i) => (
+              <div className="py-3 block mt-3" key={i} >
+                <span className="p-float-label">
+                  <InputText
+                    className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
+                    keyfilter={form.keyfilter as KeyFilterType}
+                    placeholder={form.placeholder}
+                    {...register(form.name, {
+                      required: form.alertText,
+                    })} />
+                  <label className="block pb-2">{form.label}</label>
+                </span>
+                {errors[form.name] && (
+                  <small className="text-red-500">{form.alertText}</small>
+                )}
+              </div>
+            ))}
+            <div className="card flex justify-content-center py-4 w-full">
+              <ComboBox
+                label="Rol"
+                options={['Usuario', 'Administrador']}
+                defaultValue="Selecciona una opción"
+                onChange={(e) => { handleRol(e) }}></ComboBox>
+            </div>
+            <div className="flex justify-center gap-4 py-4">
+              <Button
+                label="Agregar"
+                severity="info"
+                className="w-1/2"
+                onClick={handleRegister}
+              />
+            </div>
+          </form>
+          <div className="flex justify-center px-16">
+            <Button
+              label="Cancelar"
+              severity="danger"
+              className="w-1/2"
+              onClick={() => {
+                reset()
+                setAddVisible(false)
+              }} />
+          </div>
+        </Dialog>
+
+      </div>
     </div>
   )
 }

@@ -143,7 +143,7 @@ const branchs = () => {
       placeholder: "Nombre de la sucursal",
       alertText: "*El nombre es obligatorio",
       maxLength: 50,
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "address",
@@ -152,7 +152,7 @@ const branchs = () => {
       placeholder: "Dirección de la sucursal",
       alertText: "*La dirección es obligatoria",
       maxLength: 100,
-      onChange: () => {},
+      onChange: () => { },
     },
   ];
 
@@ -170,92 +170,97 @@ const branchs = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8">
-      <Toast ref={toast} />
+    <div className="flex flex-col gap-6 mt-6">
+      <div className="border p-4 border-opacity-5 bg-gray-700 w-full ">
+        <div className="flex flex-col gap-6">
+          <Toast ref={toast} />
 
-      <h1 className="text-neutral-100 text-3xl text-center font-bold">
-        <span>
-          <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
-        </span>{" "}
-        Listado de sucursales
-      </h1>
+          <h1 className="text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md">
+            <span>
+              <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
+            </span>{" "}
+            Listado de sucursales
+          </h1>
 
-      <div className="flex gap-4 justify-between">
-        <div className="p-input-icon-left">
-          <i className="pi pi-search"></i>
-          <InputText
-            placeholder="Buscar"
-            value={searchTerm}
-            onChange={handleSearch}
-            className="w-96"
-          />
+          <div className="flex gap-4 justify-between">
+            <div className="p-input-icon-left">
+              <i className="pi pi-search"></i>
+              <InputText
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearch}
+                className="w-96"
+              />
+            </div>
+            <Button
+              label="Agregar Sucursal"
+              severity="info"
+              raised
+              className="w-56"
+              icon="pi pi-plus"
+              onClick={() => {
+                setAddVisible(true);
+              }}
+            />
+          </div>
+          <DataTable
+            value={filteredBranchs}
+            tableStyle={{ minWidth: "50rem" }}
+            className="centered-table"
+            paginator
+            rows={5}
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            rowHover={true}
+            onRowClick={(e) => {
+              setBranchBox(e.data as IBranchResponse);
+            }}
+          >
+            {columns.map((col, i) => {
+              if (col.field === "actions") {
+                return (
+                  <Column
+                    key={col.field}
+                    style={{ display: "flex", justifyContent: "center" }}
+                    header={col.header}
+                    alignHeader={"center"}
+                    body={(rowData) => (
+                      <div className="action-buttons flex gap-6">
+                        <Button
+                          icon="pi pi-pencil"
+                          severity="info"
+                          aria-label="User"
+                          onClick={() => {
+                            handleModify(rowData);
+                          }}
+                        />
+                        <ConfirmPopup />
+                        <Button
+                          icon="pi pi-eraser"
+                          severity="danger"
+                          aria-label="Cancel"
+                          onClick={(e) => confirm(e, rowData)}
+                        />
+                      </div>
+                    )}
+                  />
+                );
+              } else {
+                return (
+                  <Column
+                    key={col.field}
+                    field={col.field}
+                    header={col.header}
+                    alignHeader={"center"}
+                    body={(rowData) => rowData[col.field] || "-"}
+                    style={{ textAlign: "center" }}
+                  />
+                );
+              }
+            })}
+          </DataTable>
         </div>
-        <Button
-          label="Agregar Sucursal"
-          severity="info"
-          raised
-          className="w-56"
-          icon="pi pi-plus"
-          onClick={() => {
-            setAddVisible(true);
-          }}
-        />
       </div>
-      <DataTable
-        value={filteredBranchs}
-        tableStyle={{ minWidth: "50rem" }}
-        className="centered-table"
-        paginator
-        rows={5}
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        rowHover={true}
-        onRowClick={(e) => {
-          setBranchBox(e.data as IBranchResponse);
-        }}
-      >
-        {columns.map((col, i) => {
-          if (col.field === "actions") {
-            return (
-              <Column
-                key={col.field}
-                style={{ display: "flex", justifyContent: "center" }}
-                header={col.header}
-                alignHeader={"center"}
-                body={(rowData) => (
-                  <div className="action-buttons flex gap-6">
-                    <Button
-                      icon="pi pi-pencil"
-                      severity="info"
-                      aria-label="User"
-                      onClick={() => {
-                        handleModify(rowData);
-                      }}
-                    />
-                    <ConfirmPopup />
-                    <Button
-                      icon="pi pi-eraser"
-                      severity="danger"
-                      aria-label="Cancel"
-                      onClick={(e) => confirm(e, rowData)}
-                    />
-                  </div>
-                )}
-              />
-            );
-          } else {
-            return (
-              <Column
-                key={col.field}
-                field={col.field}
-                header={col.header}
-                alignHeader={"center"}
-                body={(rowData) => rowData[col.field] || "-"}
-                style={{ textAlign: "center" }}
-              />
-            );
-          }
-        })}
-      </DataTable>
+
 
       {branch !== undefined && branch !== null && (
         <ModifyBranchDialog
@@ -322,6 +327,7 @@ const branchs = () => {
           </div>
         </form>
       </Dialog>
+
 
       {<BoxTableModal branchBox={branchBox} toast={toast} />}
     </div>

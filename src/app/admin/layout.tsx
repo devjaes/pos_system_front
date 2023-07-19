@@ -18,7 +18,18 @@ export default function AdminLayout({
     {
       label: "Productos",
       icon: "pi pi-fw pi-tag",
-      url: "/admin/products",
+      items: [
+        {
+          label: "Administrar Productos",
+          icon: "pi pi-fw pi-plus-circle",
+          url: "/admin/products",
+        },
+        {
+          label: "Administrar Categorías",
+          icon: "pi pi-fw pi-plus-circle",
+          url: "/admin/categories",
+        },
+      ],
     },
     {
       label: "Usuarios",

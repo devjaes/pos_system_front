@@ -1,8 +1,4 @@
-export const TAXES =[
-  "IVA",
-  "ICE",
-  "IRBPNR"
-];
+export const TAXES = ["IVA", "ICE", "IRBPNR"];
 
 export const IVAS = [
   "0%",
@@ -11,19 +7,18 @@ export const IVAS = [
   "No Objeto de Impuesto",
   "Exento de IVA",
   "IVA diferenciado",
-  "IVA variable"
 ];
 
-export const ICE = ['0%'];
+export const ICE = ["0%"];
 
-export const IRBPNR = ['0%'];
+export const IRBPNR = ["0%"];
 
 export const IDENTIFICATION_TYPES = [
   "RUC",
   "CÉDULA",
   "PASAPORTE",
   "VENTA A CONSUMIDOR FINAL",
-  "IDENTIFICACIÓN DEL EXTERIOR"
+  "IDENTIFICACIÓN DEL EXTERIOR",
 ];
 
 export const RECEIPTS = [

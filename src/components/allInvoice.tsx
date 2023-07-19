@@ -25,6 +25,7 @@ export default function allInvoice() {
         { field: "totalDiscount", header: "Descuento total" },
         { field: "total", header: "Total" },
         { field: "paymentType", header: "Tipo de pago" },
+        { field: "actions", header: "Acciones" },
     ];
 
     useEffect(() => {
@@ -46,16 +47,24 @@ export default function allInvoice() {
         )
     );
 
-    const handleRowClick = (event: DataTableRowClickEvent) => {
-        const rowData = event.data as IInvoiceResponse;
-        setSelectedRowData(rowData);
+    const showInvoice = (e: IInvoiceResponse) => {
+        console.log(e);
+        setSelectedRowData(e);
         setShowVisible(true);
-    };
+    }
+
+    const handleXMLCreation = (rowData: IInvoiceResponse) => {
+        console.log(rowData);
+    }
+
+    const handlePDFCreation = (rowData: IInvoiceResponse) => {
+        console.log(rowData);
+    }
 
     return (
         <div className='flex flex-col gap-8'>
             <Toast ref={toast} />
-            <h1 className="text-neutral-100 text-3xl text-center font-bold">
+            <h1 className="text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md">
                 <span>
                     <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
                 </span>{" "}
@@ -80,22 +89,37 @@ export default function allInvoice() {
                 paginator
                 rows={5}
                 rowsPerPageOptions={[5, 10, 25, 50]}
-                rowHover
-                onRowClick={handleRowClick}
+
             >
                 {columns.map((col, i) => {
-                    return (
-                        <Column
-                            alignHeader={"center"}
-                            key={col.field}
-                            field={col.field}
-                            header={col.header}
-                            body={(rowData) => rowData[col.field] || "-"}
-                            style={{ textAlign: "center" }}
-                            bodyStyle={{ cursor: 'pointer' }}
-
-                        />
-                    );
+                    if (col.field === "actions") {
+                        return (
+                            <Column
+                                key={col.field}
+                                style={{ display: "flex", justifyContent: "center" }}
+                                header={col.header}
+                                body={(rowData) => (
+                                    <div className="action-buttons flex gap-6">
+                                        <Button severity="help" icon="pi pi-file" onClick={() => handleXMLCreation(rowData)} />
+                                        <Button icon="pi pi-file-pdf" onClick={() => handlePDFCreation(rowData)} />
+                                        <Button severity="info" icon="pi pi-window-maximize"
+                                            onClick={() => showInvoice(rowData)} />
+                                    </div>
+                                )}
+                            />
+                        );
+                    } else {
+                        return (
+                            <Column
+                                alignHeader={"center"}
+                                key={col.field}
+                                field={col.field}
+                                header={col.header}
+                                body={(rowData) => rowData[col.field] || "-"}
+                                style={{ textAlign: "center" }}
+                            />
+                        );
+                    }
                 }
                 )}
 
