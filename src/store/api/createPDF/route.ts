@@ -9,6 +9,7 @@ export async function POST(request: NextRequest) {
   const skip = (page - 1) * limit;
 
   const invoice = request.body;
+  console.log(invoice);
 
   const response = await fetch("https://invoice-generator.com/ubl", {
     method: "POST",
@@ -25,3 +26,4 @@ export async function POST(request: NextRequest) {
   };
   return NextResponse.json(json_response);
 }
+

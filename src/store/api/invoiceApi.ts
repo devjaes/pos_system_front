@@ -1,5 +1,4 @@
 import config from "../../../config/serverConfig";
-import NextCors from "nextjs-cors";
 import {
   IInvoiceCreate,
   IInvoicePDF,
@@ -132,7 +131,7 @@ export const handleCreatePDF = async (
   try {
     const postData = JSON.stringify(invoice);
 
-    // Haz la solicitud a tu endpoint en Next.js
+    // Haz la solicitud a tu endpoint en Next.js      
     const response = await fetch("http://localhost:3000/api/createPDF", {
       method: "POST",
       headers: {
