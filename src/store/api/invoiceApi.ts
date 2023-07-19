@@ -133,7 +133,7 @@ export const handleCreatePDF = async (
     const postData = JSON.stringify(invoice);
 
     // Haz la solicitud a tu endpoint en Next.js
-    const response = await fetch("http://localhost:3000/api/createPDF", {
+    const response = await fetch("/api/createPDF", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

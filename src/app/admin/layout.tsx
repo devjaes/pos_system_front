@@ -53,6 +53,11 @@ export default function AdminLayout({
       ],
     },
     {
+      label: "Facturas",
+      icon: "pi pi-fw pi-wrench",
+      url: "/admin/invoiceList",
+    },
+    {
       label: "Configuración",
       icon: "pi pi-fw pi-wrench",
       url: "/admin/settings",

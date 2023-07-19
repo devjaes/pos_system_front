@@ -31,6 +31,7 @@ export default function DynamicColumnsDemo() {
   const [selectedIVA, setSelectedIVA] = useState<any>(null);
   const [selectedICE, setSelectedICE] = useState<any>(null);
   const [selectedIRBP, setSelectedIRBP] = useState<any>(null);
+  const [image, setImage] = useState<any>(null);
 
   const {
     reset,
@@ -197,7 +198,7 @@ export default function DynamicColumnsDemo() {
 
     console.log({ product });
 
-    handleCreateProduct(product).then((res) => {
+    handleCreateProduct(product, image).then((res) => {
       if (res) {
         setAddVisible(false);
         toast.current?.show({
@@ -234,6 +235,7 @@ export default function DynamicColumnsDemo() {
 
   const handleImage = ({ files }: any) => {
     console.log(files);
+    setImage(files[0]);
   };
 
   return (
@@ -369,11 +371,8 @@ export default function DynamicColumnsDemo() {
               <h1 className="pb-4">Imagen del producto</h1>
               <FileUpload
                 name="productImage"
-                url={"/api/upload"}
-                multiple
                 accept="image/*"
                 maxFileSize={1000000}
-                onUpload={(e) => console.log(e)}
                 customUpload={true}
                 uploadHandler={handleImage}
                 emptyTemplate={
