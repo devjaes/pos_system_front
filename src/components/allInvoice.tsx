@@ -1,14 +1,15 @@
 "use client"
-import { handleGetAllInvoices } from '@/store/api/invoiceApi'
+import { handleCreatePDF, handleGetAllInvoices } from '@/store/api/invoiceApi'
 import React, { useEffect, useRef, useState } from 'react'
 import { DataTable, DataTableRowClickEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { set } from 'date-fns';
 import { IInvoiceResponse } from '@/store/types/IInvoices';
 import InvoiceInfo from '@/components/invoiceInfo';
+import { useRouter } from 'next/navigation';
+import { invoiceResToPDF } from '@/store/utils/uuid';
 
 export default function allInvoice() {
     const toast = useRef<Toast>(null);
@@ -16,6 +17,7 @@ export default function allInvoice() {
     const [searchTerm, setSearchTerm] = useState("");
     const [showVisible, setShowVisible] = useState(false);
     const [selectedRowData, setSelectedRowData] = useState<IInvoiceResponse>();
+    const router = useRouter();
 
     const columns = [
         { field: "id", header: "ID" },
@@ -57,9 +59,29 @@ export default function allInvoice() {
         console.log(rowData);
     }
 
-    const handlePDFCreation = (rowData: IInvoiceResponse) => {
-        console.log(rowData);
+    const downloadPDF = (rowData: IInvoiceResponse) => {
+        const invoiceToPrint = invoiceResToPDF(rowData);
+        if (!invoiceToPrint) {
+            return;
+        }
+        handleCreatePDF(invoiceToPrint, rowData.accessKey + "PDF").then((res) => {
+            if (res) {
+                /**
+                 * TODO: Convertir la respuesta en un blob y descargarlo
+                 */
+                console.log(res);
+                const blob = new Blob([res as unknown as BlobPart], { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = rowData.accessKey + ".pdf";
+                link.click();
+
+            }
+        }
+        )
+
     }
+
 
     return (
         <div className='flex flex-col gap-8'>
@@ -101,7 +123,7 @@ export default function allInvoice() {
                                 body={(rowData) => (
                                     <div className="action-buttons flex gap-6">
                                         <Button severity="help" icon="pi pi-file" onClick={() => handleXMLCreation(rowData)} />
-                                        <Button icon="pi pi-file-pdf" onClick={() => handlePDFCreation(rowData)} />
+                                        <Button icon="pi pi-file-pdf" onClick={() => downloadPDF(rowData)} />
                                         <Button severity="info" icon="pi pi-window-maximize"
                                             onClick={() => showInvoice(rowData)} />
                                     </div>
@@ -125,8 +147,11 @@ export default function allInvoice() {
 
             </DataTable>
 
+
             {
                 selectedRowData && (
+
+
                     <InvoiceInfo
                         invoice={selectedRowData}
                         visible={showVisible}
@@ -134,10 +159,11 @@ export default function allInvoice() {
                         onHide={() => {
                             setShowVisible(false)
                         }}
+
                     />
                 )
             }
 
-        </div>
+        </div >
     )
 }

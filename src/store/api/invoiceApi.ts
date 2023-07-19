@@ -1,5 +1,5 @@
 import config from "../../../config/serverConfig";
-import { IInvoiceCreate, IInvoiceResponse } from "../types/IInvoices";
+import { IInvoiceCreate, IInvoicePDF, IInvoiceResponse } from "../types/IInvoices";
 
 export const handleGetInvoice = async (invoiceId: number) => {
   try {
@@ -123,4 +123,33 @@ export const handleUpdateInvoiceValues = async (
   } catch (error) {
     console.log({ error });
   }
+};
+
+export const handleCreatePDF = async (invoice: IInvoicePDF, filename:string) => {
+  try{
+    var postData = JSON.stringify(invoice);
+    const response = await fetch("https://invoice-generator.com/ubl", {
+      method    : "POST",
+      mode      : "cors",
+      headers   : {
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(postData).toString(),
+          "Access-Control-Allow-Origin": "invoice-generator.com",
+      }
+    })
+
+    if(!response){
+      console.log("No se pudo crear el PDF.");
+      return;
+    }
+
+    const data = await response.json();
+
+    return data.data;
+      
+
+  }catch(error){
+    console.log({error})
+  }
+
 };
