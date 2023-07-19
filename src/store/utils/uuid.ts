@@ -14,37 +14,33 @@ export function round(num: number) {
   return (Math.round(m) / 100) * Math.sign(num);
 }
 
-export function invoiceResToPDF (invoice: IInvoiceResponse):IInvoicePDF|null{
-  if(invoice){
-    const invoicePDF:IInvoicePDF = {
+export function invoiceResToPDF(invoice: IInvoiceResponse): IInvoicePDF | null {
+  if (invoice) {
+    const invoicePDF: IInvoicePDF = {
       logo: "https://pos-products.s3.amazonaws.com/products/LogoAzul.png",
       from: invoice.branchName,
       to: invoice.customerId.toString(),
-      currency: invoice.currency,
+      currency: "usd",
       number: invoice.accessKey,
-      paymentTerms: invoice.paymentType,
-      items: invoice.sellingProducts?.map((sellingProduct) => {
-        return {
-          quantity: sellingProduct.quantity,
-          name: sellingProduct.product.name,
-          description: sellingProduct.product.description,
-          unitPrice: sellingProduct.product.unitPrice,
-        };
-      }
-      ) || [],
+      items:
+        invoice.sellingProducts?.map((sellingProduct) => {
+          return {
+            quantity: sellingProduct.quantity,
+            name: sellingProduct.product.name,
+            description: sellingProduct.product.description,
+            unit_cost: sellingProduct.product.unitPrice,
+          };
+        }) || [],
       fields: {
         tax: `%`,
-        total: invoice.total.toString(),
-        subTotal: invoice.totalWithoutTax.toString(),
-        discount: invoice.totalDiscount.toString(),
-        tip: invoice.tip.toString(),
+        discounts: invoice.totalDiscount.toString(),
       },
-      tax: invoice.sellingProducts ? invoice. sellingProducts[0].iva : 0 ,
+      tax: invoice.sellingProducts ? invoice.sellingProducts[0].iva : 0,
       notes: "Gracias por preferirnos, te quiero mucho",
       terms: "No hay devoluciones",
+    };
+    return invoicePDF;
   }
-  return invoicePDF;
-}
 
-return null;
+  return null;
 }

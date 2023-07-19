@@ -36,9 +36,12 @@ export interface IInvoicePDF {
   to: string; //client.name
   currency: string;
   number: string; //invoice.accessKey
-  paymentTerms: string; 
-  items: IInvoiceItems[];
-  fields: {tax: string; total: string; subTotal: string; discount: string; tip: string; };
+  items: IInvoicePDFItems[];
+  fields: {
+    tax: string;
+
+    discounts: string;
+  };
   tax: number;
   notes?: string;
   terms?: string;
@@ -48,4 +51,11 @@ export interface IInvoiceItems {
   name: string;
   description: string;
   unitPrice: number;
+}
+
+export interface IInvoicePDFItems {
+  quantity: number;
+  name: string;
+  description: string;
+  unit_cost: number;
 }
