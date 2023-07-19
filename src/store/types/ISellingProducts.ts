@@ -1,3 +1,5 @@
+import { IProductResponse } from "./IProducts";
+
 export interface ISellingProductsResponse {
   id: number;
   invoiceId: number;
@@ -17,4 +19,19 @@ export interface ISellingProductsEntrance {
   address: string;
   especialTaxPayer: string;
   forcedAccounting: boolean;
+}
+
+export interface ISellingProductsPDF {
+  id: number;
+  invoiceId: number;
+  product: IProductResponse;
+  discount: number;
+  subtotal: number;
+  iva: number;
+  ivaValue: number;
+  ice: number;
+  iceValue: number;
+  irbp: number;
+  irbpValue: number;
+  quantity: number;
 }

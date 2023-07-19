@@ -11,14 +11,16 @@ import { Toast } from 'primereact/toast';
 import React, { MouseEvent, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import ModifyCategoryDialog from '@/components/modifyCategoryDialog';
+import { handleGetAllCategories } from '@/store/api/categoryApi';
+import { ICategoryResponse } from '@/store/types/ICategory';
 
 export default function page() {
     const toast = useRef<Toast>(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState<ICategoryResponse[]>([]);
     const [addVisible, setAddVisible] = useState(false);
     const [editVisible, setModifyVisible] = useState(false);
-    const [category, setCategory] = useState();
+    const [category, setCategory] = useState<ICategoryResponse>();
 
     const {
         reset,
@@ -28,19 +30,24 @@ export default function page() {
     } = useForm();
 
     useEffect(() => {
-        console.log('getCategorias');
+        handleGetAllCategories().then((res) => {
+            if (res) {
+                setCategories(res);
+            }
+        }
+        )
     }, []);
 
     const columns = [
         { field: "id", header: "ID" },
-        { field: "name", header: "Nombre" },
+        { field: "category", header: "Categoria" },
     ];
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     }
 
-    const filteredUsers = categories.filter((category) =>
+    const filteredCategories = categories.filter((category) =>
         Object.values(category).some((value) =>
             String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -130,7 +137,7 @@ export default function page() {
                     <Button label="Agregar Categoria" severity="info" raised icon="pi pi-plus" className="p-button-success" onClick={() => setAddVisible(true)} />
                 </div>
                 <DataTable
-                    value={filteredUsers}
+                    value={filteredCategories}
                     tableStyle={{ minWidth: '50rem' }}
                     className='centered-table'
                     paginator
