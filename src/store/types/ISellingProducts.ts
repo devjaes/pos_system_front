@@ -1,3 +1,4 @@
+import { InvoiceId } from "aws-sdk/clients/route53domains";
 import { IProductResponse } from "./IProducts";
 
 export interface ISellingProductsResponse {
@@ -13,12 +14,10 @@ export interface ISellingProductsResponse {
 }
 
 export interface ISellingProductsEntrance {
-  storeName: string;
-  tradeName: string;
-  ruc: string;
-  address: string;
-  especialTaxPayer: string;
-  forcedAccounting: boolean;
+  discount: number;
+  quantity: number;
+  mainCode: string;
+  invoiceId: number;
 }
 
 export interface ISellingProductsPDF {

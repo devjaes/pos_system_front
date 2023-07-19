@@ -20,6 +20,13 @@ import { InputNumber } from "primereact/inputnumber";
 import { useRouter } from "next/navigation";
 import { IStoreLocal } from "@/store/types/IStore";
 import { round } from "@/store/utils/uuid";
+import { IInvoiceCreate } from "@/store/types/IInvoices";
+import { ISellingProductsEntrance } from "@/store/types/ISellingProducts";
+import {
+  handleCreateInvoice,
+  handleUpdateInvoiceValues,
+} from "@/store/api/invoiceApi";
+import { handleCreateSellingProducts } from "@/store/api/sellingProductApi";
 
 const invoicer = () => {
   const [products, setProducts] = useState<IProductResponse[]>([]);
@@ -302,7 +309,75 @@ const invoicer = () => {
     });
   };
 
-  const onSubmit = handleSubmit((data) => {});
+  const onSubmit = handleSubmit((data) => {
+    const invoiceCreate: IInvoiceCreate = {
+      environmentType: "Pruebas",
+      emissionType: "Emisión normal",
+      receiptType: "FACTURA",
+      customerIdentification: customer?.identification as string,
+      paymentType: "SIN UTILIZACION DEL SISTEMA FINANCIERO",
+      boxId: storeLocal?.box.id as number,
+    };
+
+    handleCreateInvoice(invoiceCreate).then((invoiceResponse) => {
+      if (invoiceResponse) {
+        const invoiceRes = invoiceResponse;
+        toast.current?.show({
+          severity: "info",
+          summary: "En proceso",
+          detail: "Se esta generando la factura",
+          life: 4000,
+        });
+
+        const sellingProducts: ISellingProductsEntrance[] = productTable.map(
+          (product) => {
+            return {
+              discount: 0,
+              quantity: data.quantity[product.id] as number,
+              mainCode: product.mainCode,
+              invoiceId: invoiceRes.id,
+            };
+          }
+        );
+
+        handleCreateSellingProducts(sellingProducts).then((sellingProducts) => {
+          if (sellingProducts) {
+            handleUpdateInvoiceValues(invoiceRes.id).then((invoice) => {
+              if (invoice) {
+                toast.current?.show({
+                  severity: "success",
+                  summary: "Éxito",
+                  detail: "Se ha creado la factura correctamente",
+                  life: 3000,
+                });
+                setCustomer(undefined);
+                setValue("receivedCash", 0);
+                reset();
+                setChange(0);
+                setProductTable([]);
+                setDisables(false);
+                router.push("./invoiceList");
+              } else {
+                toast.current?.show({
+                  severity: "error",
+                  summary: "Error",
+                  detail: "No se ha podido crear la factura",
+                  life: 3000,
+                });
+              }
+            });
+          } else {
+            toast.current?.show({
+              severity: "error",
+              summary: "Error",
+              detail: "No se ha podido crear la factura",
+              life: 3000,
+            });
+          }
+        });
+      }
+    });
+  });
 
   return (
     <div className="flex flex-col w-11/12 ">
@@ -450,6 +525,7 @@ const invoicer = () => {
                           return (
                             <Button
                               className="p-button-danger"
+                              type="button"
                               icon="pi pi-trash"
                               onClick={() => {
                                 setValue("quantity." + rowData.id, 1);
@@ -535,10 +611,6 @@ const invoicer = () => {
                     <label className="text-lg font-bold pl-4">
                       {productTable.length > 0 ? subtotal : "0.00"}
                     </label>
-                  </div>
-                  <div className="flex flex-row justify-between">
-                    <p className="text-lg font-bold">DESCUENTO: </p>
-                    <label className="text-lg font-bold pl-4">0.00</label>
                   </div>
                   {ivasObject.map((iva: any, index: number) => {
                     const key = Object.keys(iva)[0]; // Acceder a la única key del objeto

@@ -22,6 +22,7 @@
     "jspdf": "^2.5.1",
     "jspdf-react": "^1.0.11",
     "next": "13.4.7",
+    "nextjs-cors": "^2.1.2",
     "prettier": "^2.5.1",
     "primeicons": "^6.0.1",
     "primereact": "^9.6.0",
