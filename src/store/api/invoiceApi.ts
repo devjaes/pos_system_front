@@ -5,6 +5,7 @@ import {
   IInvoiceResponse,
 } from "../types/IInvoices";
 import { NextApiRequest, NextApiResponse } from "next";
+import fs from "fs";
 
 export const handleGetInvoice = async (invoiceId: number) => {
   try {
@@ -130,24 +131,26 @@ export const handleCreatePDF = async (
 ) => {
   try {
     const postData = JSON.stringify(invoice);
-
-    // Haz la solicitud a tu endpoint en Next.js      
-    const response = await fetch("http://localhost:3000/api/createPDF", {
+    // Haz la solicitud a tu endpoint en Next.js 
+    const options ={
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: postData,
-    });
-    console.log({ response });
+      duplex: 'half'
+    };
 
+    const response = await fetch("http://localhost:3000/api/createPDF", options); 
+    
     if (!response.ok) {
       console.log("No se pudo crear el PDF.");
       return;
     }
 
-    const data = await response.json();
-    return data;
+    console.log(response.headers.get('content-type'));
+
+    return response;
   } catch (error) {
     console.log({ error });
   }

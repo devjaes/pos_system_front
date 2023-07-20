@@ -58,16 +58,33 @@ export const handleGetAllProducts = async () => {
   }
 };
 
-export const handleCreateProduct = async (product: IProductUpdate) => {
+export const handleCreateProduct = async (
+  product: IProductUpdate,
+  image: any
+) => {
+  const formData = new FormData();
+
+  formData.append("product", JSON.stringify(product));
+
+  if (image) {
+    formData.append("image", image);
+  }
+
+  const entries = JSON.parse(JSON.stringify(formData));
+  console.log(
+    { formData },
+    { entries },
+    formData.get("image"),
+    formData.get("product"),
+    { product }
+  );
+
   try {
     const response = await fetch(
       `${config.API_REST_BASE_URL}/products/register`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(product),
+        body: formData,
       }
     );
 
@@ -91,17 +108,26 @@ export const handleCreateProduct = async (product: IProductUpdate) => {
 
 export const handleUpdateProduct = async (
   productId: number,
-  product: IProductUpdate
+  product: IProductUpdate,
+  image: any
 ) => {
+  const formData = new FormData();
+
+  formData.append("product", JSON.stringify(product));
+
+  if (image) {
+    formData.append("image", image);
+  }
+
+  const entries = JSON.parse(JSON.stringify(formData));
+  console.log({ entries });
+
   try {
     const response = await fetch(
       `${config.API_REST_BASE_URL}/products/${productId}`,
       {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(product),
+        body: formData,
       }
     );
 

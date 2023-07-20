@@ -259,7 +259,6 @@ export default function page() {
               name="signature"
               accept=".p12"
               maxFileSize={1000000}
-              onUpload={(e) => console.log(e)}
               customUpload={true}
               uploadHandler={handleSignature}
               emptyTemplate={

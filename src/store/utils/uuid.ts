@@ -15,11 +15,15 @@ export function round(num: number) {
 }
 
 export function invoiceResToPDF(invoice: IInvoiceResponse): IInvoicePDF | null {
+  const calcTax = (totalWithoutTax: number, total: number) => {
+    return (total - totalWithoutTax)*100/totalWithoutTax;
+  };
+
   if (invoice) {
     const invoicePDF: IInvoicePDF = {
       logo: "https://pos-products.s3.amazonaws.com/products/LogoAzul.png",
       from: invoice.branchName,
-      to: invoice.customerId.toString(),
+      to: String(invoice.customerId),
       currency: "usd",
       number: invoice.accessKey,
       items:
@@ -31,11 +35,16 @@ export function invoiceResToPDF(invoice: IInvoiceResponse): IInvoicePDF | null {
             unit_cost: sellingProduct.product.unitPrice,
           };
         }) || [],
+      tax_title: "Taxes",
+      header: 'Factura',
       fields: {
+      
         tax: `%`,
-        discounts: invoice.totalDiscount.toString(),
+        discounts: String(invoice.totalDiscount),
       },
-      tax: invoice.sellingProducts ? invoice.sellingProducts[0].iva : 0,
+
+      
+      tax: calcTax(invoice.totalWithoutTax, invoice.total),
       notes: "Gracias por preferirnos, te quiero mucho",
       terms: "No hay devoluciones",
     };
