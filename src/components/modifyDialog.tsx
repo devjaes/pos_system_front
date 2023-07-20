@@ -18,6 +18,7 @@ interface Props {
   visible: boolean;
   setEditVisible: (value: boolean) => void;
   setProducts: any;
+  categoriesName: string[];
 }
 
 export default function ModifyDialog({
@@ -26,6 +27,7 @@ export default function ModifyDialog({
   setEditVisible,
   setProducts,
   toast,
+  categoriesName,
 }: Props) {
   const [selectedIVA, setSelectedIVA] = React.useState<string>(
     product?.ivaType
@@ -37,6 +39,7 @@ export default function ModifyDialog({
     product?.irbpType
   );
   const [productInfo, setProductInfo] = React.useState<IInputsForm[]>([]);
+  const [category, setCategory] = React.useState<string>(product.category);
   const [image, setImage] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -113,6 +116,7 @@ export default function ModifyDialog({
 
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm();
@@ -130,9 +134,10 @@ export default function ModifyDialog({
         Number(data.unitPrice) == product.unitPrice
           ? undefined
           : Number(data.unitPrice),
+      category: category == product.category ? undefined : category,
       ivaType: selectedIVA,
-      iceType: selectedICE,
-      irbpType: selectedIRBP,
+      iceType: "0%",
+      irbpType: "0%",
     };
 
     console.log({ productToUpdate });
@@ -217,8 +222,8 @@ export default function ModifyDialog({
           <div className="card w-full">
             <ComboBox
               label="Categoria"
-              options={ICE}
-              defaultValue={product.iceType ? product.iceType : "No aplica"}
+              options={categoriesName}
+              defaultValue={product.category ? product.category : "No aplica"}
               onChange={(e) => {
                 handleICE(e);
               }}
@@ -288,6 +293,7 @@ export default function ModifyDialog({
               className="w-1/2"
               type="button"
               onClick={() => {
+                reset();
                 setEditVisible(false);
               }}
               icon="pi pi-times"
@@ -306,6 +312,7 @@ export default function ModifyDialog({
         visible={visible}
         style={{ width: "50vw" }}
         onHide={() => {
+          reset();
           setEditVisible(false);
         }}
         modal={true}

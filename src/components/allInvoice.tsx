@@ -64,19 +64,26 @@ export default function allInvoice() {
       return;
     }
     handleCreatePDF(invoiceToPrint, rowData.accessKey + "PDF.pdf").then(
-      (res) => {
+      async (res) => {
         if (res) {
           /**
-           * TODO: Convertir la respuesta en un blob y descargarlo
+           * Convertir la respuesta en un blob y descargarlo
            */
-          console.log(res);
-          const blob = new Blob([res as unknown as BlobPart], {
-            type: "application/pdf",
-          });
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+
+          // Crear un enlace de descarga
           const link = document.createElement("a");
-          link.href = window.URL.createObjectURL(blob);
+          link.href = url;
           link.download = rowData.accessKey + ".pdf";
+          link.style.display = "none"; // Para ocultar el enlace en la página
+
+          // Agregar el enlace al documento y hacer clic en él para descargar el PDF
+          document.body.appendChild(link);
           link.click();
+
+          // Liberar el objeto URL creado para el blob
+          URL.revokeObjectURL(url);
         }
       }
     );

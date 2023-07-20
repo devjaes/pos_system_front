@@ -36,6 +36,7 @@ export interface IProductUpdate {
   stock?: number;
   unitPrice?: number;
   ivaVariable?: string;
+  category?: string;
   ivaType?: string;
   iceType?: string;
   irbpType?: string;

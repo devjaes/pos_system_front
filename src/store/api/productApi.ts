@@ -70,15 +70,6 @@ export const handleCreateProduct = async (
     formData.append("image", image);
   }
 
-  const entries = JSON.parse(JSON.stringify(formData));
-  console.log(
-    { formData },
-    { entries },
-    formData.get("image"),
-    formData.get("product"),
-    { product }
-  );
-
   try {
     const response = await fetch(
       `${config.API_REST_BASE_URL}/products/register`,
@@ -118,9 +109,6 @@ export const handleUpdateProduct = async (
   if (image) {
     formData.append("image", image);
   }
-
-  const entries = JSON.parse(JSON.stringify(formData));
-  console.log({ entries });
 
   try {
     const response = await fetch(
@@ -169,6 +157,41 @@ export const handleDeleteProduct = async (productId: number) => {
 
     if (!data) {
       console.log("Error al eliminar el producto.");
+      return;
+    }
+
+    return data;
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
+export const handleUpdateIvaByCategory = async (
+  category: string,
+  iva: string
+) => {
+  try {
+    const formData = new FormData();
+
+    formData.append("category", category);
+    formData.append("ivaVariable", iva);
+
+    const response = await fetch(
+      `${config.API_REST_BASE_URL}/products/update-by-category`,
+      {
+        method: "PUT",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      console.log("No se pudo actualizar el IVA.");
+      return;
+    }
+    const data = response.json();
+
+    if (!data) {
+      console.log("Error al actualizar el IVA.");
       return;
     }
 

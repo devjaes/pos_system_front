@@ -52,7 +52,7 @@ export default function DynamicColumnsDemo() {
     { field: "description", header: "Descripción" },
     { field: "stock", header: "Stock" },
     { field: "unitPrice", header: "Precio Unitario" },
-    { field: "img", header: "Imagen" },
+    { field: "imageUrl", header: "Imagen" },
     { field: "ivaType", header: "Tipo de IVA" },
     { field: "iceType", header: "Tipo de ICE" },
     { field: "irbpType", header: "Tipo de IRBP" },
@@ -63,6 +63,7 @@ export default function DynamicColumnsDemo() {
     handleGetAllProducts().then((res) => {
       if (res) {
         setProducts(res);
+        console.log({ res });
       }
     });
     handleGetAllCategories().then((res) => {
@@ -324,6 +325,23 @@ export default function DynamicColumnsDemo() {
                   )}
                 />
               );
+            } else if (col.field === "imageUrl") {
+              return (
+                <Column
+                  key={col.field}
+                  field={col.field}
+                  header={col.header}
+                  body={(rowData) => (
+                    <img
+                      src={rowData[col.field]}
+                      alt={rowData[col.field]}
+                      width="100"
+                      height="100"
+                    />
+                  )}
+                  style={{ textAlign: "center" }}
+                />
+              );
             } else {
               return (
                 <Column
@@ -344,6 +362,7 @@ export default function DynamicColumnsDemo() {
             visible={editVisible}
             setEditVisible={setEditVisible}
             setProducts={setProducts}
+            categoriesName={categoriesName}
             toast={toast}
           />
         )}
