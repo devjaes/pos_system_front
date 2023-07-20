@@ -1,11 +1,11 @@
 import config from "../../../config/serverConfig";
-import NextCors from "nextjs-cors";
 import {
   IInvoiceCreate,
   IInvoicePDF,
   IInvoiceResponse,
 } from "../types/IInvoices";
 import { NextApiRequest, NextApiResponse } from "next";
+import fs from "fs";
 
 export const handleGetInvoice = async (invoiceId: number) => {
   try {
@@ -131,27 +131,55 @@ export const handleCreatePDF = async (
 ) => {
   try {
     const postData = JSON.stringify(invoice);
-
     // Haz la solicitud a tu endpoint en Next.js
-    const response = await fetch("/api/createPDF", {
+    const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: postData,
-    });
-    console.log({ response });
+      duplex: "half",
+    };
+
+    const response = await fetch(
+      "http://localhost:3000/api/createPDF",
+      options
+    );
 
     if (!response.ok) {
       console.log("No se pudo crear el PDF.");
       return;
     }
 
-    const data = await response.json();
-    return data;
+    return response;
   } catch (error) {
     console.log({ error });
   }
 };
 
-// generate pdf v2
+export const handleGenerateXML = async (invoiceId: number) => {
+  try {
+    const response = await fetch(
+      `${config.API_REST_BASE_URL}/invoices/generate/${invoiceId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.ok) {
+      console.log("No se pudo generar el XML.");
+      return;
+    }
+    const data = await response.json();
+    const xmlData: string = data;
+
+    if (!xmlData) {
+      console.log("Error al generar el XML.");
+      return;
+    }
+
+    return response;
+  } catch (error) {
+    console.log({ error });
+  }
+};

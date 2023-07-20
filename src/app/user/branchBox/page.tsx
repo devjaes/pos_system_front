@@ -65,7 +65,7 @@ const BranchBox = () => {
   };
 
   return (
-    <div className="border p-4 border-opacity-5 bg-gray-800  w-full rounded-md">
+    <div className="border p-4 border-opacity-5 bg-gray-800  w-3/4 rounded-md">
       {!box && (
         <div>
           <h1 className="text-2xl text-white font-bold">
@@ -107,21 +107,25 @@ const BranchBox = () => {
         </div>
       )}
       {box && (
-        <div className="flex flex-col">
-          <h1 className="text-2xl text-center font-bold">Caja actual:</h1>
-          <div className="flex flex-row border items-center border-gray-600 bg-gray-700 p-2 m-2 h-32 rounded-md font-bold">
-            <h1 className="px-8 text-2xl">{box?.branchName + ":"}</h1>
-            <div className="flex justify-between w-full h-full">
-              <div className="flex border bg-slate-800 text-3xl bg-gay-800 justify-center rounded-md items-center h-full w-2/12">
-                <h1>{box.key}</h1>
-              </div>
-              <button
-                className="flex border bg-zinc-800 text-2xl bg-gay-800 justify-center rounded-md items-center h-full w-2/12 place-self-end hover:bg-zinc-700"
-                onClick={handleResetBox}
-              >
-                Seleccionar otra caja
-              </button>
+        <div className="flex flex-col h-64 gap-4">
+          <h1 className="text-4xl text-center font-bold">Caja actual:</h1>
+
+          <div className="flex border items-center border-gray-600 bg-gray-700 rounded-md font-bold gap-6 h-48 p-3 py-6">
+            <div className="flex-1 w-full h-full flex items-center justify-center">
+              <h1 className="px-8 text-3xl">{box?.branchName + ":"}</h1>
             </div>
+
+            <div className="flex flex-1 border bg-slate-800 text-3xl bg-gay-800 justify-center rounded-md items-center h-full w-2/12">
+              <h1>{box.key}</h1>
+            </div>
+
+            <button
+              className="flex flex-1 border bg-zinc-800 text-2xl bg-gay-800 justify-center rounded-md items-center h-full hover:bg-zinc-700"
+              onClick={handleResetBox}
+            >
+              Seleccionar otra caja
+            </button>
+
           </div>
         </div>
       )}

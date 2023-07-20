@@ -51,7 +51,7 @@ export default function modifyUserDialog(
             {
                 name: "name",
                 label: "Nombre",
-                keyfilter: "alpha",
+                keyfilter: /^[A-Za-z ]$/,
                 placeholder: "Nombre del Usuario",
                 alertText: "*El nombre es obligatorio",
                 value: user?.name,
@@ -60,7 +60,7 @@ export default function modifyUserDialog(
             {
                 name: "lastName",
                 label: "Apellido",
-                keyfilter: "alpha",
+                keyfilter: /^[A-Za-z ]$/,
                 placeholder: "Apellido del Usuario",
                 alertText: "*El apellido es obligatorio",
                 value: user?.lastName,
@@ -102,12 +102,9 @@ export default function modifyUserDialog(
             password: data.password === undefined ? null : data.password,
         }
 
-        console.log(userToUpdate);
-
         if (data.password !== '' || data.password !== undefined) {
             if (data.password !== data.confirmPassword) {
                 toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Las contraseñas no coinciden', life: 3000 });
-                console.log("Las contraseñas no coinciden");
                 return;
             }
         }

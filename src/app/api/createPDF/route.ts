@@ -10,19 +10,27 @@ export async function POST(request: NextRequest) {
 
   const invoice = request.body;
 
-  const response = await fetch("https://invoice-generator.com/ubl", {
+  const options = {
     method: "POST",
-    mode: "cors",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(invoice),
-  });
+    body: invoice,
+    duplex: 'half',
+  };
+
+  const response = await fetch("https://invoice-generator.com", options);
+  if (!response.ok) {
+    console.log("No se pudo crear el PDF.");
+    return;
+  }
+ 
 
   let json_response = {
     status: "success",
     data: response,
   };
-  return NextResponse.json(json_response);
+
+  return (response);
 }
 

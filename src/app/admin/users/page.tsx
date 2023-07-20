@@ -64,7 +64,6 @@ export default function DynamicColumnsDemo() {
   }
 
   const handleDelete = (user: IUserResponse) => {
-    console.log(user);
     handleDeleteUser(user.id).then((res) => {
       if (res) {
         toast.current?.show({
@@ -125,7 +124,7 @@ export default function DynamicColumnsDemo() {
     {
       name: 'name',
       label: 'Nombre',
-      keyfilter: 'alpha',
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: 'Nombre del Usuario',
       alertText: '*El nombre es obligatorio',
       onChange: () => { },
@@ -133,7 +132,7 @@ export default function DynamicColumnsDemo() {
     {
       name: 'lastName',
       label: 'Apellido',
-      keyfilter: 'alpha',
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: 'Apellido del Usuario',
       alertText: '*El apellido es obligatorio',
       onChange: () => { },
@@ -164,7 +163,6 @@ export default function DynamicColumnsDemo() {
       password: data.password,
       rol: newUserRol as UserRoles,
     }
-    console.log(newUser);
 
     handleCreateUser(newUser).then((res) => {
       if (res) {
@@ -288,6 +286,7 @@ export default function DynamicColumnsDemo() {
                     className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                     keyfilter={form.keyfilter as KeyFilterType}
                     placeholder={form.placeholder}
+                    maxLength={form.maxLength}
                     {...register(form.name, {
                       required: form.alertText,
                     })} />

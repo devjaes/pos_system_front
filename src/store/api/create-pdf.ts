@@ -31,7 +31,6 @@ export default async function handler(
 
     if (!response.ok) {
       console.log("No se pudo crear el PDF.");
-      console.log({ response });
       return res.status(500).json({ error: "Error en la creación del PDF." });
     }
 

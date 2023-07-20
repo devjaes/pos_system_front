@@ -52,7 +52,7 @@ export default function DynamicColumnsDemo() {
     { field: "description", header: "Descripción" },
     { field: "stock", header: "Stock" },
     { field: "unitPrice", header: "Precio Unitario" },
-    { field: "img", header: "Imagen" },
+    { field: "imageUrl", header: "Imagen" },
     { field: "ivaType", header: "Tipo de IVA" },
     { field: "iceType", header: "Tipo de ICE" },
     { field: "irbpType", header: "Tipo de IRBP" },
@@ -147,8 +147,8 @@ export default function DynamicColumnsDemo() {
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Nombre del Producto",
       alertText: "*El nombre es obligatorio",
-      onChange: () => {},
-      maxLength: 50,
+      onChange: () => { },
+      maxLength: 20,
     },
     {
       name: "mainCodeRegister",
@@ -156,7 +156,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Código Principal",
       alertText: "*El código principal es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
       maxLength: 4,
     },
     {
@@ -165,7 +165,8 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Código Auxiliar",
       alertText: "*El código auxiliar es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
+      maxLength: 4,
     },
     {
       name: "descriptionRegister",
@@ -173,7 +174,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Descripción",
       alertText: "*La descripción es obligatoria",
-      onChange: () => {},
+      onChange: () => { },
       maxLength: 50,
     },
     {
@@ -182,7 +183,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Stock",
       alertText: "*El stock es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "unitPriceRegister",
@@ -190,7 +191,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "money",
       placeholder: "Precio Unitario",
       alertText: "*El precio unitario es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
   ];
 
@@ -209,8 +210,6 @@ export default function DynamicColumnsDemo() {
       irbpType: selectedIRBP ? selectedIRBP : "0%",
     };
 
-    console.log({ product });
-
     handleCreateProduct(product, image).then((res) => {
       if (res) {
         setAddVisible(false);
@@ -220,7 +219,6 @@ export default function DynamicColumnsDemo() {
           detail: "El producto ha sido creado correctamente",
           life: 3000,
         });
-        console.log(res);
         setProducts([...products, res]);
         reset();
       } else {
@@ -235,7 +233,6 @@ export default function DynamicColumnsDemo() {
   });
 
   const handleCategory = (e: string) => {
-    console.log(e);
     setCategory(e);
   };
 
@@ -252,7 +249,6 @@ export default function DynamicColumnsDemo() {
   };
 
   const handleImage = ({ files }: any) => {
-    console.log(files);
     setImage(files[0]);
   };
 
@@ -324,6 +320,24 @@ export default function DynamicColumnsDemo() {
                   )}
                 />
               );
+            } else if (col.field === "imageUrl") {
+              return (
+                <Column
+                  key={col.field}
+                  field={col.field}
+                  header={col.header}
+                  alignHeader={"center"}
+                  body={(rowData) => (
+                    <img
+                      src={rowData[col.field] ? rowData[col.field] : "https://www.pharmadelivery.com.ec/archivos/products/256/not-picture-256.png"}
+                      alt={rowData[col.field]}
+                      width="100"
+                      height="100"
+                    />
+                  )}
+                  style={{ textAlign: "center" }}
+                />
+              );
             } else {
               return (
                 <Column
@@ -344,6 +358,7 @@ export default function DynamicColumnsDemo() {
             visible={editVisible}
             setEditVisible={setEditVisible}
             setProducts={setProducts}
+            categoriesName={categoriesName}
             toast={toast}
           />
         )}

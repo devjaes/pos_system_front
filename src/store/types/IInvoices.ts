@@ -43,6 +43,9 @@ export interface IInvoicePDF {
     discounts: string;
   };
   tax: number;
+  custom_fields?: {};
+  header?: string;
+  tax_title?: string;
   notes?: string;
   terms?: string;
 }

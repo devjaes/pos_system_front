@@ -18,6 +18,7 @@ interface Props {
   visible: boolean;
   setEditVisible: (value: boolean) => void;
   setProducts: any;
+  categoriesName: string[];
 }
 
 export default function ModifyDialog({
@@ -26,6 +27,7 @@ export default function ModifyDialog({
   setEditVisible,
   setProducts,
   toast,
+  categoriesName,
 }: Props) {
   const [selectedIVA, setSelectedIVA] = React.useState<string>(
     product?.ivaType
@@ -37,6 +39,7 @@ export default function ModifyDialog({
     product?.irbpType
   );
   const [productInfo, setProductInfo] = React.useState<IInputsForm[]>([]);
+  const [category, setCategory] = React.useState<string>(product.category);
   const [image, setImage] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -50,12 +53,13 @@ export default function ModifyDialog({
       {
         name: "name",
         label: "Nombre",
-        keyfilter: "alpha",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Nombre del Producto",
         alertText: "*El nombre es obligatorio",
         value: product?.name,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
+        maxLength: 20,
       },
       {
         name: "mainCode",
@@ -64,8 +68,9 @@ export default function ModifyDialog({
         placeholder: "Código Principal",
         alertText: "*El código principal es obligatorio",
         value: product?.mainCode,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
+        maxLength: 4,
       },
       {
         name: "auxCode",
@@ -74,18 +79,20 @@ export default function ModifyDialog({
         placeholder: "Código Auxiliar",
         alertText: "*El código auxiliar es obligatorio",
         value: product?.auxCode,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
+        maxLength: 4,
       },
       {
         name: "description",
         label: "Descripción",
-        keyfilter: "alpha",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Contraseña",
         alertText: "*La contraseña es obligatoria",
         value: product?.description,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
+        maxLength: 50,
       },
       {
         name: "stock",
@@ -94,7 +101,7 @@ export default function ModifyDialog({
         placeholder: "Stock",
         alertText: "*El stock es obligatorio",
         value: product?.stock as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
       {
@@ -104,7 +111,7 @@ export default function ModifyDialog({
         placeholder: "Precio Unitario",
         alertText: "*El precio unitario es obligatorio",
         value: product?.unitPrice as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
     ];
@@ -113,6 +120,7 @@ export default function ModifyDialog({
 
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm();
@@ -130,12 +138,11 @@ export default function ModifyDialog({
         Number(data.unitPrice) == product.unitPrice
           ? undefined
           : Number(data.unitPrice),
+      category: category == product.category ? undefined : category,
       ivaType: selectedIVA,
-      iceType: selectedICE,
-      irbpType: selectedIRBP,
+      iceType: "0%",
+      irbpType: "0%",
     };
-
-    console.log({ productToUpdate });
 
     handleUpdateProduct(product.id, productToUpdate, image).then((response) => {
       if (response) {
@@ -197,6 +204,7 @@ export default function ModifyDialog({
                         className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                         keyfilter={product.keyfilter as KeyFilterType}
                         placeholder={product.placeholder}
+                        maxLength={product.maxLength}
                       />
                       {errors[product.name] && (
                         <small className="text-red-500">
@@ -217,8 +225,8 @@ export default function ModifyDialog({
           <div className="card w-full">
             <ComboBox
               label="Categoria"
-              options={ICE}
-              defaultValue={product.iceType ? product.iceType : "No aplica"}
+              options={categoriesName}
+              defaultValue={product.category ? product.category : "No aplica"}
               onChange={(e) => {
                 handleICE(e);
               }}
@@ -288,6 +296,7 @@ export default function ModifyDialog({
               className="w-1/2"
               type="button"
               onClick={() => {
+                reset();
                 setEditVisible(false);
               }}
               icon="pi pi-times"
@@ -306,6 +315,7 @@ export default function ModifyDialog({
         visible={visible}
         style={{ width: "50vw" }}
         onHide={() => {
+          reset();
           setEditVisible(false);
         }}
         modal={true}

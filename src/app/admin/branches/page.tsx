@@ -94,8 +94,6 @@ const branchs = () => {
       address: data.address,
     };
 
-    console.log({ branch });
-
     handleCreateBranch(branch).then((res) => {
       if (res) {
         setAddVisible(false);
@@ -105,7 +103,6 @@ const branchs = () => {
           detail: "La sucursal ha sido creada correctamente",
           life: 3000,
         });
-        console.log(res);
         setBranches([...branches, res]);
         reset();
       } else {
@@ -139,7 +136,7 @@ const branchs = () => {
     {
       name: "name",
       label: "Nombre",
-      keyfilter: "alpha",
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: "Nombre de la sucursal",
       alertText: "*El nombre es obligatorio",
       maxLength: 50,
@@ -148,7 +145,7 @@ const branchs = () => {
     {
       name: "address",
       label: "Dirección",
-      keyfilter: "alpha",
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: "Dirección de la sucursal",
       alertText: "*La dirección es obligatoria",
       maxLength: 100,

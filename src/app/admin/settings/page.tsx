@@ -15,6 +15,7 @@ import { FileUpload } from "primereact/fileupload";
 import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
 import { confirmPopup, ConfirmPopup } from "primereact/confirmpopup";
+import { validateRuc } from "@/store/utils/dniRucValidator";
 
 export default function page() {
   const [store, setStore] = React.useState<IStoreResponse>();
@@ -26,6 +27,7 @@ export default function page() {
     handleSubmit,
     formState: { errors },
     reset,
+    register,
   } = useForm();
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export default function page() {
       label: "RUC",
       keyfilter: "num",
       placeholder: "RUC de la Empresa",
-      alertText: "*El RUC es obligatorio",
+      alertText: "*El RUC es inválido",
       value: store?.ruc,
     },
     {
@@ -144,8 +146,6 @@ export default function page() {
       address: data.address === store?.address ? null : data.address,
     };
 
-    console.log(signature);
-    console.log(storeUpdateData);
     handleUpdateStore(storeUpdateData, signature).then((res) => {
       if (res) {
         toast.current?.show({
@@ -195,6 +195,16 @@ export default function page() {
                         keyfilter={store.keyfilter as KeyFilterType}
                         placeholder={store.placeholder}
                         defaultValue={store.value}
+                        {...register(store.name, {
+                          required: store.alertText,
+                          validate: (value) => {
+                            if (store.name === "ruc") {
+                              return validateRuc(value);
+                            }
+                            return true;
+                          }
+                        }
+                        )}
                       />
                       {errors[store.name] && (
                         <small className="text-red-500">

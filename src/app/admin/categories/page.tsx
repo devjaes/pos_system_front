@@ -11,8 +11,8 @@ import { Toast } from 'primereact/toast';
 import React, { MouseEvent, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import ModifyCategoryDialog from '@/components/modifyCategoryDialog';
-import { handleGetAllCategories } from '@/store/api/categoryApi';
-import { ICategoryResponse } from '@/store/types/ICategory';
+import { handleCreateCategory, handleDeleteCategory, handleGetAllCategories } from '@/store/api/categoryApi';
+import { ICategoryResponse, ICategoryUpdate } from '@/store/types/ICategory';
 
 export default function page() {
     const toast = useRef<Toast>(null);
@@ -41,6 +41,7 @@ export default function page() {
     const columns = [
         { field: "id", header: "ID" },
         { field: "category", header: "Categoria" },
+        { field: "actions", header: "Acciones" },
     ];
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,33 +95,70 @@ export default function page() {
     }
 
     const handleDelete = (category: any) => {
-        console.log(category);
+        handleDeleteCategory(category.id).then((res) => {
+            if (res) {
+                toast.current?.show({
+                    severity: 'success',
+                    summary: 'Categoria eliminada',
+                    detail: `Se ha eliminado la categoria ${category.category}`,
+                    life: 3000,
+                });
+                setCategories(categories.filter((val) => val.id !== category.id));
+            } else {
+                toast.current?.show({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: `No se ha podido eliminar la categoria`,
+                    life: 3000,
+                });
+            }
+        }
+        )
 
     }
+
+
     const allForms: IInputsForm[] = [
         {
             name: 'name',
             label: 'Nombre',
-            keyfilter: 'alpha',
+            keyfilter: /^[A-Za-z ]$/,
             placeholder: 'Nombre de la categoria',
             alertText: '*El nombre es obligatorio',
+            maxLength: 20,
         },
-        {
-            name: 'iva',
-            label: 'IVA',
-            keyfilter: 'alphanum',
-            placeholder: 'IVA',
-            alertText: '*El IVA es obligatorio',
-        }
-
     ];
 
-    const handleRegister = (data: any) => {
-        console.log(data);
-    }
+    const handleRegister = handleSubmit((data: any) => {
+        const category: ICategoryUpdate = {
+            category: data.name,
+        }
+
+        handleCreateCategory(category).then((res) => {
+            if (res) {
+                toast.current?.show({
+                    severity: 'success',
+                    summary: 'Categoria creada',
+                    detail: `Se ha creado la categoria ${category.category}`,
+                    life: 3000,
+                });
+                setAddVisible(false);
+                setCategories([...categories, res]);
+                reset();
+            } else {
+                toast.current?.show({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: `No se ha podido crear la categoria`,
+                    life: 3000,
+                });
+            }
+        })
+    })
 
     return (
         <div className='border p-4 border-opacity-5 bg-gray-700 w-full mx-16'>
+            <Toast ref={toast} />
             <div className='flex flex-col gap-6'>
                 <h1 className='text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md'><span><i className="pi pi-search" style={{ fontSize: '1.5rem' }}></i></span> Listado de Categorias</h1>
                 <div className='flex gap-4 justify-between'>
@@ -155,7 +193,6 @@ export default function page() {
                                     body={(rowData) => (
                                         <div className="action-buttons flex gap-6">
                                             <Button icon="pi pi-pencil" severity="info" aria-label="User" onClick={() => handleModify(rowData)} />
-                                            <Toast ref={toast} />
                                             <ConfirmPopup />
                                             <Button
                                                 icon="pi pi-eraser"
@@ -210,7 +247,7 @@ export default function page() {
                     }}
                 >
                     <form className="px-16">
-                        <h1 className="text-center font-bold text-3xl">Agregar un cliente</h1>
+                        <h1 className="text-center font-bold text-3xl">Agregar una categoria</h1>
                         {allForms.map((form, i) => (
                             <div className="py-3 block mt-3" key={i} >
                                 <span className="p-float-label">
@@ -218,6 +255,7 @@ export default function page() {
                                         className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                                         keyfilter={form.keyfilter as KeyFilterType}
                                         placeholder={form.placeholder}
+                                        maxLength={form.maxLength}
                                         {...register(form.name, {
                                             required: form.alertText,
                                         })} />

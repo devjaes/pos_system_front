@@ -19,6 +19,8 @@ import { Toast } from "primereact/toast";
 import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import ModifyClientDialog from "@/components/modifyClientDialog";
+import validateDni, { validateRuc } from "@/store/utils/dniRucValidator";
+import { id } from "date-fns/locale";
 
 export default function CustomerTable({
   setCustomersContext,
@@ -102,7 +104,6 @@ export default function CustomerTable({
   };
 
   const handleDelete = (customer: ICustomerResponse) => {
-    console.log(customer);
     handleDeleteCustomer(customer.id).then((res) => {
       if (res) {
         toast.current?.show({
@@ -138,18 +139,20 @@ export default function CustomerTable({
     {
       name: "name",
       label: "Nombre",
-      keyfilter: "alpha",
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: "Ingrese su nombre",
       alertText: "El nombre es requerido",
-      onChange: () => {},
+      onChange: () => { },
+      maxLength: 20,
     },
     {
       name: "lastName",
       label: "Apellido",
-      keyfilter: "alpha",
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: "Ingrese su apellido",
       alertText: "El apellido es requerido",
-      onChange: () => {},
+      onChange: () => { },
+      maxLength: 20,
     },
     {
       name: "email",
@@ -157,7 +160,7 @@ export default function CustomerTable({
       keyfilter: "email",
       placeholder: "Ingrese su correo",
       alertText: "El correo es requerido",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "businessName",
@@ -165,15 +168,8 @@ export default function CustomerTable({
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Ingrese su razón social",
       alertText: "La razón social es requerida",
-      onChange: () => {},
-    },
-    {
-      name: "identification",
-      label: "Identificación",
-      keyfilter: "num",
-      placeholder: "Ingrese su identificación",
-      alertText: "La identificación es requerida",
-      onChange: () => {},
+      onChange: () => { },
+      maxLength: 30,
     },
     {
       name: "address",
@@ -181,7 +177,15 @@ export default function CustomerTable({
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Ingrese su dirección",
       alertText: "La dirección es requerida",
-      onChange: () => {},
+      onChange: () => { },
+    },
+    {
+      name: "identification",
+      label: "Identificación",
+      keyfilter: "num",
+      placeholder: "Ingrese su identificación",
+      alertText: "La identificación es inválida",
+      onChange: () => { },
     },
   ];
 
@@ -219,13 +223,14 @@ export default function CustomerTable({
           life: 3000,
         });
       }
+      reset();
     });
   });
 
   return (
     <>
       <div className="flex flex-col gap-8">
-        <h1 className="text-neutral-100 text-3xl text-center font-bold">
+        <h1 className="text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md">
           <span>
             <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
           </span>{" "}
@@ -337,9 +342,24 @@ export default function CustomerTable({
                     className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                     keyfilter={form.keyfilter as KeyFilterType}
                     placeholder={form.placeholder}
+                    maxLength={form.maxLength}
                     {...register(form.name, {
                       required: form.alertText,
-                    })}
+                      validate: (value) => {
+                        if (form.name === "identification") {
+                          if (idType === '' || idType === 'Selecciona una opción' || idType === undefined) {
+                            return 'Debe seleccionar un tipo de identificación'
+                          }
+                          if (idType === 'CÉDULA') {
+                            return validateDni(value);
+                          } else if (idType === 'RUC') {
+                            return validateRuc(value);
+                          }
+                        }
+                        return true;
+                      }
+                    }
+                    )}
                   />
                   <label className="block pb-2">{form.label}</label>
                 </span>
