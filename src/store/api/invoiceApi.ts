@@ -170,7 +170,7 @@ export const handleGenerateXML = async (invoiceId: number) => {
       console.log("No se pudo generar el XML.");
       return;
     }
-    const data = await response.json();
+    const data = await response.text();
     const xmlData: string = data;
 
     if (!xmlData) {
@@ -178,7 +178,7 @@ export const handleGenerateXML = async (invoiceId: number) => {
       return;
     }
 
-    return response;
+    return xmlData;
   } catch (error) {
     console.log({ error });
   }

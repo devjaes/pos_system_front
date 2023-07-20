@@ -21,7 +21,7 @@ export interface IProductCreate {
   description: string;
   stock: number;
   unitPrice: number;
-  ivaVariable: string;
+  ivaVariable: string | null;
   category: string;
   ivaType: string;
   iceType: string;

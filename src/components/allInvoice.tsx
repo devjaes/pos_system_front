@@ -61,6 +61,23 @@ export default function allInvoice() {
     handleGenerateXML(rowData.id).then((res) => {
       if (res) {
         console.log({ res });
+        //convertir la respuesta en un blob y descargarlo
+        const blob = new Blob([res], { type: "text/xml" });
+        const url = URL.createObjectURL(blob);
+
+        // Crear un enlace de descarga
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = rowData.accessKey + ".xml";
+        link.style.display = "none"; // Para ocultar el enlace en la página
+
+        // Agregar el enlace al documento y hacer clic en él para descargar el PDF
+        document.body.appendChild(link);
+        link.click();
+
+        // Liberar el objeto URL creado para el blob
+        URL.revokeObjectURL(url);
+
         toast.current?.show({
           severity: "success",
           summary: "XML generado",
