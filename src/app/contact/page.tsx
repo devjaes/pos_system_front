@@ -17,7 +17,7 @@ export default function page() {
                     <p></p>
                     <p className="mt-3 text-gray-500 dark:text-gray-400">Si tienes alguna pregunta, comentario o simplemente deseas comunicarte con nosotros, no dudes en ponerte en contacto.Nuestro equipo de atención al cliente está aquí para ayudarte.Puedes contactarnos a través de los siguientes medios:</p>
                 </div>
-                <div className="grid grid-cols-1 gap-12 mt-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="grid grid-cols-1 gap-12 mt-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
                     <BloqueContacto 
                         titulo="Correo electronico" 
                         icon="pi pi-envelope" 
@@ -38,11 +38,21 @@ export default function page() {
                         icon="pi pi-facebook"
                         texto='Siguenos en nuestras redes sociales:'
                         reference='@facturacionelectronica' />
+                    <BloqueContacto
+                        titulo="Horario de atención"
+                        icon="pi pi-clock"
+                        texto='Nuestro horario de atención es:'
+                        reference='Lunes a Viernes de 8:00 a 17:00' />
+                    <BloqueContacto
+                        titulo='Soporte técnico'
+                        icon="pi pi-question-circle"
+                        texto='Escribenos a este correo:'
+                        reference='soporte.Jeep@gmail.com' />
                 </div>
 
                 </div>
             </main>
-            <footer className=" bg-jair h-max mt-2">
+            <footer className=" bg-jair h-max mt-6">
                 <div className="container flex flex-col items-center justify-between p-6 mx-auto space-y-4 sm:space-y-0 sm:flex-row">
                     <a href="#">
                         <img className="w-16 h-auto" src={logo.src} alt="" />
@@ -55,6 +65,7 @@ export default function page() {
                     </div>
                 </div>
             </footer>
-        </div>
+            </div>
+        
     )
 }

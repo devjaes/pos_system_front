@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Navegador from "@/components/Nav";
 import LookPayN from "../../../public/images/PostLogo5.png";
@@ -7,6 +8,7 @@ import { HiOutlineCurrencyDollar } from "react-icons/hi";
 import BloqueInfo from "@/components/aboutBox";
 import { IOption } from "@/components/Nav";
 import logo from "../../../public/images/PostLogo5.png";
+
 
 function SobreNosotros() {
     const options: IOption[] = [{ label: "Iniciar sesión", redirect: "/", type: "option" }]

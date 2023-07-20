@@ -1,7 +1,7 @@
 import 'primeicons/primeicons.css';
 function BloqueContacto({titulo,icon,texto,reference}: {titulo:string,icon:any,texto:string, reference:string}){
     return(
-        <div className="p-4 rounded-lg bg-blue-50 md:p-6 dark:bg-gray-800">
+        <div className="p-4 rounded-lg bg-blue-50 md:p-6 dark:bg-gray-800 hover:scale-110 transform transition-all duration-300">
             <span className="inline-block p-3 text-blue-500 rounded-lg bg-blue-100/80 dark:bg-gray-700">
                 <i className={icon} style={{fontSize: "2rem"}}></i>
             </span>
