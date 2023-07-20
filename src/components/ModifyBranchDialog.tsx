@@ -37,7 +37,7 @@ export default function ModifyBranchDialog({
       {
         name: "name",
         label: "Nombre",
-        keyfilter: "alphanum",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Nombre de la Sucursal",
         alertText: "*El nombre es obligatorio",
         value: branch?.name,
@@ -47,7 +47,7 @@ export default function ModifyBranchDialog({
       {
         name: "address",
         label: "Dirección",
-        keyfilter: "alphanum",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Código Principal",
         alertText: "*El código principal es obligatorio",
         value: branch?.address,

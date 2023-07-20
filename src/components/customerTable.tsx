@@ -139,18 +139,20 @@ export default function CustomerTable({
     {
       name: "name",
       label: "Nombre",
-      keyfilter: "alpha",
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: "Ingrese su nombre",
       alertText: "El nombre es requerido",
       onChange: () => { },
+      maxLength: 20,
     },
     {
       name: "lastName",
       label: "Apellido",
-      keyfilter: "alpha",
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: "Ingrese su apellido",
       alertText: "El apellido es requerido",
       onChange: () => { },
+      maxLength: 20,
     },
     {
       name: "email",
@@ -167,6 +169,7 @@ export default function CustomerTable({
       placeholder: "Ingrese su razón social",
       alertText: "La razón social es requerida",
       onChange: () => { },
+      maxLength: 30,
     },
     {
       name: "address",
@@ -227,7 +230,7 @@ export default function CustomerTable({
   return (
     <>
       <div className="flex flex-col gap-8">
-        <h1 className="text-neutral-100 text-3xl text-center font-bold">
+        <h1 className="text-neutral-100 text-3xl text-center font-bold bg-jair py-3 border-2 border-slate-400 rounded-md">
           <span>
             <i className="pi pi-search" style={{ fontSize: "1.5rem" }}></i>
           </span>{" "}
@@ -339,6 +342,7 @@ export default function CustomerTable({
                     className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                     keyfilter={form.keyfilter as KeyFilterType}
                     placeholder={form.placeholder}
+                    maxLength={form.maxLength}
                     {...register(form.name, {
                       required: form.alertText,
                       validate: (value) => {

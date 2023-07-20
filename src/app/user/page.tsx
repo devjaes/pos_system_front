@@ -3,8 +3,6 @@ import BranchBox from "./branchBox/page";
 
 export default function page() {
   return (
-    <div>
-      <BranchBox />
-    </div>
+    <BranchBox />
   );
 }

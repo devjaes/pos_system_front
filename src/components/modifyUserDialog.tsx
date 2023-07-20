@@ -48,7 +48,7 @@ export default function modifyUserDialog(
             {
                 name: "name",
                 label: "Nombre",
-                keyfilter: "alpha",
+                keyfilter: /^[A-Za-z ]$/,
                 placeholder: "Nombre del Usuario",
                 alertText: "*El nombre es obligatorio",
                 value: user?.name,
@@ -57,7 +57,7 @@ export default function modifyUserDialog(
             {
                 name: "lastName",
                 label: "Apellido",
-                keyfilter: "alpha",
+                keyfilter: /^[A-Za-z ]$/,
                 placeholder: "Apellido del Usuario",
                 alertText: "*El apellido es obligatorio",
                 value: user?.lastName,
