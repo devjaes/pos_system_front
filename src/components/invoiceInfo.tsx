@@ -8,6 +8,7 @@ interface Props {
     visible: boolean;
     setShowVisible: (value: boolean) => void;
     onHide: () => void;
+    className?: string;
 }
 
 export default function invoiceInfo(
@@ -15,12 +16,13 @@ export default function invoiceInfo(
         invoice,
         visible,
         setShowVisible,
-        onHide
+        onHide,
+        className
     }: Props
 
 ) {
     return (
-        <Dialog visible={visible} onHide={onHide} >
+        <Dialog visible={visible} onHide={onHide} className={className}>
             <h1 className='text-center font-bold text-3xl'>Información de la factura</h1>
             <div className='flex gap-4 px-32 py-8'>
                 <div className='font-bold'>

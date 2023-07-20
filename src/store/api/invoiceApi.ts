@@ -1,5 +1,11 @@
 import config from "../../../config/serverConfig";
-import { IInvoiceCreate, IInvoiceResponse } from "../types/IInvoices";
+import NextCors from "nextjs-cors";
+import {
+  IInvoiceCreate,
+  IInvoicePDF,
+  IInvoiceResponse,
+} from "../types/IInvoices";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export const handleGetInvoice = async (invoiceId: number) => {
   try {
@@ -89,12 +95,7 @@ export const handleCreateInvoice = async (invoice: IInvoiceCreate) => {
   }
 };
 
-export const handleUpdateInvoiceValues = async (
-  invoiceId: number,
-  invoice: {
-    invoice: { description: string; amount: number; unitPrice: number };
-  }
-) => {
+export const handleUpdateInvoiceValues = async (invoiceId: number) => {
   try {
     const response = await fetch(
       `${config.API_REST_BASE_URL}/invoices/${invoiceId}`,
@@ -103,7 +104,6 @@ export const handleUpdateInvoiceValues = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(invoice),
       }
     );
 
@@ -112,7 +112,7 @@ export const handleUpdateInvoiceValues = async (
       return;
     }
     const data = await response.json();
-    const invoiceData: IInvoiceResponse = data;
+    const invoiceData: IInvoicePDF = data;
 
     if (!invoiceData) {
       console.log("Error al actualizar los valores de la factura.");
@@ -124,3 +124,34 @@ export const handleUpdateInvoiceValues = async (
     console.log({ error });
   }
 };
+
+export const handleCreatePDF = async (
+  invoice: IInvoicePDF,
+  fileName: string
+) => {
+  try {
+    const postData = JSON.stringify(invoice);
+
+    // Haz la solicitud a tu endpoint en Next.js
+    const response = await fetch("/api/createPDF", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: postData,
+    });
+    console.log({ response });
+
+    if (!response.ok) {
+      console.log("No se pudo crear el PDF.");
+      return;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
+// generate pdf v2
