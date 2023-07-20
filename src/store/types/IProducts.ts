@@ -17,7 +17,7 @@ export interface IProductResponse {
 export interface IProductCreate {
   name: string;
   mainCode: string;
-  auxCode: string;
+  auxCode: string | null;
   description: string;
   stock: number;
   unitPrice: number;

@@ -147,7 +147,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Nombre del Producto",
       alertText: "*El nombre es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
       maxLength: 20,
     },
     {
@@ -156,7 +156,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Código Principal",
       alertText: "*El código principal es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
       maxLength: 4,
     },
     {
@@ -165,7 +165,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Código Auxiliar",
       alertText: "*El código auxiliar es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
       maxLength: 4,
     },
     {
@@ -174,7 +174,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Descripción",
       alertText: "*La descripción es obligatoria",
-      onChange: () => {},
+      onChange: () => { },
       maxLength: 50,
     },
     {
@@ -183,7 +183,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "num",
       placeholder: "Stock",
       alertText: "*El stock es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "unitPriceRegister",
@@ -191,7 +191,7 @@ export default function DynamicColumnsDemo() {
       keyfilter: "money",
       placeholder: "Precio Unitario",
       alertText: "*El precio unitario es obligatorio",
-      onChange: () => {},
+      onChange: () => { },
     },
   ];
 
@@ -199,7 +199,7 @@ export default function DynamicColumnsDemo() {
     const product: IProductCreate = {
       name: data.nameRegister,
       mainCode: data.mainCodeRegister,
-      auxCode: data.auxCodeRegister,
+      auxCode: data.auxCodeRegister ? data.auxCodeRegister : null,
       description: data.descriptionRegister,
       stock: Number(data.stockRegister),
       unitPrice: Number(data.unitPriceRegister),

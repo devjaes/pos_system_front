@@ -1,5 +1,5 @@
 import config from "../../../config/serverConfig";
-import { IProductResponse, IProductUpdate } from "../types/IProducts";
+import { IProductCreate, IProductResponse, IProductUpdate } from "../types/IProducts";
 
 export const handleGetProduct = async (productId: number) => {
   try {
@@ -59,7 +59,7 @@ export const handleGetAllProducts = async () => {
 };
 
 export const handleCreateProduct = async (
-  product: IProductUpdate,
+  product: IProductCreate,
   image: any
 ) => {
   const formData = new FormData();
