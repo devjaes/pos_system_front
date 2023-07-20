@@ -9,6 +9,15 @@ import { Button } from 'primereact/button';
 
 function HomePageAdmin() {
   const router = useRouter();
+  const header = (
+    <img alt="Card" src="https://images.unsplash.com/photo-1664575262619-b28fef7a40a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDIyfGFldTZyTC1qNmV3fHxlbnwwfHx8fHw%3D&auto=format&fit=crop&w=600&q=60 " className="h-50"/>
+  );
+  const footer = (
+    <p className="m-0 flex justify-center">
+      Bienvenido! Aquí podrás administrar tu empresa.
+    </p>
+  );
+
 
   useEffect(() => {
     const user = window.localStorage.getItem("user");
@@ -28,16 +37,10 @@ function HomePageAdmin() {
   return (
 
     <main className='bg-primary-Jair w-11/12'>
-      <div>
-        <Card title="Title">
-          <p className="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae
-            numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
-          </p>
+      <div className="card justify-center items-center bg-center flex h-screen">
+        <Card  header = {header} footer={footer} className="w-3/6 shadow-md border-b-2 ">
+        <h1 className="text-2xl font-bold text-center">{"POST SYSTEM"}</h1>
         </Card>
-      </div>
-      <div >
-        <Button label='Prueba' severity='warning' />
       </div>
     </main>
 

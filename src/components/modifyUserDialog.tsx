@@ -6,7 +6,7 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from 'primereact/inputtext';
 import { KeyFilterType } from 'primereact/keyfilter';
 import { Toast } from 'primereact/toast';
-import React, { RefObject } from 'react'
+import React, { RefObject, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 
 interface Props {
@@ -31,10 +31,13 @@ export default function modifyUserDialog(
 ) {
 
     const [userInfo, setUserInfo] = React.useState<IInputsForm[]>([]);
+
+    
     const {
         control,
         handleSubmit,
         formState: { errors },
+        
     } = useForm();
 
     React.useEffect(() => {

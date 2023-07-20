@@ -1,4 +1,8 @@
 export default function validateDni(cedula: string) {
+  if (cedula === '2222222222'|| cedula === '0000000000'){
+    return false;
+  }
+
   if (
     typeof cedula == "string" &&
     cedula.length == 10 &&

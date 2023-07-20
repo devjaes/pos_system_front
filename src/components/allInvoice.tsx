@@ -1,5 +1,9 @@
 "use client";
-import { handleCreatePDF, handleGetAllInvoices } from "@/store/api/invoiceApi";
+import {
+  handleCreatePDF,
+  handleGenerateXML,
+  handleGetAllInvoices,
+} from "@/store/api/invoiceApi";
 import React, { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableRowClickEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -54,7 +58,41 @@ export default function allInvoice() {
   };
 
   const handleXMLCreation = (rowData: IInvoiceResponse) => {
-    console.log(rowData);
+    handleGenerateXML(rowData.id).then((res) => {
+      if (res) {
+        console.log({ res });
+        //convertir la respuesta en un blob y descargarlo
+        const blob = new Blob([res], { type: "text/xml" });
+        const url = URL.createObjectURL(blob);
+
+        // Crear un enlace de descarga
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = rowData.accessKey + ".xml";
+        link.style.display = "none"; // Para ocultar el enlace en la página
+
+        // Agregar el enlace al documento y hacer clic en él para descargar el PDF
+        document.body.appendChild(link);
+        link.click();
+
+        // Liberar el objeto URL creado para el blob
+        URL.revokeObjectURL(url);
+
+        toast.current?.show({
+          severity: "success",
+          summary: "XML generado",
+          detail: "El XML se ha generado correctamente",
+          life: 3000,
+        });
+      } else {
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "El XML no se ha podido generar",
+          life: 3000,
+        });
+      }
+    });
   };
 
   const downloadPDF = (rowData: IInvoiceResponse) => {
