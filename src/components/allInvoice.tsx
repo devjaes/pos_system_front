@@ -1,5 +1,9 @@
 "use client";
-import { handleCreatePDF, handleGetAllInvoices } from "@/store/api/invoiceApi";
+import {
+  handleCreatePDF,
+  handleGenerateXML,
+  handleGetAllInvoices,
+} from "@/store/api/invoiceApi";
 import React, { useEffect, useRef, useState } from "react";
 import { DataTable, DataTableRowClickEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -54,7 +58,24 @@ export default function allInvoice() {
   };
 
   const handleXMLCreation = (rowData: IInvoiceResponse) => {
-    console.log(rowData);
+    handleGenerateXML(rowData.id).then((res) => {
+      if (res) {
+        console.log({ res });
+        toast.current?.show({
+          severity: "success",
+          summary: "XML generado",
+          detail: "El XML se ha generado correctamente",
+          life: 3000,
+        });
+      } else {
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "El XML no se ha podido generar",
+          life: 3000,
+        });
+      }
+    });
   };
 
   const downloadPDF = (rowData: IInvoiceResponse) => {
