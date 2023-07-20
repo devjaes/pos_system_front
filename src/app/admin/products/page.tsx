@@ -20,6 +20,8 @@ import ModifyDialog from "@/components/modifyDialog";
 import ComboBox from "@/components/ComboBox";
 import { useForm } from "react-hook-form";
 import { FileUpload } from "primereact/fileupload";
+import { ICategoryResponse } from "@/store/types/ICategory";
+import { handleGetAllCategories } from "@/store/api/categoryApi";
 
 export default function DynamicColumnsDemo() {
   const toast = useRef<Toast>(null);
@@ -31,7 +33,9 @@ export default function DynamicColumnsDemo() {
   const [selectedIVA, setSelectedIVA] = useState<any>(null);
   const [selectedICE, setSelectedICE] = useState<any>(null);
   const [selectedIRBP, setSelectedIRBP] = useState<any>(null);
+  const [categoriesName, setCategoriesName] = useState<string[]>([]);
   const [image, setImage] = useState<any>(null);
+  const [category, setCategory] = useState<string>("");
 
   const {
     reset,
@@ -59,6 +63,14 @@ export default function DynamicColumnsDemo() {
     handleGetAllProducts().then((res) => {
       if (res) {
         setProducts(res);
+      }
+    });
+    handleGetAllCategories().then((res) => {
+      if (res) {
+        const categoriesName = res.map((category) => {
+          return category.category;
+        });
+        setCategoriesName(categoriesName);
       }
     });
   }, []);
@@ -191,6 +203,7 @@ export default function DynamicColumnsDemo() {
       stock: Number(data.stockRegister),
       unitPrice: Number(data.unitPriceRegister),
       ivaVariable: "",
+      category: category,
       ivaType: selectedIVA,
       iceType: selectedICE ? selectedICE : "0%",
       irbpType: selectedIRBP ? selectedIRBP : "0%",
@@ -220,6 +233,11 @@ export default function DynamicColumnsDemo() {
       }
     });
   });
+
+  const handleCategory = (e: string) => {
+    console.log(e);
+    setCategory(e);
+  };
 
   const handleICE = (e: string) => {
     setSelectedICE(e);
@@ -366,6 +384,17 @@ export default function DynamicColumnsDemo() {
                 )}
               </div>
             ))}
+            <div className="flex justify-content-center py-4 w-full">
+              <ComboBox
+                key={"category"}
+                label="Categoria"
+                options={categoriesName}
+                defaultValue="Selecciona una opción"
+                onChange={(e) => {
+                  handleCategory(e);
+                }}
+              ></ComboBox>
+            </div>
 
             <div className="card">
               <h1 className="pb-4">Imagen del producto</h1>

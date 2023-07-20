@@ -1,4 +1,4 @@
 export interface ICategoryResponse {
-    id: number;
-    name: string;
+  id: number;
+  category: string;
 }
