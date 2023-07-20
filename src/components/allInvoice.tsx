@@ -61,6 +61,7 @@ export default function allInvoice() {
     handleGenerateXML(rowData.id).then((res) => {
       if (res) {
         console.log({ res });
+<<<<<<< HEAD
         //convertir la respuesta en un blob y descargarlo
         const blob = new Blob([res], { type: "text/xml" });
         const url = URL.createObjectURL(blob);
@@ -78,6 +79,8 @@ export default function allInvoice() {
         // Liberar el objeto URL creado para el blob
         URL.revokeObjectURL(url);
 
+=======
+>>>>>>> df2d6629f1597a46313f1459c95123a8d8650fb2
         toast.current?.show({
           severity: "success",
           summary: "XML generado",
