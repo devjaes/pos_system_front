@@ -62,6 +62,9 @@ export default function allInvoice() {
       if (res) {
         console.log({ res });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a81565361310c9b6aedc3bc6c56e6714d6cf018e
         //convertir la respuesta en un blob y descargarlo
         const blob = new Blob([res], { type: "text/xml" });
         const url = URL.createObjectURL(blob);
@@ -79,8 +82,11 @@ export default function allInvoice() {
         // Liberar el objeto URL creado para el blob
         URL.revokeObjectURL(url);
 
+<<<<<<< HEAD
 =======
 >>>>>>> df2d6629f1597a46313f1459c95123a8d8650fb2
+=======
+>>>>>>> a81565361310c9b6aedc3bc6c56e6714d6cf018e
         toast.current?.show({
           severity: "success",
           summary: "XML generado",
