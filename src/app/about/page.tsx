@@ -2,9 +2,7 @@
 import React from "react";
 import Navegador from "@/components/Nav";
 import LookPayN from "../../../public/images/PostLogo5.png";
-import { HiOutlineClipboardList, HiOutlineLockClosed, HiTrendingUp } from "react-icons/hi";
-import { HiOutlineGlobeAlt } from "react-icons/hi";
-import { HiOutlineCurrencyDollar } from "react-icons/hi";
+
 import BloqueInfo from "@/components/aboutBox";
 import { IOption } from "@/components/Nav";
 import logo from "../../../public/images/PostLogo5.png";
