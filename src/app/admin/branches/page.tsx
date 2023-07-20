@@ -136,7 +136,7 @@ const branchs = () => {
     {
       name: "name",
       label: "Nombre",
-      keyfilter: "alpha",
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: "Nombre de la sucursal",
       alertText: "*El nombre es obligatorio",
       maxLength: 50,
@@ -145,7 +145,7 @@ const branchs = () => {
     {
       name: "address",
       label: "Dirección",
-      keyfilter: "alpha",
+      keyfilter: /^[A-Za-z ]$/,
       placeholder: "Dirección de la sucursal",
       alertText: "*La dirección es obligatoria",
       maxLength: 100,

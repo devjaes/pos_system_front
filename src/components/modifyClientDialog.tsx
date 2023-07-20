@@ -51,7 +51,7 @@ export default function modifyClientDialog({
       {
         name: "name",
         label: "Nombre",
-        keyfilter: "alpha",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Nombre del Cliente",
         alertText: "*El nombre es obligatorio",
         value: customer?.name,
@@ -60,7 +60,7 @@ export default function modifyClientDialog({
       {
         name: "lastName",
         label: "Apellido",
-        keyfilter: "alpha",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Apellido del Cliente",
         alertText: "*El apellido es obligatorio",
         value: customer?.lastName,
@@ -96,7 +96,7 @@ export default function modifyClientDialog({
       {
         name: "address",
         label: "Dirección",
-        keyfilter: "alphanum",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Dirección del Cliente",
         alertText: "*La dirección es obligatoria",
         value: customer?.address,
