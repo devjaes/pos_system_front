@@ -66,12 +66,14 @@ const invoicer = () => {
       if (response) {
         setProducts(response);
         const productsDropdown = response.map((product) => {
-          return {
-            label: product.name + " " + product.mainCode,
-            value: product,
-          };
+          if (product.stock > 0) {
+            return {
+              label: product.name + " " + product.mainCode,
+              value: product,
+            };
+          }
         });
-        setProductsDropdown(productsDropdown);
+        setProductsDropdown(productsDropdown as any);
       }
     });
 
@@ -227,12 +229,14 @@ const invoicer = () => {
 
   useEffect(() => {
     const productsDropdown = products.map((product) => {
-      return {
-        label: product.name + " " + product.mainCode,
-        value: product,
-      };
+      if (product.stock > 0) {
+        return {
+          label: product.name + " " + product.mainCode,
+          value: product,
+        };
+      }
     });
-    setProductsDropdown(productsDropdown);
+    setProductsDropdown(productsDropdown as any);
   }, [products]);
 
   useEffect(() => {
