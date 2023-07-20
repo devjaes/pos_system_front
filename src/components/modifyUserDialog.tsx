@@ -99,12 +99,9 @@ export default function modifyUserDialog(
             password: data.password === undefined ? null : data.password,
         }
 
-        console.log(userToUpdate);
-
         if (data.password !== '' || data.password !== undefined) {
             if (data.password !== data.confirmPassword) {
                 toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Las contraseñas no coinciden', life: 3000 });
-                console.log("Las contraseñas no coinciden");
                 return;
             }
         }

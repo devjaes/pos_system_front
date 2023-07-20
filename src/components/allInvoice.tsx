@@ -49,7 +49,6 @@ export default function allInvoice() {
   );
 
   const showInvoice = (e: IInvoiceResponse) => {
-    console.log(e);
     setSelectedRowData(e);
     setShowVisible(true);
   };

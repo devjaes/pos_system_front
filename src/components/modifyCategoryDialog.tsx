@@ -45,10 +45,11 @@ export default function modifyCategoryDialog({
       {
         name: "name",
         label: "Nombre",
-        keyfilter: "alpha",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Nombre de la categoría",
         alertText: "*El nombre es obligatorio",
         value: category?.name,
+        maxLength: 20,
       },
       {
         name: "iva",
@@ -57,6 +58,7 @@ export default function modifyCategoryDialog({
         placeholder: "IVA de la categoría",
         alertText: "*El IVA es obligatorio",
         value: category?.iva,
+        maxLength: 2,
       },
     ];
     setCategoryInfo(categoryInfo);
@@ -131,6 +133,7 @@ export default function modifyCategoryDialog({
                         className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                         keyfilter={category.keyfilter as KeyFilterType}
                         placeholder={category.placeholder}
+                        maxLength={category.maxLength}
                       />
                       {errors[category.name] && (
                         <small className="text-red-500">

@@ -148,8 +148,6 @@ export const handleCreatePDF = async (
       return;
     }
 
-    console.log(response.headers.get('content-type'));
-
     return response;
   } catch (error) {
     console.log({ error });

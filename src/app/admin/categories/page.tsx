@@ -122,9 +122,10 @@ export default function page() {
         {
             name: 'name',
             label: 'Nombre',
-            keyfilter: 'alpha',
+            keyfilter: /^[A-Za-z ]$/,
             placeholder: 'Nombre de la categoria',
             alertText: '*El nombre es obligatorio',
+            maxLength: 20,
         },
     ];
 
@@ -254,6 +255,7 @@ export default function page() {
                                         className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                                         keyfilter={form.keyfilter as KeyFilterType}
                                         placeholder={form.placeholder}
+                                        maxLength={form.maxLength}
                                         {...register(form.name, {
                                             required: form.alertText,
                                         })} />

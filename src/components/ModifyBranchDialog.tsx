@@ -41,7 +41,7 @@ export default function ModifyBranchDialog({
         placeholder: "Nombre de la Sucursal",
         alertText: "*El nombre es obligatorio",
         value: branch?.name,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
       {
@@ -51,7 +51,7 @@ export default function ModifyBranchDialog({
         placeholder: "Código Principal",
         alertText: "*El código principal es obligatorio",
         value: branch?.address,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
     ];
@@ -69,8 +69,6 @@ export default function ModifyBranchDialog({
       name: data.name == branch.name ? null : data.name,
       address: data.address == branch.address ? null : data.address,
     };
-
-    console.log({ branchToUpdate: branchToUpdate });
 
     handleUpdateBranch(branch.id, branchToUpdate).then((response) => {
       if (response) {

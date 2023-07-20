@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
   const skip = (page - 1) * limit;
 
   const invoice = request.body;
-  console.log({invoice});
 
   const options = {
     method: "POST",
@@ -31,8 +30,6 @@ export async function POST(request: NextRequest) {
     status: "success",
     data: response,
   };
-
-  console.log({response});
 
   return (response);
 }

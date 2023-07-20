@@ -91,8 +91,6 @@ const BoxTableModal = ({
       branchId: branch.id,
     };
 
-    console.log({ box: box });
-
     handleCreateBox(box).then((res) => {
       if (res) {
         toast.current?.show({
@@ -101,7 +99,6 @@ const BoxTableModal = ({
           detail: "La caja ha sido creada correctamente",
           life: 3000,
         });
-        console.log(res);
         setBoxes([...boxes, res]);
       } else {
         toast.current?.show({

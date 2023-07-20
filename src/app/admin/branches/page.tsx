@@ -94,8 +94,6 @@ const branchs = () => {
       address: data.address,
     };
 
-    console.log({ branch });
-
     handleCreateBranch(branch).then((res) => {
       if (res) {
         setAddVisible(false);
@@ -105,7 +103,6 @@ const branchs = () => {
           detail: "La sucursal ha sido creada correctamente",
           life: 3000,
         });
-        console.log(res);
         setBranches([...branches, res]);
         reset();
       } else {

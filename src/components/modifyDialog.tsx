@@ -53,12 +53,13 @@ export default function ModifyDialog({
       {
         name: "name",
         label: "Nombre",
-        keyfilter: "alpha",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Nombre del Producto",
         alertText: "*El nombre es obligatorio",
         value: product?.name,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
+        maxLength: 20,
       },
       {
         name: "mainCode",
@@ -67,8 +68,9 @@ export default function ModifyDialog({
         placeholder: "Código Principal",
         alertText: "*El código principal es obligatorio",
         value: product?.mainCode,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
+        maxLength: 4,
       },
       {
         name: "auxCode",
@@ -77,18 +79,20 @@ export default function ModifyDialog({
         placeholder: "Código Auxiliar",
         alertText: "*El código auxiliar es obligatorio",
         value: product?.auxCode,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
+        maxLength: 4,
       },
       {
         name: "description",
         label: "Descripción",
-        keyfilter: "alpha",
+        keyfilter: /^[A-Za-z ]$/,
         placeholder: "Contraseña",
         alertText: "*La contraseña es obligatoria",
         value: product?.description,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
+        maxLength: 50,
       },
       {
         name: "stock",
@@ -97,7 +101,7 @@ export default function ModifyDialog({
         placeholder: "Stock",
         alertText: "*El stock es obligatorio",
         value: product?.stock as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
       {
@@ -107,7 +111,7 @@ export default function ModifyDialog({
         placeholder: "Precio Unitario",
         alertText: "*El precio unitario es obligatorio",
         value: product?.unitPrice as unknown as string,
-        onChange: () => {},
+        onChange: () => { },
         type: "InputText",
       },
     ];
@@ -139,8 +143,6 @@ export default function ModifyDialog({
       iceType: "0%",
       irbpType: "0%",
     };
-
-    console.log({ productToUpdate });
 
     handleUpdateProduct(product.id, productToUpdate, image).then((response) => {
       if (response) {
@@ -202,6 +204,7 @@ export default function ModifyDialog({
                         className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                         keyfilter={product.keyfilter as KeyFilterType}
                         placeholder={product.placeholder}
+                        maxLength={product.maxLength}
                       />
                       {errors[product.name] && (
                         <small className="text-red-500">

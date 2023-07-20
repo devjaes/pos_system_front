@@ -10,6 +10,7 @@ import { Dialog } from "primereact/dialog";
 import ComboBox from "./ComboBox";
 import { IDENTIFICATION_TYPES } from "@/store/types/Tables";
 import { handleUpdateCustomer } from "@/store/api/customerApi";
+import validateDni, { validateRuc } from "@/store/utils/dniRucValidator";
 
 interface Props {
   toast: RefObject<Toast>;
@@ -36,6 +37,7 @@ export default function modifyClientDialog({
     control,
     handleSubmit,
     formState: { errors },
+    register,
   } = useForm();
 
   React.useEffect(() => {
@@ -53,7 +55,7 @@ export default function modifyClientDialog({
         placeholder: "Nombre del Cliente",
         alertText: "*El nombre es obligatorio",
         value: customer?.name,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "lastName",
@@ -62,7 +64,7 @@ export default function modifyClientDialog({
         placeholder: "Apellido del Cliente",
         alertText: "*El apellido es obligatorio",
         value: customer?.lastName,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "email",
@@ -71,7 +73,7 @@ export default function modifyClientDialog({
         placeholder: "Correo del Cliente",
         alertText: "*El correo es obligatorio",
         value: customer?.email,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "businessName",
@@ -80,16 +82,16 @@ export default function modifyClientDialog({
         placeholder: "Razón Social del Cliente",
         alertText: "*La razón social es obligatoria",
         value: customer?.businessName,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "identification",
         label: "Identificación",
         keyfilter: "num",
         placeholder: "Identificación del Cliente",
-        alertText: "*La identificación es obligatoria",
+        alertText: "*La identificación es inválida",
         value: customer?.identification,
-        onChange: () => {},
+        onChange: () => { },
       },
       {
         name: "address",
@@ -98,7 +100,7 @@ export default function modifyClientDialog({
         placeholder: "Dirección del Cliente",
         alertText: "*La dirección es obligatoria",
         value: customer?.address,
-        onChange: () => {},
+        onChange: () => { },
       },
     ];
     setCustomerInfo(customerInfo);
@@ -157,6 +159,8 @@ export default function modifyClientDialog({
     setIdType(e);
   };
 
+
+
   const renderModifyDialog = (customer: ICustomerResponse) => {
     return (
       <div>
@@ -176,6 +180,24 @@ export default function modifyClientDialog({
                         className="border border-solid border-gray-300 py-2 px-4 rounded-full w-full"
                         keyfilter={customer.keyfilter as KeyFilterType}
                         placeholder={customer.placeholder}
+                        {...register(customer.name, {
+                          required: customer.alertText,
+                          validate: (value) => {
+                            if (customer.name === "identification") {
+                              if (IdType === '' || IdType === 'Selecciona una opción' || IdType === undefined) {
+                                return 'Debe seleccionar un tipo de identificación'
+                              }
+                              if (IdType === 'CÉDULA') {
+                                return validateDni(value);
+                              } else if (IdType === 'RUC') {
+                                return validateRuc(value);
+                              }
+                            }
+                            return true;
+                          }
+                        }
+                        )}
+
                       />
                       {errors[customer.name] && (
                         <small className="text-red-500">

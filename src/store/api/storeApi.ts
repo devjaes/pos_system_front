@@ -57,8 +57,6 @@ export const handleUpdateStore = async (
     if (!response.ok) {
       console.log("No se pudo actualizar la tienda.");
       const data = await response.json();
-
-      console.log({ data });
       return;
     }
     const data = await response.json();

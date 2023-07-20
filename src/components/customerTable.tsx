@@ -19,6 +19,8 @@ import { Toast } from "primereact/toast";
 import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import ModifyClientDialog from "@/components/modifyClientDialog";
+import validateDni, { validateRuc } from "@/store/utils/dniRucValidator";
+import { id } from "date-fns/locale";
 
 export default function CustomerTable({
   setCustomersContext,
@@ -102,7 +104,6 @@ export default function CustomerTable({
   };
 
   const handleDelete = (customer: ICustomerResponse) => {
-    console.log(customer);
     handleDeleteCustomer(customer.id).then((res) => {
       if (res) {
         toast.current?.show({
@@ -141,7 +142,7 @@ export default function CustomerTable({
       keyfilter: "alpha",
       placeholder: "Ingrese su nombre",
       alertText: "El nombre es requerido",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "lastName",
@@ -149,7 +150,7 @@ export default function CustomerTable({
       keyfilter: "alpha",
       placeholder: "Ingrese su apellido",
       alertText: "El apellido es requerido",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "email",
@@ -157,7 +158,7 @@ export default function CustomerTable({
       keyfilter: "email",
       placeholder: "Ingrese su correo",
       alertText: "El correo es requerido",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "businessName",
@@ -165,15 +166,7 @@ export default function CustomerTable({
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Ingrese su razón social",
       alertText: "La razón social es requerida",
-      onChange: () => {},
-    },
-    {
-      name: "identification",
-      label: "Identificación",
-      keyfilter: "num",
-      placeholder: "Ingrese su identificación",
-      alertText: "La identificación es requerida",
-      onChange: () => {},
+      onChange: () => { },
     },
     {
       name: "address",
@@ -181,7 +174,15 @@ export default function CustomerTable({
       keyfilter: /^[A-Za-z ]$/,
       placeholder: "Ingrese su dirección",
       alertText: "La dirección es requerida",
-      onChange: () => {},
+      onChange: () => { },
+    },
+    {
+      name: "identification",
+      label: "Identificación",
+      keyfilter: "num",
+      placeholder: "Ingrese su identificación",
+      alertText: "La identificación es inválida",
+      onChange: () => { },
     },
   ];
 
@@ -219,6 +220,7 @@ export default function CustomerTable({
           life: 3000,
         });
       }
+      reset();
     });
   });
 
@@ -339,7 +341,21 @@ export default function CustomerTable({
                     placeholder={form.placeholder}
                     {...register(form.name, {
                       required: form.alertText,
-                    })}
+                      validate: (value) => {
+                        if (form.name === "identification") {
+                          if (idType === '' || idType === 'Selecciona una opción' || idType === undefined) {
+                            return 'Debe seleccionar un tipo de identificación'
+                          }
+                          if (idType === 'CÉDULA') {
+                            return validateDni(value);
+                          } else if (idType === 'RUC') {
+                            return validateRuc(value);
+                          }
+                        }
+                        return true;
+                      }
+                    }
+                    )}
                   />
                   <label className="block pb-2">{form.label}</label>
                 </span>

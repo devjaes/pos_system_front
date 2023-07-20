@@ -144,8 +144,6 @@ export default function page() {
       address: data.address === store?.address ? null : data.address,
     };
 
-    console.log(signature);
-    console.log(storeUpdateData);
     handleUpdateStore(storeUpdateData, signature).then((res) => {
       if (res) {
         toast.current?.show({
