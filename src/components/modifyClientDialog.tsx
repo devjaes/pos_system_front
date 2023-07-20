@@ -55,7 +55,7 @@ export default function modifyClientDialog({
         placeholder: "Nombre del Cliente",
         alertText: "*El nombre es obligatorio",
         value: customer?.name,
-        onChange: () => { },
+        onChange: () => {},
       },
       {
         name: "lastName",
@@ -64,7 +64,7 @@ export default function modifyClientDialog({
         placeholder: "Apellido del Cliente",
         alertText: "*El apellido es obligatorio",
         value: customer?.lastName,
-        onChange: () => { },
+        onChange: () => {},
       },
       {
         name: "email",
@@ -73,7 +73,7 @@ export default function modifyClientDialog({
         placeholder: "Correo del Cliente",
         alertText: "*El correo es obligatorio",
         value: customer?.email,
-        onChange: () => { },
+        onChange: () => {},
       },
       {
         name: "businessName",
@@ -82,7 +82,7 @@ export default function modifyClientDialog({
         placeholder: "Razón Social del Cliente",
         alertText: "*La razón social es obligatoria",
         value: customer?.businessName,
-        onChange: () => { },
+        onChange: () => {},
       },
       {
         name: "identification",
@@ -91,7 +91,7 @@ export default function modifyClientDialog({
         placeholder: "Identificación del Cliente",
         alertText: "*La identificación es inválida",
         value: customer?.identification,
-        onChange: () => { },
+        onChange: () => {},
       },
       {
         name: "address",
@@ -100,7 +100,7 @@ export default function modifyClientDialog({
         placeholder: "Dirección del Cliente",
         alertText: "*La dirección es obligatoria",
         value: customer?.address,
-        onChange: () => { },
+        onChange: () => {},
       },
     ];
     setCustomerInfo(customerInfo);
@@ -159,8 +159,6 @@ export default function modifyClientDialog({
     setIdType(e);
   };
 
-
-
   const renderModifyDialog = (customer: ICustomerResponse) => {
     return (
       <div>
@@ -184,20 +182,31 @@ export default function modifyClientDialog({
                           required: customer.alertText,
                           validate: (value) => {
                             if (customer.name === "identification") {
-                              if (IdType === '' || IdType === 'Selecciona una opción' || IdType === undefined) {
-                                return 'Debe seleccionar un tipo de identificación'
+                              if (
+                                IdType === "" ||
+                                IdType === "Selecciona una opción" ||
+                                IdType === undefined
+                              ) {
+                                return "Debe seleccionar un tipo de identificación";
                               }
-                              if (IdType === 'CÉDULA') {
+                              if (IdType === "CÉDULA") {
                                 return validateDni(value);
-                              } else if (IdType === 'RUC') {
+                              } else if (IdType === "RUC") {
                                 return validateRuc(value);
+                              } else if (IdType === "PASAPORTE") {
+                                return value.length >= 9 && value.length <= 15;
                               }
                             }
+                            if (customer.name === "email") {
+                              return (
+                                /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+                                  value
+                                ) || customer.alertText
+                              );
+                            }
                             return true;
-                          }
-                        }
-                        )}
-
+                          },
+                        })}
                       />
                       {errors[customer.name] && (
                         <small className="text-red-500">
