@@ -1,51 +1,70 @@
 "use client";
 import "@/app/globals.css";
-import Navegador from "@/components/Nav";
-import { IOption } from "@/components/Nav";
-import { CardAccountsProvider } from "@/context/CardAccountsProvider";
-import { TClientsResponse } from "@/store/types/IUserResponses";
-import { useRouter } from "next/navigation";
 
-export default function UserLayout({
+import { MenuItem } from "primereact/menuitem";
+import "primereact/resources/themes/bootstrap4-dark-purple/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import Image from "next/image";
+import Logo from "../../../public/images/PostLogo5.png";
+import { Menu } from "primereact/menu";
+
+const items: MenuItem[] = [
+  {
+    label: "Seleccionar Sucursal/Caja",
+    icon: "pi pi-fw pi-building",
+    url: "/user/branchBox",
+  },
+  {
+    label: "Facturación",
+    icon: "pi pi-fw pi-tag",
+    url: "/user/invoice",
+  },
+  {
+    label: "Clientes",
+    icon: "pi pi-fw pi-user",
+    url: "/user/customers",
+  },
+
+  {
+    label: "Ver facturas",
+    icon: "pi pi-fw pi-wrench",
+    url: "/user/invoiceList",
+  },
+  {
+    label: "Salir",
+    icon: "pi pi-fw pi-sign-out",
+    command: () => {
+      window.localStorage.removeItem("user");
+      window.location.href = "/";
+    },
+  },
+];
+
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = localStorage.getItem("user");
-  let userId;
-  const router = useRouter();
-
-  if (user === null) {
-    console.log("no hay usuario");
-    router.push(`/`);
-  } else {
-    const client = JSON.parse(user) as TClientsResponse;
-    if (client.name) {
-      userId = client.id;
-    }
-  }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("user");
-    router.push(`/`);
-  };
-
-  const options: IOption[] = [
-    { label: "DashBoard", redirect: "/user", type: "option" },
-    { label: "Cuentas", redirect: "/user/accounts", type: "option" },
-    { label: "Perfil", redirect: "/user/profile", type: "option" },
-    { label: "Cerrar sesión", redirect: handleLogout, type: "button" },
-  ];
   return (
-    <>
-      {userId && (
-        <div>
-          <Navegador options={options} imageRedirect="/user" />
-          <CardAccountsProvider userId={userId} userType="CLIENT">
-            <main>{children}</main>
-          </CardAccountsProvider>
+    <div className="flex ">
+      <div className="min-h-screen bg-jair">
+        <div className="h-full ">
+          <div className="flex justify-center items-center">
+            <Image
+              src={Logo.src}
+              alt=""
+              width={104}
+              height={104}
+              className="py-2 "
+            />
+          </div>
+          <Menu model={items} className="w-52 md:w-25rem mb-4 bg-gray-700" />
         </div>
-      )}
-    </>
+      </div>
+      <div className="flex justify-center items-center w-11/12 bg-slate-600">
+        {children}
+      </div>
+    </div>
   );
 }

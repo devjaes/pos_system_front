@@ -1,9 +1,10 @@
 import React from "react";
-import logo from "../../public/images/Logo marketing simple azul  (2).png";
+import logo from "../../public/images/PostLogo5.png";
 import Option from "./Option";
 import Link from "next/link";
 import { UrlObject } from "url";
 import Button from "@/components/Button";
+import "../app/globals.css";
 
 type Url = string | UrlObject;
 export interface IOption {
@@ -21,11 +22,13 @@ function Navegador({
   imageRedirect: string;
 }) {
   return (
-    <div className="flex bg-gray-800 py-1 ">
+    <div className="flex py-1 bg-jair">
       <div className="flex-1 ml-12">
-        <Link href={imageRedirect}>
-          <img className=" h-32" src={logo.src} alt="logo" />
-        </Link>
+        <div className="flex justify-start w-2/6">
+          <Link href={imageRedirect}>
+            <img className=" h-32" src={logo.src} alt="logo" />
+          </Link>
+        </div>
       </div>
 
       <div className="flex-1 flex justify-end gap-x-4 mr-12 items-center">

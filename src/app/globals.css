@@ -2,63 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: rgb(241, 245, 249);
+.bg-jair {
+    background-color: #2a323d;
 }
 
-.bg-image {
-  background-image: url(../../public/images/transaccion3.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.bg-transparency {
-  background-color: rgb(0 0 0 / 40%);
-}
-
-
-.w-10p {
-  width: 10%;
-}
-
-.w-32rem {
-  width: 32rem;
-}
-
-/*Vista principal de admin*/
-/*fondo de cada opcion*/
-.opcion__usuario {
-  background-image: url(../../public/images/adminOpcionUsuario2.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-
-}
-
-.opcion__empresa {
-  background-image: url(../../public/images/adminOpcionEmpresa.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-}
-
-/*opacidad de cada opcion*/
-.opcionUsuario__content,
-.opcionEmpresa__content {
-  background-color: rgb(0 0 0 / 70%);
-  transition: background-color .5s ease;
-}
-
-/*hover de cada opcion*/
-.opcionUsuario__content:hover,
-.opcionEmpresa__content:hover {
-  background-color: rgb(0 0 0 / 30%);
-}
-
-/*botones de paginaion*/
-.pagination-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+.bg-jair-black {
+    background-color: #20262e;
 }
