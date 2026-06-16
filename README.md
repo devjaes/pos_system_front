@@ -1,4 +1,4 @@
-# SRI-Compliant POS — Frontend (2023)
+# SRI-Compliant POS - Frontend (2023)
 
 > Point-of-sale web client for small Ecuadorian retailers, with inventory management and SRI-validated electronic invoicing.
 
@@ -55,4 +55,4 @@ Earlier project (2023). Built for Ecuadorian SMB retailers. Kept public for care
 
 ## Portfolio
 
-[Project entry on devjaes.dev →](https://devjaes.dev/work/pos-system)
+[Project entry on devjaes.dev](https://devjaes.dev/work/pos-system)
