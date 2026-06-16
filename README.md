@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SRI-Compliant POS — Frontend (2023)
 
-## Getting Started
+> Point-of-sale web client for small Ecuadorian retailers, with inventory management and SRI-validated electronic invoicing.
 
-First, run the development server:
+## Overview
+
+Point-of-sale workflow for small retailers: catalog browsing, cart, checkout, and on-sale emission of SRI-validated XML electronic invoices. Replaces spreadsheet inventory and end-of-month manual tax filings with a single transactional flow.
+
+SRI (Servicio de Rentas Internas) is the Ecuadorian tax authority; every sale must produce a schema-valid XML invoice.
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 13 (Pages-era setup, `src/app`) |
+| Language | TypeScript |
+| Styles | Tailwind CSS 3, Sass |
+| State | Redux Toolkit, React Context |
+| UI | PrimeReact, Headless UI, Heroicons |
+| Forms | react-hook-form |
+| PDF | @react-pdf/renderer |
+| HTTP | axios |
+| Backend (separate repo) | Spring Boot + PostgreSQL |
+
+## Repo scope
+
+This repo is the **frontend** only. The backend (Spring Boot + PostgreSQL, emitting SRI-validated XML and archiving documents on AWS S3) lives in a separate private repo.
+
+## Local setup
+
+Requires Node.js 18+ and a running backend reachable from the frontend (configured via `config/serverConfig.ts` / environment).
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # production build
+npm run start   # serve production build
+npm run lint    # next lint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+App runs on `http://localhost:3000`.
 
-## Learn More
+## Status
 
-To learn more about Next.js, take a look at the following resources:
+Earlier project (2023). Built for Ecuadorian SMB retailers. Kept public for career timeline; not actively maintained.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Demo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+[YouTube demo](https://www.youtube.com/watch?v=BqeJK45yrGA)
 
-## Deploy on Vercel
+## Portfolio
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[Project entry on devjaes.dev →](https://devjaes.dev/work/pos-system)
